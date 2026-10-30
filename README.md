@@ -1,69 +1,47 @@
 # FORM
 
-FORM is a focused daily home-training Android app. It provides a fixed weekly routine, guided exercise cards, rep counting, exercise and rest timers, workout history, streak tracking, and daily wake-up/workout reminders. The Android app is built with Capacitor and packages the complete interface and exercise images inside the APK.
+FORM is a focused daily home-training Android app with a fixed weekly routine, guided exercises, workout timers, local history, streaks, and daily reminders. The complete interface and exercise images are bundled in the APK, so normal use does not require an internet connection.
+
+**Official release:** [FORM v1.0 — Official Release](https://github.com/Harsha240105/FrOm/releases/tag/v1.0)
+
+## Contents
+
+- [Features](#features)
+- [Offline operation](#offline-operation)
+- [Release and app details](#release-and-app-details)
+- [Installation](#installation)
+- [Build from source](#build-from-source)
+- [Signing and security](#signing-and-security)
+- [Testing](#testing)
+- [Links](#links)
 
 ## Features
 
+### Training
+
 - Daily training plan with a 4:00 AM training-day reset.
-- Weekly routine covering Strength A, Strength B, walking/mobility, stamina/balance, and recovery days.
-- Guided exercises with bundled demonstration images, instructions, targets, and rest times.
+- Fixed weekly routine covering Strength A, Strength B, walking/mobility, stamina/balance, and recovery days.
+- Guided exercise cards with bundled demonstration images, instructions, targets, and rest times.
 - Rep counting for repetition-based exercises.
-- Exercise timers and automatically timed rest periods with sound and vibration cues.
-- Local workout history stored on the device, including session start/end times and per-exercise timestamps.
-- Streak tracking and a monthly calendar view.
+- Exercise timers and timed rest periods with sound and vibration cues.
+- Session summary with start time, end time, duration, and completed exercise count.
+
+### Tracking and reminders
+
+- Local workout history with session and per-exercise timestamps.
+- Daily streak tracking and a monthly calendar view.
 - JSON export of workout history.
-- User-scheduled daily local notifications for the 4:00 AM wake-up and 5:00 AM workout reminder.
+- User-scheduled local notifications for the 4:00 AM wake-up and 5:00 AM workout reminder.
 - In-app wake/workout reminders with a 10-minute snooze option.
 - Monochrome, mobile-first interface designed for phone use.
 
-## Offline functionality
+## Offline operation
 
-FORM does not require an internet connection during normal use. The HTML, JavaScript, CSS, icons, and exercise images are bundled inside the APK. Workouts, timers, history, streaks, and local notifications work with the device offline (for example, in airplane mode).
+FORM works without an internet connection during normal use. The HTML, JavaScript, CSS, icons, and exercise images are packaged inside the APK. Workouts, timers, history, streaks, and scheduled local notifications work with the device offline, including in airplane mode.
 
-External photo-credit links open the original image source in a browser and require internet access only if the user chooses to open them.
+Photo-credit links are optional and open external sources in a browser. Internet access is required only if you choose to open one of those links.
 
-## Android installation
-
-### Requirements
-
-- Android 5.1 (API 22) or newer.
-- Notification permission on Android 13 and newer.
-- Exact-alarm permission if the device/OS requires it for scheduled reminders.
-
-### Verify the APK SHA-256 checksum (PowerShell)
-
-```powershell
-Get-FileHash -Algorithm SHA256 .\FORM-v1.0-release.apk
-```
-
-Expected SHA-256 for FORM v1.0:
-
-```text
-07DB03127B639711A4A2A1F815E94826C16BB7087451642DA7E2B11D7CEF755E
-```
-
-### Install
-
-1. Download `FORM-v1.0-release.apk` from the [official v1.0 release](https://github.com/Harsha240105/FrOm/releases/tag/v1.0).
-2. Verify the SHA-256 checksum with the command above.
-3. Allow installation from the file manager/browser used to open the APK, then install it.
-4. Open FORM and allow notification access when prompted.
-5. Use the ALARM screen to enable reminders. On Android versions that require exact alarms, allow FORM to schedule exact alarms.
-
-Install with ADB:
-
-```powershell
-adb install -r .\FORM-v1.0-release.apk
-```
-
-The release APK uses a different signing key from the debug APK. Uninstall any existing debug build before installing the release:
-
-```powershell
-adb uninstall com.harsha.form
-adb install .\FORM-v1.0-release.apk
-```
-
-## App details
+## Release and app details
 
 | Item | Value |
 | --- | --- |
@@ -76,21 +54,73 @@ adb install .\FORM-v1.0-release.apk
 | Compile SDK | 34 |
 | Capacitor | 6.2.3 |
 | Local Notifications plugin | 6.1.3 |
-| Release APK size | 2,094,449 bytes |
-| Release APK SHA-256 | `07DB03127B639711A4A2A1F815E94826C16BB7087451642DA7E2B11D7CEF755E` |
+| Release title | FORM v1.0 — Official Release |
+| Release tag | `v1.0` |
+| Target branch | `main` |
+| Release status | Latest official release, not a pre-release |
+| Release APK | [FORM-v1.0-release.apk](https://github.com/Harsha240105/FrOm/releases/download/v1.0/FORM-v1.0-release.apk) |
+| APK size | 2,094,449 bytes |
+| SHA-256 | See [SHA-256 verification](#sha-256-verification) |
 
-## Build instructions
+## Installation
+
+### Requirements
+
+- Android 5.1 (API 22) or newer.
+- Notification permission on Android 13 and newer.
+- Exact-alarm permission on devices or Android versions that require it for scheduled reminders.
+
+### SHA-256 verification
+
+Download `FORM-v1.0-release.apk` from the [official v1.0 release](https://github.com/Harsha240105/FrOm/releases/tag/v1.0), then verify it in PowerShell:
+
+```powershell
+Get-FileHash -Algorithm SHA256 .\FORM-v1.0-release.apk
+```
+
+The complete SHA-256 must be:
+
+```text
+07DB03127B639711A4A2A1F815E94826C16BB7087451642DA7E2B11D7CEF755E
+```
+
+Do not install the APK if the computed hash does not match exactly.
+
+### Install on Android
+
+1. Download and verify `FORM-v1.0-release.apk`.
+2. Allow installation from the file manager or browser used to open the APK.
+3. Install the APK and open FORM.
+4. Allow notification access when prompted.
+5. Open the **ALARM** screen to enable reminders. Allow exact alarms if Android requests it.
+
+### Install with ADB
+
+```powershell
+adb install -r .\FORM-v1.0-release.apk
+```
+
+The release APK uses a different signing key from the debug build. If a debug build is already installed, uninstall it first:
+
+```powershell
+adb uninstall com.harsha.form
+adb install .\FORM-v1.0-release.apk
+```
+
+## Build from source
 
 ### Requirements
 
 - Node.js and npm.
 - JDK 17.
 - Android SDK with API 34 and the matching build tools.
-- `ANDROID_HOME` (or `ANDROID_SDK_ROOT`) pointing to the Android SDK.
+- `ANDROID_HOME` or `ANDROID_SDK_ROOT` pointing to the Android SDK.
 
-### Install dependencies and sync the Android project
+### Prepare the project
 
 ```powershell
+git clone https://github.com/Harsha240105/FrOm.git
+Set-Location FrOm
 npm install
 npx cap sync android
 ```
@@ -109,7 +139,7 @@ android\app\build\outputs\apk\debug\app-debug.apk
 
 ### Build a signed release APK
 
-Create `android\keystore.properties` locally (never commit it):
+Create `android\keystore.properties` locally. Use your own signing values and never commit this file:
 
 ```properties
 storeFile=C:/path/to/your-release.jks
@@ -131,61 +161,63 @@ Output:
 android\app\build\outputs\apk\release\app-release.apk
 ```
 
-The release build enables R8 minification and resource shrinking. Keep the keystore, `keystore.properties`, passwords, and signing credentials private. They are excluded by `.gitignore`.
+The release build enables R8 minification and resource shrinking.
 
-## Testing instructions
+## Signing and security
 
-### Manual checks
+The published v1.0 APK was verified with the Android SDK `apksigner` tool:
 
-1. Launch FORM and confirm the home screen shows the current day, weekly plan, 4:00 AM wake-up, 5:00 AM workout, and 5:30 AM finish times.
-2. Tap **START TODAY'S WORKOUT**, open an exercise, and verify the image, instructions, target, and rest time load.
-3. For a repetition exercise, use `+`/`-` to count reps, then complete the set.
-4. For a timed exercise, start the timer, let it finish, and complete the exercise.
-5. Let the rest timer finish and confirm the next exercise becomes available.
-6. Complete the session and confirm the summary, history entry, and streak update.
-7. Force-stop and relaunch FORM; confirm the workout history remains.
-8. Put the device in airplane mode and repeat steps 1–7; all app content should remain available.
-9. From the ALARM screen, allow notifications and schedule the wake-up and workout reminders. Confirm pending notifications exist.
-10. Change the device time across 4:00 AM (03:59 to 04:00) and confirm the app moves to the new training day.
+| Check | Result |
+| --- | --- |
+| APK Signature Scheme v1 (JAR signing) | Verified |
+| APK Signature Scheme v2 | Verified |
+| Number of signers | 1 |
+| Signer certificate DN | `CN=FORM, OU=Android, O=FORM, L=Private, ST=Private, C=IN` |
+| Signer certificate SHA-256 | `a5cd73c6c33f33eff4050ebef75aea7044ae817f92802e714589b98f6dbb1d84` |
+| Key algorithm | RSA 4096-bit |
 
-### Verified release results
-
-The v1.0 release APK was installed and tested on an Android 16 (API 36.1) emulator with networking disabled:
-
-- The home screen, weekly plan, exercise cards, and bundled exercise images loaded offline.
-- The 4:00 AM reset produced the previous training day at 03:59 and the current training day at 04:00.
-- Exercise completion, rep counting, exercise timers, and rest timers worked.
-- Workout records persisted after force-stop and relaunch.
-- Wake-up and workout notifications were scheduled with IDs `4001` (4:00 AM) and `5001` (5:00 AM), repeating daily.
-- The release APK verifies with APK Signature Scheme v1 and v2.
-- WebView debugging is disabled in the release build; no WebView DevTools socket was exposed.
-
-## Release information
-
-### FORM v1.0 — Official Release
-
-- Release: [FORM v1.0 — Official Release](https://github.com/Harsha240105/FrOm/releases/tag/v1.0)
-- Tag: `v1.0`
-- Target branch: `main`
-- Version: `1.0` (version code `1`)
-- Release APK: [FORM-v1.0-release.apk](https://github.com/Harsha240105/FrOm/releases/download/v1.0/FORM-v1.0-release.apk)
-- SHA-256: `07DB03127B639711A4A2A1F815E94826C16BB7087451642DA7E2B11D7CEF755E`
-
-### Signing verification
-
-- APK Signature Scheme v1 (JAR signing): verified
-- APK Signature Scheme v2: verified
-- Signer certificate DN: `CN=FORM, OU=Android, O=FORM, L=Private, ST=Private, C=IN`
-- Signer certificate SHA-256: `a5cd73c6c33f33eff4050ebef75aea7044ae817f92802e714589b98f6dbb1d84`
-- Key algorithm: RSA 4096-bit
-
-Verify the downloaded APK signature with the Android SDK build tools:
+Verify the downloaded APK signature with Android SDK build tools:
 
 ```powershell
 & "$env:LOCALAPPDATA\Android\Sdk\build-tools\34.0.0\apksigner.bat" verify --verbose --print-certs .\FORM-v1.0-release.apk
 ```
 
-## Repository
+Signing security:
 
-- GitHub: https://github.com/Harsha240105/FrOm
-- Latest release: https://github.com/Harsha240105/FrOm/releases/latest
+- The keystore, `keystore.properties`, passwords, and signing credentials are not included in this repository.
+- Signing secrets are excluded by `.gitignore`.
+- The release APK is distributed as a GitHub Release asset and is not committed to the source repository.
+
+## Testing
+
+### Manual verification
+
+1. Launch FORM and confirm the home screen shows the current day, weekly plan, 4:00 AM wake-up, 5:00 AM workout, and 5:30 AM finish times.
+2. Select **START TODAY'S WORKOUT** and confirm each exercise card shows its image, instructions, target, and rest time.
+3. For a repetition exercise, use `+` and `-` to count repetitions, then complete the set.
+4. For a timed exercise, start the timer, let it finish, and complete the exercise.
+5. Let the rest timer finish and confirm the next exercise becomes available.
+6. Complete the session and confirm the summary and history entry.
+7. Force-stop and relaunch FORM, then confirm the workout history remains.
+8. Enable airplane mode and repeat the checks; all app content should remain available.
+9. From the **ALARM** screen, allow notifications and schedule the wake-up and workout reminders.
+10. Move the device time across 4:00 AM, from 03:59 to 04:00, and confirm FORM starts the new training day.
+
+### Verified v1.0 results
+
+The release APK was installed and tested on an Android 16 (API 36.1) emulator with networking disabled:
+
+- The home screen, weekly plan, exercise cards, and bundled exercise images loaded offline.
+- The 4:00 AM reset returned the previous training day at 03:59 and the current training day at 04:00.
+- Exercise completion, rep counting, exercise timers, and rest timers worked.
+- Workout records persisted after force-stop and relaunch.
+- Wake-up and workout notifications were scheduled with IDs `4001` (4:00 AM) and `5001` (5:00 AM), repeating daily.
+- The APK verified with signature schemes v1 and v2.
+- WebView debugging is disabled in the release build, and no WebView DevTools socket was exposed.
+
+## Links
+
+- **Repository:** https://github.com/Harsha240105/FrOm
+- **Official release:** https://github.com/Harsha240105/FrOm/releases/tag/v1.0
+- **APK download:** https://github.com/Harsha240105/FrOm/releases/download/v1.0/FORM-v1.0-release.apk
+- **Latest release:** https://github.com/Harsha240105/FrOm/releases/latest
