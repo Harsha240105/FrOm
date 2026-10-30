@@ -4,3 +4,11 @@ node_modules/
 *.iml
 *.log
 .DS_Store
+
+# Release signing secrets - never commit or upload
+*.jks
+*.keystore
+*.p12
+keystore.properties
+release-signing.properties
+FORM-release-credentials.txt
