@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FORM</string>
+    <string name="title_activity_main">FORM</string>
+    <string name="package_name">com.harsha.form</string>
+    <string name="custom_url_scheme">com.harsha.form</string>
+</resources>
