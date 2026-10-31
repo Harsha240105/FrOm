@@ -278,7 +278,21 @@ function renderHome(){
   $('exercisePreview').textContent=preview;
   $('startToday').textContent=complete?'VIEW COMPLETED SESSION':r.sessionStart?'CONTINUE WORKOUT':p.ids.length?'START TODAY':cands.length?'CHOOSE MAKE-UP':'VIEW REST DAY';
   $('streakCount').textContent=streak();
+  const streakButton=$('openStreak');
+  if(streakButton){
+    const streakValue=streak();
+    streakButton.textContent='STREAK | '+String(streakValue).padStart(2,'0')+(streakValue===1?' DAY':' DAYS');
+    streakButton.classList.remove('streakPulse');
+    void streakButton.offsetWidth;
+    streakButton.classList.add('streakPulse');
+  }
   $('completedCount').textContent=completedCount();
+  const dateElement=$('dateLine');
+  if(dateElement){
+    dateElement.classList.remove('dateFade');
+    void dateElement.offsetWidth;
+    dateElement.classList.add('dateFade');
+  }
   const m=monthCount();$('monthProgress').textContent=m.done+'/'+m.scheduled;
   const cal=calories();$('calorieEstimate').textContent=cal.text;$('calorieNote').textContent=cal.note;
   renderStage();

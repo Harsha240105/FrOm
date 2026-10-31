@@ -23,6 +23,16 @@ a{color:inherit}
 .topActions{display:flex;gap:6px}
 .headerBtn{background:transparent;border:1px solid var(--ink);border-radius:999px;padding:6px 10px;font-size:9px;letter-spacing:1.1px;font-weight:700;min-height:32px}
 .headerBtn.solid{background:var(--ink);color:var(--paper)}
+#openStreak:active{transform:scale(0.98)}
+.streakPulse{animation:streakFade 650ms ease-out}
+@keyframes streakFade{from{opacity:.55}to{opacity:1}}
+#dateLine{animation:dateFade 700ms ease-out}
+@keyframes dateFade{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  #openStreak:active{transform:none}
+  .streakPulse{animation:none}
+  #dateLine{animation:none}
+}
 .view{display:none;padding:18px 0 0}
 .view.active{display:block}
 .overline{font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);font-weight:650;margin-bottom:6px}
