@@ -1,6 +1,6 @@
 {
   "name": "form-daily-training",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "description": "FORM daily training app wrapped in Capacitor",
   "scripts": {

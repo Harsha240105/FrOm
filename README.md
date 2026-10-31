@@ -2,7 +2,7 @@
 
 FORM is a focused daily home-training Android app with a fixed weekly routine, guided exercises, workout timers, local history, streaks, and daily reminders. The complete interface and exercise images are bundled in the APK, so normal use does not require an internet connection.
 
-**Official release:** [FORM v1.0 — Official Release](https://github.com/Harsha240105/FrOm/releases/tag/v1.0)
+**Official release:** [FORM v2.0 — Official Release](https://github.com/Harsha240105/FrOm/releases/tag/v2.0)
 
 ## Contents
 
@@ -47,19 +47,19 @@ Photo-credit links are optional and open external sources in a browser. Internet
 | --- | --- |
 | App name | FORM |
 | Package ID | `com.harsha.form` |
-| Version | 1.0 |
-| Version code | 1 |
+| Version | 2.0 |
+| Version code | 2 |
 | Minimum Android | 5.1 (API 22) |
 | Target SDK | 34 (Android 14) |
 | Compile SDK | 34 |
 | Capacitor | 6.2.3 |
 | Local Notifications plugin | 6.1.3 |
-| Release title | FORM v1.0 — Official Release |
-| Release tag | `v1.0` |
+| Release title | FORM v2.0 — Official Release |
+| Release tag | `v2.0` |
 | Target branch | `main` |
 | Release status | Latest official release, not a pre-release |
-| Release APK | [FORM-v1.0-release.apk](https://github.com/Harsha240105/FrOm/releases/download/v1.0/FORM-v1.0-release.apk) |
-| APK size | 2,094,449 bytes |
+| Release APK | [FORM-v2.0-release.apk](https://github.com/Harsha240105/FrOm/releases/download/v2.0/FORM-v2.0-release.apk) |
+| APK size | 2,220,758 bytes |
 | SHA-256 | See [SHA-256 verification](#sha-256-verification) |
 
 ## Installation
@@ -72,23 +72,23 @@ Photo-credit links are optional and open external sources in a browser. Internet
 
 ### SHA-256 verification
 
-Download `FORM-v1.0-release.apk` from the [official v1.0 release](https://github.com/Harsha240105/FrOm/releases/tag/v1.0), then verify it in PowerShell:
+Download `FORM-v2.0-release.apk` from the [official v2.0 release](https://github.com/Harsha240105/FrOm/releases/tag/v2.0), then verify it in PowerShell:
 
 ```powershell
-Get-FileHash -Algorithm SHA256 .\FORM-v1.0-release.apk
+Get-FileHash -Algorithm SHA256 .\FORM-v2.0-release.apk
 ```
 
 The complete SHA-256 must be:
 
 ```text
-07DB03127B639711A4A2A1F815E94826C16BB7087451642DA7E2B11D7CEF755E
+BB4D81592BE30B09FB867875081A0C3F76F5EC48A94864E2ADB9DFD0E4448242
 ```
 
 Do not install the APK if the computed hash does not match exactly.
 
 ### Install on Android
 
-1. Download and verify `FORM-v1.0-release.apk`.
+1. Download and verify `FORM-v2.0-release.apk`.
 2. Allow installation from the file manager or browser used to open the APK.
 3. Install the APK and open FORM.
 4. Allow notification access when prompted.
@@ -97,14 +97,14 @@ Do not install the APK if the computed hash does not match exactly.
 ### Install with ADB
 
 ```powershell
-adb install -r .\FORM-v1.0-release.apk
+adb install -r .\FORM-v2.0-release.apk
 ```
 
 The release APK uses a different signing key from the debug build. If a debug build is already installed, uninstall it first:
 
 ```powershell
 adb uninstall com.harsha.form
-adb install .\FORM-v1.0-release.apk
+adb install .\FORM-v2.0-release.apk
 ```
 
 ## Build from source
@@ -165,7 +165,7 @@ The release build enables R8 minification and resource shrinking.
 
 ## Signing and security
 
-The published v1.0 APK was verified with the Android SDK `apksigner` tool:
+The published v2.0 APK was verified with the Android SDK `apksigner` tool:
 
 | Check | Result |
 | --- | --- |
@@ -179,7 +179,7 @@ The published v1.0 APK was verified with the Android SDK `apksigner` tool:
 Verify the downloaded APK signature with Android SDK build tools:
 
 ```powershell
-& "$env:LOCALAPPDATA\Android\Sdk\build-tools\34.0.0\apksigner.bat" verify --verbose --print-certs .\FORM-v1.0-release.apk
+& "$env:LOCALAPPDATA\Android\Sdk\build-tools\34.0.0\apksigner.bat" verify --verbose --print-certs .\FORM-v2.0-release.apk
 ```
 
 Signing security:
@@ -203,7 +203,7 @@ Signing security:
 9. From the **ALARM** screen, allow notifications and schedule the wake-up and workout reminders.
 10. Move the device time across 4:00 AM, from 03:59 to 04:00, and confirm FORM starts the new training day.
 
-### Verified v1.0 results
+### Verified v2.0 results
 
 The release APK was installed and tested on an Android 16 (API 36.1) emulator with networking disabled:
 
@@ -218,6 +218,6 @@ The release APK was installed and tested on an Android 16 (API 36.1) emulator wi
 ## Links
 
 - **Repository:** https://github.com/Harsha240105/FrOm
-- **Official release:** https://github.com/Harsha240105/FrOm/releases/tag/v1.0
-- **APK download:** https://github.com/Harsha240105/FrOm/releases/download/v1.0/FORM-v1.0-release.apk
+- **Official release:** https://github.com/Harsha240105/FrOm/releases/tag/v2.0
+- **APK download:** https://github.com/Harsha240105/FrOm/releases/download/v2.0/FORM-v2.0-release.apk
 - **Latest release:** https://github.com/Harsha240105/FrOm/releases/latest
