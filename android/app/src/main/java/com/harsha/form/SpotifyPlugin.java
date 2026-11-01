@@ -1,5 +1,7 @@
 package com.harsha.form;
 
+import android.util.Log;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -18,6 +20,7 @@ import com.spotify.protocol.types.PlayerState;
 @CapacitorPlugin(name = "Spotify")
 public class SpotifyPlugin extends Plugin {
 
+    private static final String TAG = "FORM_Spotify";
     private static final String REDIRECT_URI = "formspotify://callback";
 
     private SpotifyAppRemote remote;
@@ -30,7 +33,9 @@ public class SpotifyPlugin extends Plugin {
     private String clientId() {
         try {
             String value = getContext().getString(R.string.spotify_client_id);
-            return value == null ? "" : value.trim();
+            if (value == null) return "";
+            String trimmed = value.trim();
+            return trimmed.matches("[0-9a-fA-F]{32}") ? trimmed : "";
         } catch (Exception e) {
             return "";
         }
@@ -68,20 +73,25 @@ public class SpotifyPlugin extends Plugin {
 
     @PluginMethod
     public void connect(PluginCall call) {
+        Log.i(TAG, "Connect requested");
         if (clientId().isEmpty()) {
+            Log.w(TAG, "Connect blocked: client ID is not configured");
             call.resolve(state("unconfigured"));
             return;
         }
         if (!installed()) {
+            Log.w(TAG, "Connect blocked: Spotify app is not installed");
             call.resolve(state("not_installed"));
             return;
         }
         if (remote != null && remote.isConnected()) {
+            Log.i(TAG, "Already connected; refreshing player subscription");
             subscribeToPlayerState();
             call.resolve(state("connected"));
             return;
         }
         if (connecting) {
+            Log.i(TAG, "Duplicate connect ignored while authorization is pending");
             call.resolve(state("connecting"));
             return;
         }
@@ -91,9 +101,11 @@ public class SpotifyPlugin extends Plugin {
                 .showAuthView(true)
                 .build();
         try {
+            Log.i(TAG, "Launching Spotify App Remote authorization view");
             SpotifyAppRemote.connect(getActivity(), params, new Connector.ConnectionListener() {
                 @Override
                 public void onConnected(SpotifyAppRemote spotifyAppRemote) {
+                    Log.i(TAG, "Spotify authorization succeeded");
                     connecting = false;
                     remote = spotifyAppRemote;
                     subscribeToPlayerState();
@@ -104,6 +116,7 @@ public class SpotifyPlugin extends Plugin {
 
                 @Override
                 public void onFailure(Throwable error) {
+                    Log.w(TAG, "Spotify authorization failed: " + error.getClass().getSimpleName());
                     connecting = false;
                     remote = null;
                     String status = errorStatus(error);
@@ -113,8 +126,11 @@ public class SpotifyPlugin extends Plugin {
                 }
             });
         } catch (Exception e) {
+            Log.e(TAG, "Spotify authorization launch failed", e);
             connecting = false;
             call.resolve(state("error"));
+            notifyListeners("authResult", state("error"));
+            notifyState();
         }
     }
 

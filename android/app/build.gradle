@@ -6,7 +6,9 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-def spotifyClientId = (project.findProperty('FORM_SPOTIFY_CLIENT_ID') ?: System.getenv('FORM_SPOTIFY_CLIENT_ID') ?: '').toString().trim()
+def rawSpotifyClientId = (project.findProperty('FORM_SPOTIFY_CLIENT_ID') ?: System.getenv('FORM_SPOTIFY_CLIENT_ID') ?: '').toString().trim()
+def spotifyClientIdPattern = /^[0-9a-fA-F]{32}$/
+def spotifyClientId = (rawSpotifyClientId ==~ spotifyClientIdPattern) ? rawSpotifyClientId : ''
 
 android {
     namespace "com.harsha.form"
@@ -15,8 +17,8 @@ android {
         applicationId "com.harsha.form"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "3.0"
+        versionCode 4
+        versionName "4.0"
         resValue "string", "spotify_client_id", spotifyClientId
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -43,6 +45,24 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+}
+
+task verifySpotifyConfiguration {
+    doLast {
+        if (!rawSpotifyClientId) {
+            throw new GradleException("SPOTIFY_CLIENT_ID_CONFIGURED=false. Set FORM_SPOTIFY_CLIENT_ID in the same shell that launches Gradle.")
+        }
+        if (!(rawSpotifyClientId ==~ spotifyClientIdPattern)) {
+            throw new GradleException("SPOTIFY_CLIENT_ID_INVALID=true. The value must be 32 hexadecimal characters; it is not printed here.")
+        }
+        println "SPOTIFY_CLIENT_ID_CONFIGURED=true"
+    }
+}
+
+tasks.configureEach { task ->
+    if (task.name == 'preReleaseBuild') {
+        task.dependsOn verifySpotifyConfiguration
     }
 }
 

@@ -1,8 +1,10 @@
 # FORM
 
-FORM is a focused daily home-training Android app with a fixed weekly routine, guided exercises, workout timers, local history, streaks, and daily reminders. The complete interface and exercise images are bundled in the APK, so normal use does not require an internet connection.
+FORM is a focused daily home-training Android app with a fixed weekly routine, guided exercises, workout timers, local history, streaks, and secure private photo storage.
 
-**Official release:** [FORM v3.0 — Official Release](https://github.com/Harsha240105/FrOm/releases/tag/v3.0)
+The complete interface and exercise images are bundled in the APK, so normal training use does not require an internet connection.
+
+FORM v4.0 is published. Physical-device feature verification remains a user follow-up.
 
 ## Contents
 
@@ -13,33 +15,78 @@ FORM is a focused daily home-training Android app with a fixed weekly routine, g
 - [Build from source](#build-from-source)
 - [Signing and security](#signing-and-security)
 - [Testing](#testing)
+- [Known limitations](#known-limitations)
 - [Links](#links)
 
 ## Features
 
 ### Training
 
-- Daily training plan with a 4:00 AM training-day reset.
-- Fixed weekly routine covering Strength A, Strength B, walking/mobility, stamina/balance, and recovery days.
+- Daily training plan with a Monday rest/make-up slot and six training days.
+- Fixed weekly routine covering strength, mobility, stamina, balance, and recovery days.
 - Guided exercise cards with bundled demonstration images, instructions, targets, and rest times.
 - Rep counting for repetition-based exercises.
 - Exercise timers and timed rest periods with sound and vibration cues.
 - Session summary with start time, end time, duration, and completed exercise count.
+- Make-up workout support through the Monday slot.
 
-### Tracking and reminders
+### Tracking
 
 - Local workout history with session and per-exercise timestamps.
-- Daily streak tracking and a monthly calendar view.
-- JSON export of workout history.
-- User-scheduled local notifications for the 4:00 AM wake-up and 5:00 AM workout reminder.
-- In-app wake/workout reminders with a 10-minute snooze option.
-- Monochrome, mobile-first interface designed for phone use.
+- Daily streak tracking and monthly calendar view.
+- Three calendar activity states:
+  - Black: workout completed.
+  - Green: photo saved without a workout.
+  - White: neither workout nor photo.
+- Historical details show recorded information only; future workouts are planning only and do not create fake history.
+- Workout progression is manual across Starter, Medium, and Hard stages.
+- JSON history export.
+
+### Calorie burn
+
+- Dedicated Calorie Burn screen with today’s estimate, exercise breakdown, last 14 days, total calories, total active time, and total sessions.
+- Transparent MET-based estimate:
+  - Rest periods are excluded.
+  - Repetition-based exercises use documented duration estimates.
+  - Figures remain estimates and are not medical or dietary advice.
+- Body weight snapshots protect historical calorie estimates from later weight changes.
+
+### Home, nutrition, and photos
+
+- Home screen shows today’s workout, exercise list, progress, start control, calorie summary, and seven-day upcoming workout cards.
+- The Home plan card can be swiped to view today’s plan and the next scheduled training plan.
+- Water and protein intake use editable local targets with add/subtract controls and persistence.
+- Private Photo Vault uses AES-256-GCM with PBKDF2 password-based key derivation.
+- Vault supports direct camera capture, multiple existing-photo selection, preview before encryption, and encrypted local storage.
+- No plaintext photos are stored in the Gallery, cloud storage, or app logs.
+
+### Backup and restore
+
+- Encrypted local backup using Android Storage Access Framework.
+- Backup includes workout history, profile, settings, calendar data, water/protein data, and encrypted vault files.
+- Backup uses AES-256-GCM with PBKDF2 key derivation, integrity checks, versioned format, and validation before restore.
+
+### Spotify
+
+- Optional Spotify integration through the official App Remote plugin.
+- Optional local music playback from multiple selected audio files or an Android-selected music folder.
+- Local music is played in place and is not copied into FORM.
+- Native Client ID validation requires exactly 32 hexadecimal characters.
+- Release builds fail configuration validation when the Client ID is missing or invalid.
+
+### Alarm removal
+
+- FORM no longer schedules or runs the removed 4:00 AM wake-up and 5:00 AM workout alarms.
+- Workout timers, rest timers, exercise sounds, and history remain intact.
+- The obsolete native alarm bridge was removed; only unrelated local notifications cleanup remains supported by the installed dependency.
 
 ## Offline operation
 
-FORM works without an internet connection during normal use. The HTML, JavaScript, CSS, icons, and exercise images are packaged inside the APK. Workouts, timers, history, streaks, and scheduled local notifications work with the device offline, including in airplane mode.
+FORM works offline during normal use. HTML, JavaScript, CSS, icons, and exercise images are packaged inside the APK.
 
-Photo-credit links are optional and open external sources in a browser. Internet access is required only if you choose to open one of those links.
+Workout timers, rest timers, history, streaks, water/protein data, and the private vault work offline. Encrypted backups remain local through the Android Storage Access Framework.
+
+Photo-credit links are optional and open external sources in a browser.
 
 ## Release and app details
 
@@ -47,58 +94,48 @@ Photo-credit links are optional and open external sources in a browser. Internet
 | --- | --- |
 | App name | FORM |
 | Package ID | `com.harsha.form` |
-| Version | 3.0 |
-| Version code | 3 |
+| Version | 4.0 |
+| Version code | 4 |
 | Minimum Android | 5.1 (API 22) |
 | Target SDK | 34 (Android 14) |
 | Compile SDK | 34 |
 | Capacitor | 6.2.3 |
-| Local Notifications plugin | 6.1.3 |
-| Release title | FORM v3.0 — Official Release |
-| Release tag | `v3.0` |
-| Target branch | `main` |
-| Release status | Latest official release, not a pre-release |
-| Release APK | [FORM-v3.0-release.apk](https://github.com/Harsha240105/FrOm/releases/download/v3.0/FORM-v3.0-release.apk) |
-| APK size | 2,221,086 bytes |
-| SHA-256 | See [SHA-256 verification](#sha-256-verification) |
+| Release title | FORM v4.0 |
+| Release tag | `v4.0` |
+| Release status | Published |
+
+The release APK must be named separately from the preserved v3.0 asset:
+
+```text
+dist/FORM-v4.0-release.apk
+```
+
+The v3.0 release asset remains:
+
+```text
+dist/FORM-v3.0-release.apk
+```
 
 ## Installation
 
 ### Requirements
 
 - Android 5.1 (API 22) or newer.
-- Notification permission on Android 13 and newer.
-- Exact-alarm permission on devices or Android versions that require it for scheduled reminders.
-
-### SHA-256 verification
-
-Download `FORM-v3.0-release.apk` from the [official v3.0 release](https://github.com/Harsha240105/FrOm/releases/tag/v3.0), then verify it in PowerShell:
-
-```powershell
-Get-FileHash -Algorithm SHA256 .\FORM-v3.0-release.apk
-```
-
-The complete SHA-256 must be:
-
-```text
-A70E69815DB16F774DA44A24E48C570DE160CB2EDB62703B10DE824E173F4A08
-```
-
-Do not install the APK if the computed hash does not match exactly.
+- Spotify installed and signed in for Spotify features; Spotify is optional.
 
 ### Install on Android
 
-1. Download and verify `FORM-v3.0-release.apk`.
+1. Download and verify the v4.0 release APK.
 2. Allow installation from the file manager or browser used to open the APK.
 3. Install the APK and open FORM.
-4. Allow notification access when prompted.
-5. Open the **ALARM** screen to enable reminders. Allow exact alarms if Android requests it.
 
 ### Install with ADB
 
 ```powershell
-adb install -r .\FORM-v3.0-release.apk
+adb install -r .\dist\FORM-v4.0-release.apk
 ```
+
+Do not clear application data or uninstall an existing FORM installation before validating the upgrade path.
 
 ## Build from source
 
@@ -106,8 +143,7 @@ adb install -r .\FORM-v3.0-release.apk
 
 - Node.js and npm.
 - JDK 17.
-- Android SDK with API 34 and the matching build tools.
-- `ANDROID_HOME` or `ANDROID_SDK_ROOT` pointing to the Android SDK.
+- Android SDK with API 34 and matching build tools.
 
 ### Prepare the project
 
@@ -132,7 +168,7 @@ android\app\build\outputs\apk\debug\app-debug.apk
 
 ### Build a signed release APK
 
-Create `android\keystore.properties` locally. Use your own signing values and never commit this file:
+Create `android/keystore.properties` locally. Use the existing signing identity and never commit this file:
 
 ```properties
 storeFile=C:/path/to/your-release.jks
@@ -141,7 +177,7 @@ keyAlias=YOUR_KEY_ALIAS
 keyPassword=YOUR_KEY_PASSWORD
 ```
 
-Then build:
+Build:
 
 ```powershell
 Set-Location android
@@ -156,61 +192,60 @@ android\app\build\outputs\apk\release\app-release.apk
 
 The release build enables R8 minification and resource shrinking.
 
+The release task also validates `FORM_SPOTIFY_CLIENT_ID`:
+
+- It must be present.
+- It must contain exactly 32 hexadecimal characters.
+- The value is never printed.
+
 ## Signing and security
 
-The published v3.0 APK was verified with the Android SDK `apksigner` tool:
+The v4.0 signing identity remains the existing package signing identity.
 
 | Check | Result |
 | --- | --- |
-| APK Signature Scheme v1 (JAR signing) | Verified |
-| APK Signature Scheme v2 | Verified |
-| Number of signers | 1 |
-| Signer certificate DN | `CN=FORM, OU=Android, O=FORM, L=Private, ST=Private, C=IN` |
-| Signer certificate SHA-256 | `a5cd73c6c33f33eff4050ebef75aea7044ae817f92802e714589b98f6dbb1d84` |
-| Key algorithm | RSA 4096-bit |
-
-Verify the downloaded APK signature with Android SDK build tools:
-
-```powershell
-& "$env:LOCALAPPDATA\Android\Sdk\build-tools\34.0.0\apksigner.bat" verify --verbose --print-certs .\FORM-v3.0-release.apk
-```
+| Package ID | `com.harsha.form` |
+| Version | 4.0 |
+| Version code | 4 |
+| Signing status | Verified; matches the preserved v3.0 signing certificate |
 
 Signing security:
 
-- The keystore, `keystore.properties`, passwords, and signing credentials are not included in this repository.
-- Signing secrets are excluded by `.gitignore`.
-- The release APK is distributed as a GitHub Release asset and is not committed to the source repository.
+- Keystore, credentials, passwords, Spotify secrets, and tokens are not committed.
+- The release keystore is not overwritten.
+- The verified release APK is included as the `v4.0` release asset.
+- Secrets are excluded from logs and source output.
 
 ## Testing
 
-### Manual verification
+### Automated/local checks
 
-1. Launch FORM and confirm the home screen shows the current day, weekly plan, 4:00 AM wake-up, 5:00 AM workout, and 5:30 AM finish times.
-2. Select **START TODAY'S WORKOUT** and confirm each exercise card shows its image, instructions, target, and rest time.
-3. For a repetition exercise, use `+` and `-` to count repetitions, then complete the set.
-4. For a timed exercise, start the timer, let it finish, and complete the exercise.
-5. Let the rest timer finish and confirm the next exercise becomes available.
-6. Complete the session and confirm the summary and history entry.
-7. Force-stop and relaunch FORM, then confirm the workout history remains.
-8. Enable airplane mode and repeat the checks; all app content should remain available.
-9. From the **ALARM** screen, allow notifications and schedule the wake-up and workout reminders.
-10. Move the device time across 4:00 AM, from 03:59 to 04:00, and confirm FORM starts the new training day.
+- Java compilation: `.\gradlew.bat :app:compileDebugJavaWithJavac`
+- JavaScript syntax check: `node --check www/app.js`
+- Runnable calorie smoke check: `node tests/form-calorie.test.js`
+- Android resource processing through the release compile task.
 
-### Verified v3.0 results
+### Required physical tests before final publication
 
-The release APK was installed and tested on an Android 16 (API 36.1) emulator with networking disabled:
+- Spotify installation, sign-in, authorization, playback, and error states on a physical device.
+- Private vault capture, preview, encryption, unlock, view, delete, lock, and background behavior.
+- Encrypted backup export, import, corruption rejection, and restore behavior.
+- Workout timer, rest timer, session persistence, and history preservation.
+- Calorie calculation, weight snapshots, water/protein persistence, and history totals.
+- Calendar states and future-plan behavior.
+- Upgrade installation with `adb install -r` without data clearing.
 
-- The home screen, weekly plan, exercise cards, and bundled exercise images loaded offline.
-- The 4:00 AM reset returned the previous training day at 03:59 and the current training day at 04:00.
-- Exercise completion, rep counting, exercise timers, and rest timers worked.
-- Workout records persisted after force-stop and relaunch.
-- Wake-up and workout notifications were scheduled with IDs `4001` (4:00 AM) and `5001` (5:00 AM), repeating daily.
-- The APK verified with signature schemes v1 and v2.
-- WebView debugging is disabled in the release build, and no WebView DevTools socket was exposed.
+Do not mark physical tests complete without running them.
+
+## Known limitations
+
+- Calorie burn is an estimate and excludes rest/normal movement/BMR.
+- Spotify remains optional and requires a valid physical-client setup.
+- The private vault cannot reset a lost password; backups are required.
+- Physical-device feature verification remains pending until the user tests camera capture, local music, calendar history, and vault flows.
 
 ## Links
 
 - **Repository:** https://github.com/Harsha240105/FrOm
-- **Official release:** https://github.com/Harsha240105/FrOm/releases/tag/v3.0
-- **APK download:** https://github.com/Harsha240105/FrOm/releases/download/v3.0/FORM-v3.0-release.apk
-- **Latest release:** https://github.com/Harsha240105/FrOm/releases/latest
+- **v3.0 release:** https://github.com/Harsha240105/FrOm/releases/tag/v3.0
+- **v4.0 release:** https://github.com/Harsha240105/FrOm/releases/tag/v4.0
