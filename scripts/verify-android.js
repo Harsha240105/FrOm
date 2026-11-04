@@ -42,11 +42,16 @@ if (!/package: name='com\.harsha\.form' versionCode='9' versionName='7\.0'/.test
   throw new Error('APK package identity or version is incorrect.');
 }
 const apksigner = sdkTool('apksigner');
-const signature = run(apksigner, ['verify', '--verbose', apk]);
+const signature = run(apksigner, ['verify', '--verbose', '--print-certs', apk]);
 if (!/Verifies\s*\r?\n/.test(signature)
     || !/Verified using v1 scheme.*: true/.test(signature)
     || !/Verified using v2 scheme.*: true/.test(signature)) {
   throw new Error('APK signature verification failed.');
+}
+const expectedCertSha256 = 'A5CD73C6C33F33EFF4050EBEF75AEA7044AE817F92802E714589B98F6DBB1D84';
+const certMatch = signature.match(/Signer #1 certificate SHA-256 digest:\s*([0-9a-f]+)/i);
+if (!certMatch || certMatch[1].toUpperCase() !== expectedCertSha256) {
+  throw new Error('APK signing certificate fingerprint does not match the production certificate.');
 }
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256').update(fs.readFileSync(apk)).digest('hex').toUpperCase();
@@ -54,4 +59,5 @@ console.log(`APK verified: ${path.relative(root, apk)}`);
 console.log('Compiled Spotify resource: valid');
 console.log('Package/version: com.harsha.form 7.0 (9)');
 console.log('Signature: verified');
+console.log('Signing certificate: production SHA-256 verified');
 console.log(`SHA-256: ${hash}`);
