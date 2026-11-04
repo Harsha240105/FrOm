@@ -1,6 +1,6 @@
 'use strict';
 
-const { execFileSync } = require('child_process');
+const { execFileSync, spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -31,6 +31,16 @@ function run(tool, args) {
     shell: process.platform === 'win32' && tool.endsWith('.bat')
   });
 }
+function runCombined(tool, args) {
+  const result = spawnSync(tool, args, {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+    shell: process.platform === 'win32' && tool.endsWith('.bat')
+  });
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(result.stderr || result.stdout || `${tool} failed.`);
+  return `${result.stdout || ''}${result.stderr || ''}`;
+}
 
 const aapt = sdkTool('aapt');
 const resources = run(aapt, ['dump', '--values', 'resources', apk]);
@@ -42,14 +52,14 @@ if (!/package: name='com\.harsha\.form' versionCode='9' versionName='7\.0'/.test
   throw new Error('APK package identity or version is incorrect.');
 }
 const apksigner = sdkTool('apksigner');
-const signature = run(apksigner, ['verify', '--verbose', '--print-certs', apk]);
+const signature = runCombined(apksigner, ['verify', '--verbose', '--print-certs', apk]);
 if (!/Verifies\s*\r?\n/.test(signature)
     || !/Verified using v1 scheme.*: true/.test(signature)
     || !/Verified using v2 scheme.*: true/.test(signature)) {
   throw new Error('APK signature verification failed.');
 }
 const expectedCertSha256 = 'A5CD73C6C33F33EFF4050EBEF75AEA7044AE817F92802E714589B98F6DBB1D84';
-const certMatch = signature.match(/Signer #1 certificate SHA-256 digest:\s*([0-9a-f:]+)/i);
+const certMatch = signature.match(/certificate SHA-256 digest:\s*([0-9a-f:]+)/i);
 const actualCertSha256 = certMatch ? certMatch[1].replace(/:/g, '').toUpperCase() : '';
 if (actualCertSha256 !== expectedCertSha256) {
   throw new Error(`APK signing certificate fingerprint does not match the production certificate (got ${actualCertSha256 || '<none>'}).`);
