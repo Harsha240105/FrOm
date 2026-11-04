@@ -90,9 +90,9 @@ jobs:
 
           if ! keytool -list -v -keystore "$KS" -storetype PKCS12 \
               -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" \
-              > "$WORK_DIR/keytool.txt" 2> "$WORK_DIR/keytool.err"; then
+              > "$WORK_DIR/keytool.txt" 2>&1; then
             echo "::error::The decoded PKCS12 keystore could not be opened with ANDROID_KEYSTORE_PASSWORD and ANDROID_KEY_ALIAS. Verify that ANDROID_KEYSTORE_BASE64 is the production keystore and that the store password and alias secrets match it."
-            cat "$WORK_DIR/keytool.err" >&2 || true
+            cat "$WORK_DIR/keytool.txt" >&2 || true
             exit 1
           fi
           echo "Keystore: valid PKCS12; alias found; store password accepted."
@@ -102,9 +102,9 @@ jobs:
           if ! jarsigner -keystore "$KS" -storetype PKCS12 \
               -storepass "$ANDROID_KEYSTORE_PASSWORD" -keypass "$ANDROID_KEY_PASSWORD" \
               "$WORK_DIR/probe.jar" "$ANDROID_KEY_ALIAS" \
-              > /dev/null 2> "$WORK_DIR/jarsigner.err"; then
+              > "$WORK_DIR/jarsigner.txt" 2>&1; then
             echo "::error::The private key could not be loaded with ANDROID_KEY_PASSWORD. Verify that the key password secret matches the production keystore."
-            cat "$WORK_DIR/jarsigner.err" >&2 || true
+            cat "$WORK_DIR/jarsigner.txt" >&2 || true
             exit 1
           fi
           echo "Private key: loaded with the configured key password."
