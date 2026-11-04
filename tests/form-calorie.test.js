@@ -73,12 +73,16 @@ const sandbox = {
 };
 sandbox.globalThis = sandbox;
 const testCode = `
-const k='2026-11-03';
+const k='2026-11-05';
 const p=dayPlan(k);
 assert(p && Array.isArray(p.ids) && p.ids.length > 0, 'The test date must be a training day.');
 const id=p.ids.find(c=>EX(c)?.kind==='time')||p.ids[0];
 const exercise=EX(id);
 const now=new Date().toISOString();
+db[k]={sessionStart:null,sessionEnd:null,done:[],events:{},status:'not-started'};
+assert.strictEqual(caloriesForDay(k).minutes,0,'No completed exercises must produce no active minutes.');
+db[k]={sessionStart:now,sessionEnd:null,done:[id],events:{[id]:{startedAt:now,setLogs:[]}},status:'in-progress'};
+assert.strictEqual(caloriesForDay(k).minutes,0,'An incomplete workout must produce no calorie estimate.');
 db[k]={sessionStart:now,sessionEnd:now,done:[id],events:{[id]:{startedAt:now,endedAt:now,setsCompleted:2,setLogs:[{set:0,startedAt:now,endedAt:now,reps:exercise.reps||0,seconds:exercise.seconds||0},{set:1,startedAt:now,endedAt:now,reps:exercise.reps||0,seconds:exercise.seconds||0}]}},status:'completed'};
 profile.weightKg=80;
 profile.weightHistory={};
@@ -87,6 +91,16 @@ assert.strictEqual(d.kg,80,'The weight snapshot should use the saved body weight
 assert(d.minutes>0,'Completed timed work should produce an active calorie estimate.');
 const expected=Math.round((((3.5-1)*3.5*80*2)/200)*10)/10;
 assert(Math.abs(d.kcal-expected)<1,'Calorie estimate should use MET and completed work only; got '+d.kcal+', expected '+expected+'.');
+const secondId=p.ids.find(candidate=>candidate!==id);
+if(secondId){
+  db[k].done.push(secondId);
+  db[k].events[secondId]={startedAt:now,endedAt:now,setsCompleted:1,setLogs:[{set:0,startedAt:now,endedAt:now,reps:EX(secondId).reps||0,seconds:EX(secondId).seconds||0}]};
+  const multiple=caloriesForDay(k);
+  assert(multiple.minutes>d.minutes,'Multiple completed exercises should increase active minutes.');
+  assert(multiple.items.length>=2,'Multiple completed exercises should produce multiple calorie items.');
+}
+db[k]={sessionStart:now,sessionEnd:now,done:[id],events:{[id]:{startedAt:now,endedAt:now,setsCompleted:'invalid',setLogs:[{set:0,reps:-4,seconds:-10}]}},status:'completed'};
+assert.strictEqual(caloriesForDay(k).minutes,0,'Invalid logged work must not produce active minutes.');
 profile.weightHistory={[k]:90};
 assert.strictEqual(weightForDay(k),90,'Weight history should override the current weight for a date.');
 db[k]={sessionStart:now,sessionEnd:now,done:[id],events:{},status:'completed'};

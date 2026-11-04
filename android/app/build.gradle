@@ -17,8 +17,8 @@ android {
         applicationId "com.harsha.form"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "5.0"
+        versionCode 6
+        versionName "5.0.1"
         resValue "string", "spotify_client_id", spotifyClientId
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -51,10 +51,12 @@ android {
 task verifySpotifyConfiguration {
     doLast {
         if (!rawSpotifyClientId) {
-            throw new GradleException("SPOTIFY_CLIENT_ID_CONFIGURED=false. Set FORM_SPOTIFY_CLIENT_ID in the same shell that launches Gradle.")
+            println "SPOTIFY_CLIENT_ID_CONFIGURED=false. Spotify remains unavailable until a valid client ID is configured."
+            return
         }
         if (!(rawSpotifyClientId ==~ spotifyClientIdPattern)) {
-            throw new GradleException("SPOTIFY_CLIENT_ID_INVALID=true. The value must be 32 hexadecimal characters; it is not printed here.")
+            println "SPOTIFY_CLIENT_ID_INVALID=true. Spotify remains unavailable until a valid 32-character hexadecimal client ID is configured."
+            return
         }
         println "SPOTIFY_CLIENT_ID_CONFIGURED=true"
     }

@@ -340,7 +340,10 @@ function workSecondsFor(id,ev,stage){
   const e=EX(id);
   if(!e)return 0;
   const rx=rxFor(e,stage);
-  const logged=(ev&&Array.isArray(ev.setLogs))?ev.setLogs.length:0;
+  const logged=(ev&&Array.isArray(ev.setLogs))?ev.setLogs.filter(log=>{
+    if(!log||typeof log!=='object')return false;
+    return e.kind==='time'?Number(log.seconds)>0:Number(log.reps)>0;
+  }).length:0;
   const recorded=Math.max(0,Number(ev&&ev.setsCompleted)||0,logged);
   const sets=Math.min(rx.sets,recorded);
   const perSet=rx.seconds||(rx.reps?repTarget(rx)*REP_SECONDS:0);
@@ -349,6 +352,7 @@ function workSecondsFor(id,ev,stage){
 function caloriesForDay(k){
   const p=dayPlan(k),r=db[k],stage=p.stage||stageAt(k),kg=weightForDay(k);
   if(!p.ids.length)return {kcal:0,minutes:0,kg,items:[],note:'Rest day. No workout estimate.'};
+  if(!r||!(r.status==='completed'||r.sessionEnd))return {kcal:0,minutes:0,kg,items:[],note:'No completed exercise recorded yet.'};
   let kcal=0,seconds=0;
   const items=[];
   p.ids.forEach(id=>{

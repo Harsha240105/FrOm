@@ -1,5 +1,18 @@
 # Changelog
 
+## FORM v5.0.1
+
+### Fixed
+
+- Corrected calorie test fixtures and rejected invalid exercise logs.
+- Calorie estimates now require a completed workout record.
+
+### Security and release
+
+- Updated npm dependency overrides for patched glob, minimatch, rimraf, and tar versions.
+- Spotify configuration remains optional; missing credentials no longer block release builds.
+- Updated Android version to 5.0.1/version code 6.
+
 ## FORM v5.0
 
 ### Added

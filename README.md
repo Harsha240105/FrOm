@@ -1,6 +1,6 @@
 # FORM
 
-FORM v5.0 is a local-first Android home-training application for guided daily
+FORM v5.0.1 is a local-first Android home-training application for guided daily
 workouts, progress tracking, recovery, nutrition habits, optional music, and
 private photo storage. The web interface and exercise assets are bundled into
 the APK, so normal training use works offline.
