@@ -1,6 +1,6 @@
 # FORM
 
-FORM v5.0.2 is a local-first Android home-training application for guided daily
+FORM v6.0 is a local-first Android home-training application for guided daily
 workouts, progress tracking, recovery, nutrition habits, optional music, and
 private photo storage. The web interface and exercise assets are bundled into
 the APK, so normal training use works offline.
@@ -16,7 +16,7 @@ the APK, so normal training use works offline.
 - Recovery guidance for rest days and the Monday make-up slot. Missed workouts are not doubled up.
 - Local water and protein tracking with editable targets.
 - Food guidance and a 7–8 hour sleep recommendation.
-- Optional Spotify App Remote integration and local music playback where supported.
+- Optional Spotify Authorization Code with PKCE and Web API playback controls; local music playback where supported.
 - AES-256-GCM/PBKDF2 Photo Vault with camera capture, photo selection, preview, unlock, and deletion.
 - Encrypted local backup and restore through Android Storage Access Framework.
 - Settings for profile, programme, body weight snapshots, music, and local preferences.
@@ -60,19 +60,39 @@ python -m http.server 8080 --directory www
 ```
 
 Open `http://localhost:8080`. Browser mode supports the web UI, but Android-only
-features such as Spotify App Remote, camera capture, encrypted native vault
+features such as Spotify PKCE authorization, camera capture, encrypted native vault
 operations, and Android notifications require the APK.
 
-### Build a debug APK
+### Build Android
+
+Set `FORM_SPOTIFY_CLIENT_ID` in the same shell. The build script validates it
+without printing the value:
 
 ```powershell
-npm run build:apk
+$env:FORM_SPOTIFY_CLIENT_ID = "YOUR_32_CHARACTER_HEX_CLIENT_ID"
+npm run build:android
+npm run build:android -- --release
 ```
 
-Output:
+Linux/macOS:
 
-```text
-android\app\build\outputs\apk\debug\app-debug.apk
+```bash
+export FORM_SPOTIFY_CLIENT_ID="YOUR_32_CHARACTER_HEX_CLIENT_ID"
+npm run build:android
+npm run build:android -- --release
+```
+
+Release output:
+
+`android/app/build/outputs/apk/release/app-release.apk`
+
+An intentionally Spotify-disabled debug build requires the explicit
+`FORM_ALLOW_UNCONFIGURED_SPOTIFY=true` option. This override is rejected for
+release builds:
+
+```powershell
+$env:FORM_ALLOW_UNCONFIGURED_SPOTIFY = "true"
+npm run build:android
 ```
 
 Install on a running emulator or connected Android device:
@@ -81,7 +101,7 @@ Install on a running emulator or connected Android device:
 adb install -r .\android\app\build\outputs\apk\debug\app-debug.apk
 ```
 
-### Build a release APK
+### Release signing
 
 Create `android/keystore.properties` locally; it is ignored and must never be
 committed:
@@ -93,17 +113,6 @@ keyAlias=YOUR_KEY_ALIAS
 keyPassword=YOUR_KEY_PASSWORD
 ```
 
-Set a valid 32-character hexadecimal Spotify client ID in the same shell when
-building either variant:
-
-```powershell
-$env:FORM_SPOTIFY_CLIENT_ID = "YOUR_32_CHARACTER_HEX_CLIENT_ID"
-Set-Location android
-.\gradlew.bat assembleDebug
-.\gradlew.bat assembleRelease
-```
-
-The release output is `android\app\build\outputs\apk\release\app-release.apk`.
 Release signing enables R8 minification and resource shrinking.
 
 Spotify uses Authorization Code with PKCE and the exact redirect URI
@@ -133,8 +142,8 @@ photos are encrypted locally and are not uploaded to cloud storage or copied
 to the public Gallery. Backups are encrypted and exported through Android's
 local Storage Access Framework.
 
-Spotify is optional and communicates with the installed Spotify application
-when the native integration is configured. Photo-credit links and Spotify are
+Spotify is optional and uses the Spotify Web API after PKCE authorization.
+Photo-credit links and Spotify are
 the only features that may open external services. FORM does not require an
 account or cloud backend.
 
@@ -146,18 +155,25 @@ upgrade; the app's local data is intended to remain in place.
 ```powershell
 node --check .\www\app.js
 npm test
-npm run build:apk
+npm run build:android
+npm run verify
 ```
 
 Physical-device verification remains important for camera capture, vault
 encryption, Spotify authorization, local music, encrypted backup/restore,
 notifications, and upgrade-data preservation.
 
-The calorie smoke test currently exposes an existing calculation expectation
-mismatch (`42` actual versus `7` expected); this is tracked separately from the
-v5.0 UI release work and is not silently claimed as passing.
+The calorie regression test covers completed, incomplete, invalid, and
+multi-exercise records.
 
 ## Version history
+
+### FORM v6.0
+
+- Reliable cross-platform Android build commands with strict Spotify configuration validation.
+- Spotify Client ID is required for debug and release builds unless explicit debug-only opt-out is set.
+- Added compiled resource verification, build identity diagnostics, and repeatable GitHub Actions release publishing.
+- Android version 6.0/version code 8.
 
 ### FORM v5.0.2
 
@@ -193,5 +209,7 @@ otherwise.
 ## Links
 
 - Repository: https://github.com/Harsha240105/FrOm
+- v6.0 release: https://github.com/Harsha240105/FrOm/releases/tag/v6.0
+- v5.0.2 release: https://github.com/Harsha240105/FrOm/releases/tag/v5.0.2
 - v5.0 release: https://github.com/Harsha240105/FrOm/releases/tag/v5.0
 - v4.0 release: https://github.com/Harsha240105/FrOm/releases/tag/v4.0

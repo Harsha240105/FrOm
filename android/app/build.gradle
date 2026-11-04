@@ -6,8 +6,18 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-def rawSpotifyClientId = (project.findProperty('FORM_SPOTIFY_CLIENT_ID') ?: System.getenv('FORM_SPOTIFY_CLIENT_ID') ?: '').toString().trim()
+def spotifyProperty = project.hasProperty('FORM_SPOTIFY_CLIENT_ID') ? project.property('FORM_SPOTIFY_CLIENT_ID').toString().trim() : ''
+def spotifyEnvironment = (System.getenv('FORM_SPOTIFY_CLIENT_ID') ?: '').toString().trim()
+if (spotifyProperty && spotifyEnvironment && spotifyProperty != spotifyEnvironment) {
+    throw new GradleException('FORM_SPOTIFY_CLIENT_ID project property and environment variable do not match.')
+}
+def rawSpotifyClientId = spotifyProperty ?: spotifyEnvironment
 def spotifyClientIdPattern = /^[0-9a-fA-F]{32}$/
+def allowUnconfiguredSpotify = ((project.findProperty('FORM_ALLOW_UNCONFIGURED_SPOTIFY') ?: System.getenv('FORM_ALLOW_UNCONFIGURED_SPOTIFY') ?: '').toString().trim().equalsIgnoreCase('true'))
+def releaseRequested = gradle.startParameter.taskNames.any { it.toLowerCase().contains('release') }
+if (!(rawSpotifyClientId ==~ spotifyClientIdPattern) && (!allowUnconfiguredSpotify || releaseRequested)) {
+    throw new GradleException('A valid 32-character FORM_SPOTIFY_CLIENT_ID is required. Only an explicit debug build with FORM_ALLOW_UNCONFIGURED_SPOTIFY=true may omit it.')
+}
 def spotifyClientId = (rawSpotifyClientId ==~ spotifyClientIdPattern) ? rawSpotifyClientId : ''
 
 android {
@@ -17,8 +27,8 @@ android {
         applicationId "com.harsha.form"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "5.0.2"
+        versionCode 8
+        versionName "6.0"
         resValue "string", "spotify_client_id", spotifyClientId
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -50,20 +60,13 @@ android {
 
 task verifySpotifyConfiguration {
     doLast {
-        if (!rawSpotifyClientId) {
-            println "SPOTIFY_CLIENT_ID_CONFIGURED=false. Spotify remains unavailable until a valid client ID is configured."
-            return
-        }
-        if (!(rawSpotifyClientId ==~ spotifyClientIdPattern)) {
-            println "SPOTIFY_CLIENT_ID_INVALID=true. Spotify remains unavailable until a valid 32-character hexadecimal client ID is configured."
-            return
-        }
-        println "SPOTIFY_CLIENT_ID_CONFIGURED=true"
+        println "SPOTIFY_CLIENT_ID_CONFIGURED=${spotifyClientId ? 'true' : 'false'}"
+        println "SPOTIFY_UNCONFIGURED_DEBUG_ALLOWED=${spotifyClientId ? 'false' : allowUnconfiguredSpotify.toString()}"
     }
 }
 
 tasks.configureEach { task ->
-    if (task.name == 'preReleaseBuild') {
+    if (task.name == 'preBuild' || task.name == 'preReleaseBuild') {
         task.dependsOn verifySpotifyConfiguration
     }
 }

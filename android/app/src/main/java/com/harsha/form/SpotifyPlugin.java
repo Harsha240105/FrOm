@@ -1,7 +1,9 @@
 package com.harsha.form;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 
@@ -77,6 +79,18 @@ public class SpotifyPlugin extends Plugin {
 
     private JSObject state(String status) {
         JSObject result = new JSObject();
+        try {
+            android.content.pm.PackageInfo packageInfo = getContext().getPackageManager()
+                    .getPackageInfo(getContext().getPackageName(), 0);
+            result.put("versionName", packageInfo.versionName);
+            result.put("versionCode", Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+                    ? packageInfo.getLongVersionCode() : packageInfo.versionCode);
+        } catch (Exception e) {
+            result.put("versionName", "");
+            result.put("versionCode", 0);
+        }
+        result.put("buildType", (getContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 ? "debug" : "release");
+        result.put("nativePluginAvailable", true);
         result.put("available", true);
         result.put("configured", !clientId().isEmpty());
         result.put("installed", installed());

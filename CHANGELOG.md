@@ -1,5 +1,17 @@
 # Changelog
 
+## FORM v6.0
+
+### Changed
+
+- Updated Android version to 6.0/version code 8.
+- Spotify Client ID validation now fails builds when configuration is missing,
+  invalid, or inconsistent between Gradle property and environment variable.
+- Added cross-platform `npm run build:android` and `npm run verify` commands.
+- Added repeatable GitHub Actions release workflow with compiled resource and
+  signature verification.
+- Added runtime build identity diagnostics without exposing the Client ID.
+
 ## FORM v5.0.2
 
 ### Added

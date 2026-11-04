@@ -1,0 +1,68 @@
+name: Android release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - v6.0
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      FORM_SPOTIFY_CLIENT_ID: ${{ vars.FORM_SPOTIFY_CLIENT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate configuration
+        run: |
+          test "${#FORM_SPOTIFY_CLIENT_ID}" -eq 32
+          echo "$FORM_SPOTIFY_CLIENT_ID" | grep -Eq '^[0-9a-fA-F]{32}$'
+          echo "Spotify Client ID supplied: yes"
+      - name: Test and sync
+        run: |
+          node --check www/app.js
+          npm test
+          npm audit --omit=optional
+          npm run sync
+      - name: Configure signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          test -n "$ANDROID_KEYSTORE_BASE64"
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/form-release.jks
+          cat > android/keystore.properties <<EOF
+          storeFile=form-release.jks
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          keyPassword=$ANDROID_KEY_PASSWORD
+          EOF
+      - name: Build release
+        run: npm run build:android -- --release
+      - name: Verify release APK
+        run: npm run verify
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v6.0')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk FORM-v6.0-android.apk
+          gh release create v6.0 FORM-v6.0-android.apk \
+            --title "FORM v6.0 — Reliable Android Build & Spotify Integration" \
+            --generate-notes

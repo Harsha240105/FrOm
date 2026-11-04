@@ -1176,6 +1176,11 @@ function applySpotify(s){
   else if(!hasPlaylist)note='Spotify connected. Add a focus playlist in Settings, or PLAY resumes the current track.';
   else note='PLAY starts your saved focus playlist. Audio streams from the official Spotify app.';
   $('spotifyNote').textContent=note;
+  const buildInfo=$('spotifyBuildInfo');
+  if(buildInfo){
+    if(!available)buildInfo.textContent='Build identity unavailable in browser mode.';
+    else buildInfo.textContent=(s.versionName||'Unknown')+' · '+(s.buildType||'unknown')+' build · Spotify configuration '+(configured?'present':'missing')+' · native plugin '+(s.nativePluginAvailable?'available':'unavailable');
+  }
 }
 function spotifyUri(value){
   const v=String(value||'').trim();
