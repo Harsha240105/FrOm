@@ -23,7 +23,9 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
+      - name: Verify Java version
+        run: java -version
       - name: Set up Android SDK
         shell: bash
         run: |
