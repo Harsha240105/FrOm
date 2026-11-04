@@ -58,7 +58,7 @@ jobs:
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           test -n "$ANDROID_KEYSTORE_BASE64"
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/form-release.jks
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/form-release.jks
           cat > android/keystore.properties <<EOF
           storeFile=form-release.jks
           storePassword=$ANDROID_KEYSTORE_PASSWORD
