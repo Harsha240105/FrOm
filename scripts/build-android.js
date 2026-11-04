@@ -12,14 +12,16 @@ if (!/^[0-9a-fA-F]{32}$/.test(clientId) && (!allowUnconfigured || release)) {
 }
 console.log(`Spotify Client ID supplied: ${/^[0-9a-fA-F]{32}$/.test(clientId) ? 'yes' : 'no (explicit debug-disabled mode)'}`);
 
-const gradle = process.platform === 'win32' ? 'gradlew.bat' : './gradlew';
 const args = [release ? 'assembleRelease' : 'assembleDebug'];
 if (clientId) args.push(`-PFORM_SPOTIFY_CLIENT_ID=${clientId}`);
 if (!clientId && allowUnconfigured) args.push('-PFORM_ALLOW_UNCONFIGURED_SPOTIFY=true');
-const result = spawnSync(gradle, args, {
+const isWindows = process.platform === 'win32';
+const command = isWindows ? 'gradlew.bat' : 'bash';
+const commandArgs = isWindows ? args : ['./gradlew', ...args];
+const result = spawnSync(command, commandArgs, {
   cwd: path.resolve(__dirname, '..', 'android'),
   stdio: 'inherit',
-  shell: process.platform === 'win32'
+  shell: isWindows
 });
 if (result.error) {
   console.error(`Android build could not start: ${result.error.message}`);
