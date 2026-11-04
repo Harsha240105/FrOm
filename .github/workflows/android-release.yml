@@ -92,7 +92,7 @@ jobs:
               -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" \
               > "$WORK_DIR/keytool.txt" 2> "$WORK_DIR/keytool.err"; then
             echo "::error::The decoded PKCS12 keystore could not be opened with ANDROID_KEYSTORE_PASSWORD and ANDROID_KEY_ALIAS. Verify that ANDROID_KEYSTORE_BASE64 is the production keystore and that the store password and alias secrets match it."
-            sed -E 's/(password|storepass|keypass)[^ ]*/\1 [redacted]/Ig' "$WORK_DIR/keytool.err" >&2 || true
+            cat "$WORK_DIR/keytool.err" >&2 || true
             exit 1
           fi
           echo "Keystore: valid PKCS12; alias found; store password accepted."
@@ -104,7 +104,7 @@ jobs:
               "$WORK_DIR/probe.jar" "$ANDROID_KEY_ALIAS" \
               > /dev/null 2> "$WORK_DIR/jarsigner.err"; then
             echo "::error::The private key could not be loaded with ANDROID_KEY_PASSWORD. Verify that the key password secret matches the production keystore."
-            sed -E 's/(password|storepass|keypass)[^ ]*/\1 [redacted]/Ig' "$WORK_DIR/jarsigner.err" >&2 || true
+            cat "$WORK_DIR/jarsigner.err" >&2 || true
             exit 1
           fi
           echo "Private key: loaded with the configured key password."
