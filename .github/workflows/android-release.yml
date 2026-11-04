@@ -93,6 +93,7 @@ jobs:
               > "$WORK_DIR/keytool.txt" 2>&1; then
             echo "::error::The decoded PKCS12 keystore could not be opened with ANDROID_KEYSTORE_PASSWORD and ANDROID_KEY_ALIAS. Verify that ANDROID_KEYSTORE_BASE64 is the production keystore and that the store password and alias secrets match it."
             cat "$WORK_DIR/keytool.txt" >&2 || true
+            echo "Decoded keystore SHA-256: $(sha256sum "$KS" | awk '{print toupper($1)}')"
             exit 1
           fi
           echo "Keystore: valid PKCS12; alias found; store password accepted."
