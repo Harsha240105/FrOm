@@ -12,6 +12,8 @@
 - Updated npm dependency overrides for patched glob, minimatch, rimraf, and tar versions.
 - Spotify configuration remains optional; missing credentials no longer block release builds.
 - Updated Android version to 5.0.1/version code 6.
+- Spotify now uses Authorization Code with PKCE and returns through the
+  registered `formspotify://callback` deep link without a client secret.
 
 ## FORM v5.0
 

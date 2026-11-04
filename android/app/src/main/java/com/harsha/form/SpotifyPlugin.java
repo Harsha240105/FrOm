@@ -1,5 +1,8 @@
 package com.harsha.form;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Base64;
 import android.util.Log;
 
 import com.getcapacitor.JSObject;
@@ -7,34 +10,53 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.spotify.android.appremote.api.ConnectionParams;
-import com.spotify.android.appremote.api.Connector;
-import com.spotify.android.appremote.api.SpotifyAppRemote;
-import com.spotify.android.appremote.api.error.AuthenticationFailedException;
-import com.spotify.android.appremote.api.error.CouldNotFindSpotifyApp;
-import com.spotify.android.appremote.api.error.NotLoggedInException;
-import com.spotify.android.appremote.api.error.SpotifyDisconnectedException;
-import com.spotify.protocol.client.Subscription;
-import com.spotify.protocol.types.PlayerState;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @CapacitorPlugin(name = "Spotify")
 public class SpotifyPlugin extends Plugin {
 
     private static final String TAG = "FORM_Spotify";
     private static final String REDIRECT_URI = "formspotify://callback";
+    private static final String AUTHORIZE_URI = "https://accounts.spotify.com/authorize";
+    private static final String TOKEN_URI = "https://accounts.spotify.com/api/token";
+    private static final String API_URI = "https://api.spotify.com/v1";
+    private static final String SCOPES = "user-read-playback-state user-modify-playback-state";
+    private static SpotifyPlugin activePlugin;
 
-    private SpotifyAppRemote remote;
-    private Subscription<PlayerState> playerStateSubscription;
-    private boolean connecting;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private String accessToken = "";
+    private long tokenExpiresAt;
+    private String pendingState = "";
+    private String codeVerifier = "";
+    private PluginCall pendingConnectCall;
     private boolean playing;
     private String track = "";
     private String artist = "";
 
+    @Override
+    public void load() {
+        super.load();
+        activePlugin = this;
+    }
+
     private String clientId() {
         try {
             String value = getContext().getString(R.string.spotify_client_id);
-            if (value == null) return "";
-            String trimmed = value.trim();
+            String trimmed = value == null ? "" : value.trim();
             return trimmed.matches("[0-9a-fA-F]{32}") ? trimmed : "";
         } catch (Exception e) {
             return "";
@@ -43,10 +65,14 @@ public class SpotifyPlugin extends Plugin {
 
     private boolean installed() {
         try {
-            return SpotifyAppRemote.isSpotifyInstalled(getContext());
+            return getContext().getPackageManager().getPackageInfo("com.spotify.music", 0) != null;
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private boolean connected() {
+        return !accessToken.isEmpty() && System.currentTimeMillis() < tokenExpiresAt;
     }
 
     private JSObject state(String status) {
@@ -54,7 +80,7 @@ public class SpotifyPlugin extends Plugin {
         result.put("available", true);
         result.put("configured", !clientId().isEmpty());
         result.put("installed", installed());
-        result.put("connected", remote != null && remote.isConnected());
+        result.put("connected", connected());
         result.put("playing", playing);
         result.put("track", track);
         result.put("artist", artist);
@@ -73,206 +99,223 @@ public class SpotifyPlugin extends Plugin {
 
     @PluginMethod
     public void connect(PluginCall call) {
-        Log.i(TAG, "Connect requested");
-        if (clientId().isEmpty()) {
-            Log.w(TAG, "Connect blocked: client ID is not configured");
+        String id = clientId();
+        if (id.isEmpty()) {
             call.resolve(state("unconfigured"));
             return;
         }
-        if (!installed()) {
-            Log.w(TAG, "Connect blocked: Spotify app is not installed");
-            call.resolve(state("not_installed"));
-            return;
-        }
-        if (remote != null && remote.isConnected()) {
-            Log.i(TAG, "Already connected; refreshing player subscription");
-            subscribeToPlayerState();
-            call.resolve(state("connected"));
-            return;
-        }
-        if (connecting) {
-            Log.i(TAG, "Duplicate connect ignored while authorization is pending");
+        if (pendingConnectCall != null) {
             call.resolve(state("connecting"));
             return;
         }
-        connecting = true;
-        ConnectionParams params = new ConnectionParams.Builder(clientId())
-                .setRedirectUri(REDIRECT_URI)
-                .showAuthView(true)
-                .build();
         try {
-            Log.i(TAG, "Launching Spotify App Remote authorization view");
-            SpotifyAppRemote.connect(getActivity(), params, new Connector.ConnectionListener() {
-                @Override
-                public void onConnected(SpotifyAppRemote spotifyAppRemote) {
-                    Log.i(TAG, "Spotify authorization succeeded");
-                    connecting = false;
-                    remote = spotifyAppRemote;
-                    subscribeToPlayerState();
-                    call.resolve(state("connected"));
-                    notifyListeners("authResult", state("connected"));
-                    notifyState();
-                }
-
-                @Override
-                public void onFailure(Throwable error) {
-                    Log.w(TAG, "Spotify authorization failed: " + error.getClass().getSimpleName());
-                    connecting = false;
-                    remote = null;
-                    String status = errorStatus(error);
-                    call.resolve(state(status));
-                    notifyListeners("authResult", state(status));
-                    notifyState();
-                }
-            });
+            SecureRandom random = new SecureRandom();
+            byte[] verifierBytes = new byte[32];
+            random.nextBytes(verifierBytes);
+            codeVerifier = base64Url(verifierBytes);
+            pendingState = codeVerifier.substring(0, 24);
+            String challenge = base64Url(MessageDigest.getInstance("SHA-256")
+                    .digest(codeVerifier.getBytes(StandardCharsets.US_ASCII)));
+            Uri authorization = Uri.parse(AUTHORIZE_URI).buildUpon()
+                    .appendQueryParameter("client_id", id)
+                    .appendQueryParameter("response_type", "code")
+                    .appendQueryParameter("redirect_uri", REDIRECT_URI)
+                    .appendQueryParameter("scope", SCOPES)
+                    .appendQueryParameter("code_challenge_method", "S256")
+                    .appendQueryParameter("code_challenge", challenge)
+                    .appendQueryParameter("state", pendingState)
+                    .build();
+            pendingConnectCall = call;
+            getActivity().startActivity(new Intent(Intent.ACTION_VIEW, authorization));
         } catch (Exception e) {
-            Log.e(TAG, "Spotify authorization launch failed", e);
-            connecting = false;
+            pendingConnectCall = null;
             call.resolve(state("error"));
-            notifyListeners("authResult", state("error"));
-            notifyState();
         }
+    }
+
+    public static void handleRedirectIntent(Intent intent) {
+        if (activePlugin == null || intent == null) return;
+        Uri uri = intent.getData();
+        if (uri != null && "formspotify".equals(uri.getScheme())
+                && "callback".equals(uri.getHost())) {
+            activePlugin.handleRedirect(uri);
+        }
+    }
+
+    private void handleRedirect(Uri uri) {
+        String error = uri.getQueryParameter("error");
+        String returnedState = uri.getQueryParameter("state");
+        String code = uri.getQueryParameter("code");
+        if (error != null || code == null || !pendingState.equals(returnedState)) {
+            finishConnect("auth_failed");
+            return;
+        }
+        final String verifier = codeVerifier;
+        executor.execute(() -> {
+            try {
+                JSONObject token = postForm(TOKEN_URI,
+                        "grant_type=authorization_code"
+                                + "&code=" + encode(code)
+                                + "&redirect_uri=" + encode(REDIRECT_URI)
+                                + "&client_id=" + encode(clientId())
+                                + "&code_verifier=" + encode(verifier));
+                String tokenValue = token.optString("access_token", "");
+                if (tokenValue.isEmpty()) {
+                    finishConnect("auth_failed");
+                    return;
+                }
+                accessToken = tokenValue;
+                tokenExpiresAt = System.currentTimeMillis()
+                        + (token.optLong("expires_in", 3600) * 1000L) - 30000L;
+                finishConnect("connected");
+                refreshPlayerState();
+            } catch (Exception e) {
+                finishConnect("auth_failed");
+            }
+        });
+    }
+
+    private void finishConnect(String status) {
+        getActivity().runOnUiThread(() -> {
+            PluginCall call = pendingConnectCall;
+            pendingConnectCall = null;
+            if (call != null) call.resolve(state(status));
+            notifyListeners("authResult", state(status));
+            notifyState();
+        });
     }
 
     @PluginMethod
     public void disconnect(PluginCall call) {
-        disconnectRemote();
+        accessToken = "";
+        tokenExpiresAt = 0;
+        playing = false;
+        track = "";
+        artist = "";
         call.resolve(state("disconnected"));
         notifyState();
     }
 
     @PluginMethod
     public void play(PluginCall call) {
-        if (!hasRemote(call)) return;
         String uri = call.getString("uri", "");
-        if (uri != null && !uri.trim().isEmpty()) {
-            remote.getPlayerApi().play(uri.trim())
-                    .setResultCallback(empty -> {
-                        notifyState();
-                        call.resolve(state("playing"));
-                    })
-                    .setErrorCallback(error -> {
-                        notifyState();
-                        call.resolve(state("error"));
-                    });
-            return;
-        }
-        remote.getPlayerApi().resume()
-                .setResultCallback(empty -> {
-                    notifyState();
-                    call.resolve(state("playing"));
-                })
-                .setErrorCallback(error -> {
-                    notifyState();
-                    call.resolve(state("error"));
-                });
+        requestPlayer(call, "PUT", "/me/player/play",
+                uri == null || uri.trim().isEmpty() ? "{}"
+                        : "{\"context_uri\":\"" + jsonEscape(uri.trim()) + "\"}", "playing");
     }
 
     @PluginMethod
     public void pause(PluginCall call) {
-        if (!hasRemote(call)) return;
-        remote.getPlayerApi().pause()
-                .setResultCallback(empty -> {
-                    notifyState();
-                    call.resolve(state("paused"));
-                })
-                .setErrorCallback(error -> {
-                    notifyState();
-                    call.resolve(state("error"));
-                });
+        requestPlayer(call, "PUT", "/me/player/pause", null, "paused");
     }
 
     @PluginMethod
     public void next(PluginCall call) {
-        if (!hasRemote(call)) return;
-        remote.getPlayerApi().skipNext()
-                .setResultCallback(empty -> {
-                    notifyState();
-                    call.resolve(state("next"));
-                })
-                .setErrorCallback(error -> {
-                    notifyState();
-                    call.resolve(state("error"));
-                });
+        requestPlayer(call, "POST", "/me/player/next", null, "next");
     }
 
     @PluginMethod
     public void previous(PluginCall call) {
-        if (!hasRemote(call)) return;
-        remote.getPlayerApi().skipPrevious()
-                .setResultCallback(empty -> {
-                    notifyState();
-                    call.resolve(state("previous"));
-                })
-                .setErrorCallback(error -> {
-                    notifyState();
-                    call.resolve(state("error"));
-                });
+        requestPlayer(call, "POST", "/me/player/previous", null, "previous");
     }
 
-    private boolean hasRemote(PluginCall call) {
-        if (remote != null && remote.isConnected()) return true;
-        call.resolve(state("disconnected"));
-        return false;
-    }
-
-    private void subscribeToPlayerState() {
-        if (remote == null) return;
-        if (playerStateSubscription != null && !playerStateSubscription.isCanceled()) {
-            playerStateSubscription.cancel();
+    private void requestPlayer(PluginCall call, String method, String path, String body, String success) {
+        if (!connected()) {
+            call.resolve(state("disconnected"));
+            return;
         }
-        Subscription<PlayerState> subscription = remote.getPlayerApi().subscribeToPlayerState();
-        subscription.setEventCallback(playerState -> {
-            updateFromPlayerState(playerState);
-            notifyState();
+        executor.execute(() -> {
+            try {
+                apiRequest(method, path, body);
+                if ("playing".equals(success)) playing = true;
+                if ("paused".equals(success)) playing = false;
+                refreshPlayerState();
+                getActivity().runOnUiThread(() -> call.resolve(state(success)));
+            } catch (Exception e) {
+                getActivity().runOnUiThread(() -> call.resolve(state(e.getMessage() != null
+                        && e.getMessage().contains("401") ? "auth_failed" : "error")));
+            }
         });
-        subscription.setErrorCallback(error -> {
-            playing = false;
-            notifyState();
-        });
-        playerStateSubscription = subscription;
     }
 
-    private void updateFromPlayerState(PlayerState playerState) {
-        if (playerState == null) return;
-        playing = !playerState.isPaused;
-        if (playerState.track != null) {
-            track = playerState.track.name == null ? "" : playerState.track.name;
-            artist = playerState.track.artist == null || playerState.track.artist.name == null
-                    ? ""
-                    : playerState.track.artist.name;
-        } else {
-            track = "";
-            artist = "";
+    private void refreshPlayerState() {
+        try {
+            JSONObject player = apiRequest("GET", "/me/player", null);
+            playing = player.optBoolean("is_playing", false);
+            JSONObject item = player.optJSONObject("item");
+            if (item != null) {
+                track = item.optString("name", "");
+                JSONObject artists = item.optJSONArray("artists") == null ? null
+                        : item.optJSONArray("artists").optJSONObject(0);
+                artist = artists == null ? "" : artists.optString("name", "");
+            }
+            getActivity().runOnUiThread(this::notifyState);
+        } catch (Exception ignored) {
+            // A 204 response means there is no active Spotify player.
         }
     }
 
-    private String errorStatus(Throwable error) {
-        if (error instanceof CouldNotFindSpotifyApp) return "not_installed";
-        if (error instanceof AuthenticationFailedException) return "auth_failed";
-        if (error instanceof NotLoggedInException) return "not_logged_in";
-        if (error instanceof SpotifyDisconnectedException) return "disconnected";
-        return "error";
+    private JSONObject apiRequest(String method, String path, String body) throws Exception {
+        HttpURLConnection connection = (HttpURLConnection) new URL(API_URI + path).openConnection();
+        connection.setRequestMethod(method);
+        connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setConnectTimeout(15000);
+        connection.setReadTimeout(15000);
+        if (body != null) {
+            connection.setDoOutput(true);
+            try (OutputStream output = connection.getOutputStream()) {
+                output.write(body.getBytes(StandardCharsets.UTF_8));
+            }
+        }
+        int responseCode = connection.getResponseCode();
+        if (responseCode == 204) return new JSONObject();
+        String response = read(connection, responseCode >= 400);
+        if (responseCode >= 400) throw new Exception(String.valueOf(responseCode));
+        return response.isEmpty() ? new JSONObject() : new JSONObject(response);
     }
 
-    private void disconnectRemote() {
-        if (playerStateSubscription != null) {
-            if (!playerStateSubscription.isCanceled()) playerStateSubscription.cancel();
-            playerStateSubscription = null;
+    private JSONObject postForm(String endpoint, String body) throws Exception {
+        HttpURLConnection connection = (HttpURLConnection) new URL(endpoint).openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setDoOutput(true);
+        try (OutputStream output = connection.getOutputStream()) {
+            output.write(body.getBytes(StandardCharsets.UTF_8));
         }
-        if (remote != null) {
-            SpotifyAppRemote.disconnect(remote);
-            remote = null;
+        int responseCode = connection.getResponseCode();
+        String response = read(connection, responseCode >= 400);
+        if (responseCode >= 400) throw new Exception(String.valueOf(responseCode));
+        return new JSONObject(response);
+    }
+
+    private String read(HttpURLConnection connection, boolean error) throws Exception {
+        InputStream stream = error ? connection.getErrorStream() : connection.getInputStream();
+        if (stream == null) return "";
+        StringBuilder result = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) result.append(line);
         }
-        connecting = false;
-        playing = false;
-        track = "";
-        artist = "";
+        return result.toString();
+    }
+
+    private static String base64Url(byte[] value) {
+        return Base64.encodeToString(value, Base64.NO_WRAP | Base64.URL_SAFE | Base64.NO_PADDING);
+    }
+
+    private static String encode(String value) throws Exception {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+    }
+
+    private static String jsonEscape(String value) {
+        return value.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 
     @Override
     protected void handleOnDestroy() {
-        disconnectRemote();
+        if (activePlugin == this) activePlugin = null;
+        executor.shutdownNow();
         super.handleOnDestroy();
     }
 }

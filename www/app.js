@@ -1149,7 +1149,6 @@ function applySpotify(s){
   let label='UNAVAILABLE';
   if(available){
     if(!configured)label='SETUP NEEDED';
-    else if(!installed)label='APP MISSING';
     else if(status==='connecting')label='LINKING';
     else if(connected)label='CONNECTED';
     else if(status==='auth_failed')label='AUTH FAILED';
@@ -1160,8 +1159,7 @@ function applySpotify(s){
   const hasPlaylist=!!spotifyUri(profile.spotifyPlaylist);
   $('spotifyStatus').textContent=label;
   $('spotifyTrack').textContent=connected&&s.track?s.track:'Not connected';
-  $('spotifyArtist').textContent=connected&&s.artist?s.artist:available&&installed?'Spotify is ready to link.':'Spotify controls are optional.';
-  const canUse=available&&configured&&installed;
+  $('spotifyArtist').textContent=connected&&s.artist?s.artist:available&&configured?'Spotify is ready to link.':'Spotify controls are optional.';
   $('spotifyPrev').disabled=!connected;
   $('spotifyNext').disabled=!connected;
   $('spotifyPlay').disabled=!connected||playing;
@@ -1173,7 +1171,6 @@ function applySpotify(s){
   if(!available&&s.error)note='The native Spotify bridge is unavailable in this build. Rebuild after adding the plugin.';
   else if(!available)note='Open FORM as the Android app to use Spotify controls.';
   else if(!configured)note=SPOTIFY_NOTES.unconfigured;
-  else if(!installed)note=SPOTIFY_NOTES.not_installed;
   else if(status&&status!=='connected'&&SPOTIFY_NOTES[status])note=SPOTIFY_NOTES[status];
   else if(!connected)note='Tap LINK. Finish the Spotify authorisation in the browser, then return to FORM.';
   else if(!hasPlaylist)note='Spotify connected. Add a focus playlist in Settings, or PLAY resumes the current track.';

@@ -93,17 +93,25 @@ keyAlias=YOUR_KEY_ALIAS
 keyPassword=YOUR_KEY_PASSWORD
 ```
 
-Set a valid 32-character hexadecimal Spotify client ID in the same shell if
-building the release variant:
+Set a valid 32-character hexadecimal Spotify client ID in the same shell when
+building either variant:
 
 ```powershell
 $env:FORM_SPOTIFY_CLIENT_ID = "YOUR_32_CHARACTER_HEX_CLIENT_ID"
 Set-Location android
+.\gradlew.bat assembleDebug
 .\gradlew.bat assembleRelease
 ```
 
 The release output is `android\app\build\outputs\apk\release\app-release.apk`.
 Release signing enables R8 minification and resource shrinking.
+
+Spotify uses Authorization Code with PKCE and the exact redirect URI
+`formspotify://callback`. Register that URI in the Spotify Developer Dashboard.
+The Android app does not contain or require a Spotify client secret. Spotify
+playback controls use the Web API and require a Spotify Premium account with an
+active playback device; the rest of FORM remains usable when Spotify is not
+configured.
 
 ## Project structure
 
