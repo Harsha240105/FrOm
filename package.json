@@ -5,6 +5,7 @@
   "description": "FORM daily training app wrapped in Capacitor",
   "scripts": {
     "sync": "cap sync android",
+    "prepare:spotify-sdk": "node scripts/prepare-spotify-sdk.js",
     "build": "node scripts/build-android.js",
     "build:android": "node scripts/build-android.js",
     "test": "node tests/form-calorie.test.js && node tests/spotify-playback.test.js",

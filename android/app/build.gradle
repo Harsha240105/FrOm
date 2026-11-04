@@ -65,9 +65,19 @@ task verifySpotifyConfiguration {
     }
 }
 
+task verifySpotifyAppRemoteSdk {
+    doLast {
+        def sdkFile = file('libs/spotify-app-remote-release-0.8.0.aar')
+        if (!sdkFile.exists()) {
+            throw new GradleException('Spotify App Remote SDK is missing. Run npm run prepare:spotify-sdk before building.')
+        }
+    }
+}
+
 tasks.configureEach { task ->
     if (task.name == 'preBuild' || task.name == 'preReleaseBuild') {
         task.dependsOn verifySpotifyConfiguration
+        task.dependsOn verifySpotifyAppRemoteSdk
     }
 }
 

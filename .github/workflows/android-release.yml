@@ -46,6 +46,8 @@ jobs:
           npm test
           npm audit --omit=optional
           npm run sync
+      - name: Prepare official Spotify App Remote SDK
+        run: npm run prepare:spotify-sdk
       - name: Configure signing
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
