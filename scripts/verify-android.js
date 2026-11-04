@@ -49,9 +49,10 @@ if (!/Verifies\s*\r?\n/.test(signature)
   throw new Error('APK signature verification failed.');
 }
 const expectedCertSha256 = 'A5CD73C6C33F33EFF4050EBEF75AEA7044AE817F92802E714589B98F6DBB1D84';
-const certMatch = signature.match(/Signer #1 certificate SHA-256 digest:\s*([0-9a-f]+)/i);
-if (!certMatch || certMatch[1].toUpperCase() !== expectedCertSha256) {
-  throw new Error('APK signing certificate fingerprint does not match the production certificate.');
+const certMatch = signature.match(/Signer #1 certificate SHA-256 digest:\s*([0-9a-f:]+)/i);
+const actualCertSha256 = certMatch ? certMatch[1].replace(/:/g, '').toUpperCase() : '';
+if (actualCertSha256 !== expectedCertSha256) {
+  throw new Error(`APK signing certificate fingerprint does not match the production certificate (got ${actualCertSha256 || '<none>'}).`);
 }
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256').update(fs.readFileSync(apk)).digest('hex').toUpperCase();
