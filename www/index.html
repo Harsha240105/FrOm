@@ -10,12 +10,14 @@
 :root{--paper:#0b0b0b;--paper2:#121212;--ink:#f4f2ec;--muted:#a4a49c;--faint:#787870;--line:#2b2b2b;--soft:#1b1b1b;--white:#ffffff;--black:#000000;--green:#3ddc84;--radius:2px}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--black)}
+html,body{overflow-x:hidden}
 body{font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit;color:var(--ink);background:var(--paper2);border:1px solid var(--line);border-radius:var(--radius)}
 button{cursor:pointer}
 button:disabled{cursor:default;opacity:.42}
 a{color:inherit}
 .phone{max-width:480px;min-height:100vh;margin:0 auto;background:var(--paper);padding:0 16px 40px}
+.phone{padding-bottom:calc(94px + env(safe-area-inset-bottom))}
 .top{display:flex;align-items:center;justify-content:space-between;padding:16px 0 12px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:20}
 .brand{display:flex;align-items:baseline;gap:8px}
 .brand h1{font-size:19px;letter-spacing:-.4px;margin:0;font-weight:800;text-transform:lowercase}
@@ -45,8 +47,24 @@ a{color:inherit}
   .streakPulse{animation:none}
   #dateLine{animation:none}
 }
-.view{display:none;padding:18px 0 0}
+.view{display:none;padding:12px 0 0}
 .view.active{display:block}
+.bottomNav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(448px,calc(100% - 24px));height:64px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:6px;border:1px solid #1d2b48;border-radius:34px;background:#080d16;box-shadow:0 10px 28px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.03) inset;z-index:25}
+.bottomNav button{position:relative;display:flex;align-items:center;justify-content:center;border:0;border-radius:28px;background:transparent;color:#f0f3f8;padding:0;z-index:0}
+.bottomNav button::before{content:"";position:absolute;inset:0;border-radius:28px;background:rgba(61,220,132,.18);opacity:0;transform:scale(.72);transition:opacity .28s ease,transform .28s cubic-bezier(.2,.8,.2,1);z-index:-1}
+.bottomNav button span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.bottomNav button svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:transform .28s cubic-bezier(.2,.8,.2,1),stroke-width .28s ease}
+.bottomNav button.active{color:var(--green)}
+.bottomNav button.active::before{opacity:1;transform:scale(1)}
+.bottomNav button.active svg{transform:scale(1.08);stroke-width:2.15;animation:navIconPop .32s cubic-bezier(.2,.8,.2,1)}
+.bottomNav button:active svg{transform:scale(.86)}
+.bottomNav button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@keyframes navIconPop{0%{opacity:.55;transform:translateY(2px) scale(.82)}70%{transform:translateY(-2px) scale(1.17)}100%{opacity:1;transform:translateY(-1px) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.bottomNav button::before,.bottomNav button svg,.bottomNav button.active svg{animation:none;transition:none}}
+.moreGrid{display:grid;gap:8px}
+.moreItem{display:flex;align-items:center;justify-content:space-between;text-align:left;width:100%;padding:14px;background:var(--paper2);border:1px solid var(--line);color:var(--ink);font-size:11px;font-weight:700}
+.moreItem small{display:block;color:var(--muted);font-size:9px;font-weight:500;margin-top:3px}
+.view>*{max-width:100%;min-width:0}
 .overline{font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);font-weight:650;margin-bottom:6px}
 .date{font-size:34px;line-height:.98;letter-spacing:-1.7px;font-weight:790;margin:4px 0 5px}
 .weekday{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600}
@@ -56,13 +74,13 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .smallNote{font-size:10px;line-height:1.5;color:var(--muted)}
 .tinyNote{font-size:9px;line-height:1.45;color:var(--faint)}
 .muted{color:var(--muted)}
-.panel{border:1px solid var(--line);background:rgba(255,255,255,.03);padding:16px;margin:12px 0;border-radius:var(--radius)}
+.panel{border:1px solid var(--line);background:rgba(255,255,255,.03);padding:12px;margin:8px 0;border-radius:var(--radius)}
 .panel.solid{background:var(--paper2)}
 .panel.dark{background:#111;color:var(--ink);border-color:var(--green)}
 .panel.dark .overline,.panel.dark p,.panel.dark .smallNote,.panel.dark .tinyNote{color:var(--muted)}
 .pageHead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px}
 .backBtn{background:transparent;border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:9px;font-weight:700;letter-spacing:1px;white-space:nowrap;min-height:34px}
-.primaryBtn{width:100%;background:var(--green);color:#07140d;border:1px solid var(--green);border-radius:var(--radius);padding:15px;font-size:11px;letter-spacing:1.4px;font-weight:750;margin-top:8px}
+.primaryBtn{width:100%;background:var(--green);color:#07140d;border:1px solid var(--green);border-radius:var(--radius);padding:12px;font-size:11px;letter-spacing:1.4px;font-weight:750;margin-top:6px}
 .secondaryBtn{width:100%;background:transparent;color:var(--green);border:1px solid var(--green);border-radius:var(--radius);padding:13px;font-size:10px;letter-spacing:1.2px;font-weight:700;margin-top:10px}
 .ghostBtn{background:transparent;border:0;border-bottom:1px solid var(--green);color:var(--green);padding:2px 0;font-size:10px;font-weight:650}
 .linkRow{display:flex;justify-content:space-between;gap:12px;margin:10px 0 2px}
@@ -87,8 +105,14 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .trackLine i{display:block;height:100%;background:var(--green);width:0}
 .trackTimes{display:flex;justify-content:space-between;font-size:8px;letter-spacing:.7px;color:var(--faint);margin-top:6px}
 .liveHint{font-size:9px;letter-spacing:1.1px;font-weight:700;margin-top:8px;min-height:13px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:14px 0}
-.stat{padding:12px 8px 11px;border-right:1px solid var(--line)}
+.streakCalories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
+.metricCard{min-width:0;min-height:96px;padding:11px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper2);display:flex;flex-direction:column;justify-content:space-between}
+.metricHead{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:8px;letter-spacing:1px;font-weight:700}
+.metricIcon{width:16px;height:16px;fill:none;stroke:var(--green);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.metricValue{font-size:25px;line-height:1;letter-spacing:-.8px;font-weight:780;color:var(--ink);margin-top:8px}
+.metricSub{font-size:9px;line-height:1.35;color:var(--muted);margin-top:5px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 0 14px}
+.stat{padding:9px 8px 8px;border-right:1px solid var(--line)}
 .stat:last-child{border-right:0}
 .stat small{display:block;font-size:8px;letter-spacing:1px;color:var(--muted);margin-bottom:4px;font-weight:650}
 .stat b{font-size:21px;letter-spacing:-.8px;font-weight:760}
@@ -96,9 +120,9 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .calorieRow{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;border-bottom:1px solid var(--line);background:transparent;color:inherit;text-align:left;padding:10px 0;margin:-2px 0 0}
 .calorieRow b{display:block;font-size:15px;letter-spacing:-.3px}
 .calorieRow span{font-size:9px;line-height:1.4;color:var(--muted);text-align:right;max-width:60%}
-.weekStrip{display:flex;gap:6px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
-.weekStrip::-webkit-scrollbar{display:none}
-.weekDay{flex:0 0 78px;border:1px solid var(--line);padding:9px 8px;background:rgba(255,255,255,.03)}
+.weekStrip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:6px 0 2px}
+.weekDay{min-width:0;border:1px solid var(--line);padding:8px 7px;background:rgba(255,255,255,.03);color:inherit;text-align:left;font:inherit;cursor:pointer}
+.weekDay:focus-visible{outline:2px solid var(--green);outline-offset:2px}
 .weekDay.today{border-color:var(--green)}
 .weekDay.done{background:var(--green);color:#07140d;border-color:var(--green)}
 .weekDay small,.weekDay span{display:block;font-size:8px;letter-spacing:.8px;color:var(--muted)}
@@ -106,7 +130,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .weekDay b{display:block;font-size:18px;line-height:1.1;margin:2px 0}
 .weekDay em{display:block;font-style:normal;font-size:8px;line-height:1.35;color:var(--muted);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .weekDay.done em{color:#17452c}
-.planSwipeCard{touch-action:pan-y;user-select:none}
+.planSwipeCard{touch-action:pan-y;user-select:none;padding:11px;margin:8px 0}
 .planSwipeHeader{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .planSwipeTitle{font-size:18px;font-weight:760}
 .planSwipeHint{font-size:9px;color:var(--muted);letter-spacing:.7px}
@@ -143,14 +167,14 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .guideItem small{display:block;font-size:8px;letter-spacing:.9px;color:var(--muted);margin-bottom:4px;font-weight:650}
 .guideItem strong{display:block;font-size:15px;letter-spacing:-.3px;margin-bottom:4px}
 .timeline{border-top:1px solid var(--line)}
-.timeRow{display:grid;grid-template-columns:52px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.timeRow{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
 .timeRow b{font-size:10px;letter-spacing:.5px}
 .timeRow strong{display:block;font-size:12px;line-height:1.3;font-weight:700;margin-bottom:2px}
 .timeRow span{display:block;font-size:10px;line-height:1.45;color:var(--muted)}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .split .panel{margin:0}
 .foodList{margin:0;padding:0;list-style:none}
-.foodList li{display:grid;grid-template-columns:58px 1fr;gap:9px;padding:8px 0;border-bottom:1px solid var(--soft);font-size:10px;line-height:1.45;color:var(--muted)}
+.foodList li{display:grid;grid-template-columns:58px minmax(0,1fr);gap:9px;padding:7px 0;border-bottom:1px solid var(--soft);font-size:10px;line-height:1.4;color:var(--muted)}
 .foodList li:last-child{border-bottom:0}
 .foodList b{color:var(--ink);font-size:9px;letter-spacing:.5px}
 .spotifyPanel .planName{font-size:18px}
@@ -164,7 +188,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .localMusicRow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .localMusicRow input{max-width:100%;font-size:10px;color:var(--muted)}
 .localMusicAudio{width:100%;margin-top:9px}
-.exerciseCard{border:1px solid var(--line);background:rgba(255,255,255,.03);margin:10px 0;overflow:hidden}
+.exerciseCard{border:1px solid var(--line);background:rgba(255,255,255,.03);margin:7px 0;overflow:hidden}
 .exerciseMain{display:grid;grid-template-columns:110px 1fr;gap:0}
 .exerciseMain.noPhoto{grid-template-columns:1fr}
 .cardPhoto{width:100%;height:100%;min-height:138px;object-fit:cover;display:block;border-right:1px solid var(--line);background:var(--soft)}
@@ -269,12 +293,13 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .hidden{display:none!important}
 @media (min-width:640px){.phone{margin:16px auto;min-height:calc(100vh - 32px);border:1px solid #2b2b2b}}
 @media (max-width:370px){.exerciseMain{grid-template-columns:96px 1fr}.date{font-size:30px}.split{grid-template-columns:1fr}.guideGrid{grid-template-columns:1fr}.cardPhoto{min-height:150px}}
+@media (max-width:330px){.streakCalories{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <main class="phone">
 <header class="top">
-  <div class="brand"><h1>form</h1><span>4.0</span></div>
+  <div class="brand"><h1>form</h1><span>5.0</span></div>
   <div class="topActions">
     <button class="headerBtn" id="openStreak"><span class="streakLabel">STREAK | </span><span class="streakValue">00 DAYS</span></button>
     <div class="menuWrap">
@@ -283,7 +308,8 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
       </button>
       <nav class="menuPanel" id="navigationMenu" aria-label="Main navigation" hidden>
         <button class="menuItem" id="menuHome" type="button">HOME</button>
-        <button class="menuItem" id="menuSettings" type="button">SETTINGS</button>
+            <button class="menuItem" id="menuMore" type="button">MORE</button>
+            <button class="menuItem" id="menuSettings" type="button">SETTINGS</button>
       </nav>
     </div>
   </div>
@@ -333,16 +359,29 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
     </div>
   </div>
 
+  <div class="streakCalories">
+    <article class="metricCard">
+      <div class="metricHead">
+        <svg class="metricIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c4.2 0 7-2.7 7-6.5 0-3.1-2.1-5.2-4.1-7.5-.5 2-1.6 3.2-3 3.8.2-3.3-1.2-5.7-3.5-7.8.1 3.4-3.4 5.2-3.4 9.5C5 17.4 7.8 21 12 21Z"/></svg>
+        <span>STREAK</span>
+      </div>
+      <b class="metricValue" id="streakCount">0 days</b>
+      <span class="metricSub">Completed workout days</span>
+    </article>
+    <button class="metricCard" id="openCalories" type="button">
+      <div class="metricHead">
+        <svg class="metricIcon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v4M5.6 6.6l2.8 2.8M3 13h4M5.6 19.4l2.8-2.8M18.4 6.6l-2.8 2.8M21 13h-4M18.4 19.4l-2.8-2.8"/><circle cx="12" cy="13" r="4"/></svg>
+        <span>CALORIE ESTIMATE</span>
+      </div>
+      <b class="metricValue" id="calorieEstimate">0 kcal</b>
+      <span class="metricSub" id="calorieNote">No completed exercise recorded yet.</span>
+    </button>
+  </div>
+
   <div class="stats">
-    <div class="stat"><small>STREAK</small><b id="streakCount">0</b><span>days</span></div>
     <div class="stat"><small>COMPLETED</small><b id="completedCount">0</b><span>sessions</span></div>
     <div class="stat"><small>THIS MONTH</small><b id="monthProgress">0/0</b><span>sessions</span></div>
   </div>
-
-  <button class="calorieRow" id="openCalories" type="button">
-    <div><div class="overline">CALORIE ESTIMATE</div><b id="calorieEstimate">SET WEIGHT</b></div>
-    <span id="calorieNote">Optional. Add body weight in Settings.</span>
-  </button>
 
   <div class="weekStrip" id="weekStrip" aria-label="Seven upcoming days"></div>
 
@@ -400,7 +439,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
     </div>
   </section>
 
-  <section class="panel">
+  <section class="panel" id="timetablePanel">
     <div class="overline">DAILY TIMETABLE</div>
     <h3>Keep the morning simple.</h3>
     <div class="timeline">
@@ -415,7 +454,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
     </div>
   </section>
 
-  <section class="panel">
+  <section class="panel" id="foodPanel">
     <div class="overline">FOOD, WATER, SLEEP</div>
     <h3>Fuel the routine, not a diet.</h3>
     <ul class="foodList">
@@ -493,6 +532,46 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
     <div id="calorieHistory"></div>
   </section>
   <p class="tinyNote">Active calories use exercise-specific MET values and completed work time. Rest, normal movement, and BMR are excluded. This is an estimate, not medical or dietary advice.</p>
+</section>
+
+<section id="progress" class="view">
+  <div class="pageHead"><div><div class="overline">YOUR PROGRESS</div><h2>Progress</h2></div></div>
+  <div class="stats">
+    <div class="stat"><small>STREAK</small><b id="progressStreak">0</b><span>days</span></div>
+    <div class="stat"><small>COMPLETED</small><b id="progressCompleted">0</b><span>sessions</span></div>
+    <div class="stat"><small>MONTH</small><b id="progressMonth">0/0</b><span>sessions</span></div>
+  </div>
+  <div id="progressContent"></div>
+  <button class="secondaryBtn" id="progressHistory">VIEW HISTORY CALENDAR</button>
+</section>
+
+<section id="recovery" class="view">
+  <div class="pageHead"><div><div class="overline">RECOVERY</div><h2>Rest without guilt.</h2></div></div>
+  <div id="recoveryContent"></div>
+  <div class="panel solid"><div class="overline">MISSED SESSION</div><h3>Do not double up later.</h3><p>If you do not train today, rest without guilt. No session is recorded yet. Monday is the only make-up slot for this training week.</p></div>
+</section>
+
+<section id="nutrition" class="view">
+  <div class="pageHead"><div><div class="overline">FOOD, WATER AND SLEEP</div><h2>Nutrition</h2></div></div>
+  <div id="nutritionContent"></div>
+</section>
+
+<section id="music" class="view">
+  <div class="pageHead"><div><div class="overline">OPTIONAL</div><h2>Music</h2></div></div>
+  <div id="musicContent"></div>
+</section>
+
+<section id="more" class="view">
+  <div class="pageHead"><div><div class="overline">FORM</div><h2>More</h2></div></div>
+  <div class="moreGrid">
+    <button class="moreItem" id="moreRecovery" type="button"><span>Recovery Guide<small>Rest, sleep and missed sessions</small></span><b>›</b></button>
+    <button class="moreItem" id="moreNutrition" type="button"><span>Nutrition<small>Water, protein and meal guidance</small></span><b>›</b></button>
+    <button class="moreItem" id="moreMusic" type="button"><span>Music<small>Spotify and local music</small></span><b>›</b></button>
+    <button class="moreItem" id="moreVault" type="button"><span>Photo Vault<small>Private encrypted photos</small></span><b>›</b></button>
+    <button class="moreItem" id="moreSettings" type="button"><span>Settings<small>Preferences and privacy</small></span><b>›</b></button>
+    <button class="moreItem" id="moreAbout" type="button"><span>About FORM<small>Offline personal training companion</small></span><b>›</b></button>
+  </div>
+  <div class="panel hidden" id="aboutForm"><h3>About FORM</h3><p>FORM is a local-first home-training companion. Your workout history, nutrition data and private photos remain on this device.</p></div>
 </section>
 
 <section id="workout" class="view">
@@ -773,6 +852,28 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<nav class="bottomNav" id="bottomNav" aria-label="Primary navigation">
+  <button type="button" data-nav-view="home" aria-label="Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+    <span>HOME</span>
+  </button>
+  <button type="button" data-nav-view="workout" aria-label="Workout">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8v8M17 8v8M4 10v4M20 10v4M7 12h10"/></svg>
+    <span>WORKOUT</span>
+  </button>
+  <button type="button" data-nav-view="routine" aria-label="Plan">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></svg>
+    <span>PLAN</span>
+  </button>
+  <button type="button" data-nav-view="progress" aria-label="Progress">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V9M12 19V5M19 19v-8"/></svg>
+    <span>PROGRESS</span>
+  </button>
+  <button type="button" data-nav-view="more" aria-label="More">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 12h14M5 16h14"/></svg>
+    <span>MORE</span>
+  </button>
+</nav>
 </main>
 <script src="app.js"></script>
 </body>

@@ -249,6 +249,19 @@ function timeString(x){return x?new Date(x).toLocaleTimeString('en-IN',{hour:'2-
 function durationString(a,b){if(!a||!b)return '—';let s=Math.max(0,Math.floor((new Date(b)-new Date(a))/1000));return Math.floor(s/60)+'m '+String(s%60).padStart(2,'0')+'s'}
 function fmt(sec){return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
 function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3200)}
+function relocateRedesignPanels(){
+  const move=(id,target)=>{
+    const node=$(id),parent=$(target);
+    if(node&&parent&&typeof parent.appendChild==='function')parent.appendChild(node);
+  };
+  move('stagePanel','progressContent');
+  move('dailyGuide','recoveryContent');
+  move('makeupPanel','recoveryContent');
+  move('nutritionPanel','nutritionContent');
+  move('timetablePanel','nutritionContent');
+  move('foodPanel','nutritionContent');
+  move('spotifyPanel','musicContent');
+}
 function show(id){
   if(currentView==='streak'&&id!=='streak'){
     clearCalendarPhoto();
@@ -262,6 +275,11 @@ function show(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const el=$(id);if(!el)return;
   el.classList.add('active');
+  document.querySelectorAll('[data-nav-view]').forEach(button=>{
+    const active=button.dataset.navView===id;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-current',active?'page':'false');
+  });
   if(id==='home')renderHome();
   if(id==='vault')renderVault();
   if(id==='backup')renderBackup();
@@ -270,6 +288,15 @@ function show(id){
   if(id==='streak')renderStreak();
   if(id==='routine')renderRoutine();
   if(id==='settings')renderSettings();
+  if(id==='recovery'){renderDailyGuide(isDayComplete(dayKey()),plan());renderMakeup(makeupCandidates())}
+  if(id==='nutrition')renderNutrition();
+  if(id==='music')renderSpotify();
+  if(id==='progress'){
+    $('progressStreak').textContent=streak();
+    $('progressCompleted').textContent=completedCount();
+    $('progressMonth').textContent=monthCount().done+'/'+monthCount().scheduled;
+    renderStage();
+  }
   window.scrollTo(0,0);
 }
 function showHome(){show('home')}
@@ -406,12 +433,21 @@ function saveNutritionTargets(){
   profile.waterGoal=Math.round(wg);profile.proteinGoal=Math.round(pg);
   saveProfile();renderNutrition();toast('Daily targets saved.');
 }
+let selectedHomePlanKey=null;
+function selectHomePlan(k){
+  selectedHomePlanKey=k;
+  homePlanSlide=0;
+  renderHomePlanCard();
+  $('homePlanCard').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
 function renderWeekStrip(){
   const start=dayKey();
-  $('weekStrip').innerHTML=Array.from({length:7},(_,i)=>{
+  $('weekStrip').innerHTML=Array.from({length:3},(_,i)=>{
     const k=addDays(start,i),p=dayPlan(k),activity=activityForDay(k),today=k===start;
-    return '<div class="weekDay '+activity.className+(today?' today':'')+'"><small>'+pretty(k,{weekday:'short'}).toUpperCase()+'</small><b>'+pretty(k,{day:'numeric'})+'</b><span>'+activity.label+'</span><em title="'+p.title+'">'+p.title+'</em></div>';
+    return '<button type="button" class="weekDay '+activity.className+(today?' today':'')+'" data-home-plan-date="'+k+'" aria-label="View '+pretty(k,{weekday:'long',day:'numeric',month:'long'})+' plan"><small>'+pretty(k,{weekday:'short'}).toUpperCase()+'</small><b>'+pretty(k,{day:'numeric'})+'</b><span>'+activity.label+'</span><em title="'+p.title+'">'+p.title+'</em></button>';
   }).join('');
+  const strip=$('weekStrip');
+  if(strip&&typeof strip.querySelectorAll==='function')strip.querySelectorAll('[data-home-plan-date]').forEach(card=>card.onclick=()=>selectHomePlan(card.dataset.homePlanDate));
 }
 function makeupCandidates(){
   const k=dayKey();
@@ -458,10 +494,10 @@ function renderHome(){
   const progress=p.ids.length?Math.min(doneCount,p.ids.length):0;
   $('workoutProgress').textContent=p.ids.length?(complete?'ALL '+p.ids.length+' EXERCISES COMPLETE':progress+' / '+p.ids.length+' EXERCISES · '+Math.round(progress/p.ids.length*100)+'%'):'RECOVERY DAY';
   $('startToday').textContent=complete?'VIEW COMPLETED SESSION':r.sessionStart?'CONTINUE WORKOUT':p.ids.length?'START TODAY':cands.length?'CHOOSE MAKE-UP':'VIEW REST DAY';
-  $('streakCount').textContent=streak();
+  const streakValue=streak();
+  $('streakCount').textContent=streakValue+' '+(streakValue===1?'day':'days');
   const streakButton=$('openStreak');
   if(streakButton){
-    const streakValue=streak();
     streakButton.innerHTML='<span class="streakLabel">STREAK | </span><span class="streakValue">'+String(streakValue).padStart(2,'0')+(streakValue===1?' DAY':' DAYS')+'</span>';
     streakButton.classList.remove('streakPulse');
     void streakButton.offsetWidth;
@@ -493,10 +529,10 @@ function nextScheduledDay(){
   return addDays(today,1);
 }
 function renderHomePlanCard(){
-  const k=homePlanSlide?nextScheduledDay():dayKey(),p=dayPlan(k),today=k===dayKey();
+  const k=selectedHomePlanKey||(homePlanSlide?nextScheduledDay():dayKey()),p=dayPlan(k),today=k===dayKey();
   const title=p.ids.length?p.title:(weekday(k)===1?'Rest and make-up':'Rest and reset');
   const names=p.ids.length?p.ids.map(id=>EX(id)?.name||id).join(' · '):'No workout scheduled. Recovery is part of the plan.';
-  $('homePlanLabel').textContent=today?"TODAY'S PLAN":'UPCOMING PLAN';
+  $('homePlanLabel').textContent=today?"TODAY'S PLAN":'SELECTED PLAN';
   $('homePlanTitle').textContent=title;
   $('homePlanDate').textContent=today?'TODAY':pretty(k,{weekday:'short',day:'numeric',month:'short'}).toUpperCase();
   $('homePlanMeta').textContent=p.ids.length?(p.mins+' MIN · '+p.ids.length+' EXERCISES'):'RECOVERY DAY';
@@ -505,8 +541,8 @@ function renderHomePlanCard(){
   $('homePlanDotUpcoming').classList.toggle('active',!!homePlanSlide);
 }
 function swipeHomePlan(delta){
-  if(delta>30){homePlanSlide=1;renderHomePlanCard()}
-  else if(delta<-30){homePlanSlide=0;renderHomePlanCard()}
+  if(delta>30){selectedHomePlanKey=null;homePlanSlide=1;renderHomePlanCard()}
+  else if(delta<-30){selectedHomePlanKey=null;homePlanSlide=0;renderHomePlanCard()}
 }
 function renderDailyGuide(complete,p){
   const k=dayKey();
@@ -1571,6 +1607,20 @@ $('exportHistory').onclick=()=>{
   const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download='FORM-workout-history.json';a.click();
   URL.revokeObjectURL(a.href);
+};
+relocateRedesignPanels();
+document.querySelectorAll('[data-nav-view]').forEach(button=>button.onclick=()=>show(button.dataset.navView));
+$('menuMore').onclick=()=>show('more');
+$('progressHistory').onclick=openStreak;
+$('moreRecovery').onclick=()=>show('recovery');
+$('moreNutrition').onclick=()=>show('nutrition');
+$('moreMusic').onclick=()=>show('music');
+$('moreVault').onclick=openVault;
+$('moreSettings').onclick=openSettings;
+$('moreAbout').onclick=()=>{
+  const panel=$('aboutForm');
+  panel.classList.toggle('hidden');
+  if(!panel.classList.contains('hidden'))panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 };
 window.activeDay=dayKey();
 cancelLegacyAlarms();

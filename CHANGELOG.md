@@ -1,5 +1,19 @@
 # Changelog
 
+## FORM v5.0
+
+### Added
+
+- Dedicated Home, Workout, Plan, Progress, Recovery, Nutrition, Music, Photo Vault, Settings, and About screens.
+- Persistent rounded bottom navigation with responsive active states.
+- Compact streak and calorie estimate cards and selectable upcoming plan cards.
+
+### Changed
+
+- Redesigned the dashboard for small Android screens with compact spacing and no unnecessary Home footer.
+- Preserved existing local workout history, nutrition values, stage progression, vault data, backup data, and music behavior.
+- Updated application version to 5.0/version code 5.
+
 ## FORM v4.0
 
 ### Added
