@@ -1,5 +1,20 @@
 # Changelog
 
+## FORM v7.0
+
+### Fixed
+
+- Spotify playback now discovers available devices and prefers an active,
+  non-restricted device.
+- Playback controls target the selected device and report actionable Spotify
+  API errors without exposing credentials.
+- OAuth authorization, device availability, and active playback are shown as
+  separate states.
+
+### Changed
+
+- Updated Android version to 7.0/version code 9.
+
 ## FORM v6.0
 
 ### Changed

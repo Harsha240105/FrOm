@@ -1,6 +1,6 @@
 # FORM
 
-FORM v6.0 is a local-first Android home-training application for guided daily
+FORM v7.0 is a local-first Android home-training application for guided daily
 workouts, progress tracking, recovery, nutrition habits, optional music, and
 private photo storage. The web interface and exercise assets are bundled into
 the APK, so normal training use works offline.
@@ -167,6 +167,13 @@ The calorie regression test covers completed, incomplete, invalid, and
 multi-exercise records.
 
 ## Version history
+
+### FORM v7.0
+
+- Android version 7.0/version code 9.
+- Spotify PKCE playback discovers available devices, prefers active
+  non-restricted devices, and targets playback controls explicitly.
+- OAuth, device availability, and playback state are reported separately.
 
 ### FORM v6.0
 

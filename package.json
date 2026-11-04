@@ -1,13 +1,13 @@
 {
   "name": "form-daily-training",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "private": true,
   "description": "FORM daily training app wrapped in Capacitor",
   "scripts": {
     "sync": "cap sync android",
     "build": "node scripts/build-android.js",
     "build:android": "node scripts/build-android.js",
-    "test": "node tests/form-calorie.test.js",
+    "test": "node tests/form-calorie.test.js && node tests/spotify-playback.test.js",
     "verify": "node scripts/verify-android.js"
   },
   "dependencies": {

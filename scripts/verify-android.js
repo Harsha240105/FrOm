@@ -38,7 +38,7 @@ const resourceMatches = [...resources.matchAll(/resource 0x[0-9a-f]+ com\.harsha
 const resourceMatch = resourceMatches[resourceMatches.length - 1];
 if (!resourceMatch || resourceMatch[1] !== expectedId) throw new Error('Compiled spotify_client_id does not match the supplied Client ID.');
 const badging = run(aapt, ['dump', 'badging', apk]);
-if (!/package: name='com\.harsha\.form' versionCode='8' versionName='6\.0'/.test(badging)) {
+if (!/package: name='com\.harsha\.form' versionCode='9' versionName='7\.0'/.test(badging)) {
   throw new Error('APK package identity or version is incorrect.');
 }
 const apksigner = sdkTool('apksigner');
@@ -52,6 +52,6 @@ const crypto = require('crypto');
 const hash = crypto.createHash('sha256').update(fs.readFileSync(apk)).digest('hex').toUpperCase();
 console.log(`APK verified: ${path.relative(root, apk)}`);
 console.log('Compiled Spotify resource: valid');
-console.log('Package/version: com.harsha.form 6.0 (8)');
+console.log('Package/version: com.harsha.form 7.0 (9)');
 console.log('Signature: verified');
 console.log(`SHA-256: ${hash}`);

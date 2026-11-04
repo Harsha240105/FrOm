@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - v6.0
+      - v7.0
 
 permissions:
   contents: write
@@ -58,11 +58,11 @@ jobs:
       - name: Verify release APK
         run: npm run verify
       - name: Publish release
-        if: startsWith(github.ref, 'refs/tags/v6.0')
+        if: startsWith(github.ref, 'refs/tags/v7.0')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk FORM-v6.0-android.apk
-          gh release create v6.0 FORM-v6.0-android.apk \
-            --title "FORM v6.0 — Reliable Android Build & Spotify Integration" \
+          cp android/app/build/outputs/apk/release/app-release.apk FORM-v7.0-android.apk
+          gh release create v7.0 FORM-v7.0-android.apk \
+            --title "FORM v7.0 — Spotify Reliable Playback" \
             --generate-notes

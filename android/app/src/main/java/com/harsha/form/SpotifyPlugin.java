@@ -45,6 +45,10 @@ public class SpotifyPlugin extends Plugin {
     private String pendingState = "";
     private String codeVerifier = "";
     private PluginCall pendingConnectCall;
+    private String deviceId = "";
+    private String deviceName = "";
+    private boolean deviceAvailable;
+    private boolean deviceRestricted;
     private boolean playing;
     private String track = "";
     private String artist = "";
@@ -95,6 +99,11 @@ public class SpotifyPlugin extends Plugin {
         result.put("configured", !clientId().isEmpty());
         result.put("installed", installed());
         result.put("connected", connected());
+        result.put("oauthConnected", connected());
+        result.put("deviceAvailable", deviceAvailable);
+        result.put("deviceName", deviceName);
+        result.put("deviceRestricted", deviceRestricted);
+        result.put("playbackActive", playing);
         result.put("playing", playing);
         result.put("track", track);
         result.put("artist", artist);
@@ -181,6 +190,11 @@ public class SpotifyPlugin extends Plugin {
                 accessToken = tokenValue;
                 tokenExpiresAt = System.currentTimeMillis()
                         + (token.optLong("expires_in", 3600) * 1000L) - 30000L;
+                try {
+                    discoverDevice();
+                } catch (Exception ignored) {
+                    clearDevice();
+                }
                 finishConnect("connected");
                 refreshPlayerState();
             } catch (Exception e) {
@@ -203,6 +217,7 @@ public class SpotifyPlugin extends Plugin {
     public void disconnect(PluginCall call) {
         accessToken = "";
         tokenExpiresAt = 0;
+        clearDevice();
         playing = false;
         track = "";
         artist = "";
@@ -215,41 +230,119 @@ public class SpotifyPlugin extends Plugin {
         String uri = call.getString("uri", "");
         requestPlayer(call, "PUT", "/me/player/play",
                 uri == null || uri.trim().isEmpty() ? "{}"
-                        : "{\"context_uri\":\"" + jsonEscape(uri.trim()) + "\"}", "playing");
+                        : "{\"context_uri\":\"" + jsonEscape(uri.trim()) + "\"}", "playing", true);
     }
 
     @PluginMethod
     public void pause(PluginCall call) {
-        requestPlayer(call, "PUT", "/me/player/pause", null, "paused");
+        requestPlayer(call, "PUT", "/me/player/pause", null, "paused", false);
     }
 
     @PluginMethod
     public void next(PluginCall call) {
-        requestPlayer(call, "POST", "/me/player/next", null, "next");
+        requestPlayer(call, "POST", "/me/player/next", null, "next", false);
     }
 
     @PluginMethod
     public void previous(PluginCall call) {
-        requestPlayer(call, "POST", "/me/player/previous", null, "previous");
+        requestPlayer(call, "POST", "/me/player/previous", null, "previous", false);
     }
 
-    private void requestPlayer(PluginCall call, String method, String path, String body, String success) {
+    private void requestPlayer(PluginCall call, String method, String path, String body, String success, boolean startPlayback) {
         if (!connected()) {
-            call.resolve(state("disconnected"));
+            call.resolve(state("auth_expired"));
             return;
         }
         executor.execute(() -> {
             try {
-                apiRequest(method, path, body);
+                Device device = discoverDevice();
+                if (device == null) {
+                    resolveError(call, deviceRestricted ? "restricted_device" : "no_device",
+                            deviceRestricted
+                                    ? "Spotify found only restricted devices. Open Spotify on a controllable device."
+                                    : "Open Spotify and start playback on an available device.");
+                    return;
+                }
+                String targetPath = path + "?device_id=" + encode(device.id);
+                if (startPlayback && !device.active) {
+                    transferPlayback(device.id);
+                }
+                apiRequest(method, targetPath, body);
                 if ("playing".equals(success)) playing = true;
                 if ("paused".equals(success)) playing = false;
                 refreshPlayerState();
                 getActivity().runOnUiThread(() -> call.resolve(state(success)));
             } catch (Exception e) {
-                getActivity().runOnUiThread(() -> call.resolve(state(e.getMessage() != null
-                        && e.getMessage().contains("401") ? "auth_failed" : "error")));
+                String status = e instanceof SpotifyApiException
+                        ? ((SpotifyApiException) e).status
+                        : "error";
+                String message = e instanceof SpotifyApiException
+                        ? ((SpotifyApiException) e).getMessage()
+                        : "Spotify could not complete that action.";
+                resolveError(call, status, message);
             }
         });
+    }
+
+    private void resolveError(PluginCall call, String status, String message) {
+        getActivity().runOnUiThread(() -> {
+            JSObject result = state(status);
+            result.put("errorMessage", message);
+            call.resolve(result);
+            notifyListeners("stateChanged", result);
+        });
+    }
+
+    private Device discoverDevice() throws Exception {
+        JSONObject response = apiRequest("GET", "/me/player/devices", null);
+        org.json.JSONArray devices = response.optJSONArray("devices");
+        Device fallback = null;
+        boolean restrictedOnly = false;
+        if (devices != null) {
+            for (int i = 0; i < devices.length(); i++) {
+                JSONObject value = devices.optJSONObject(i);
+                if (value == null) continue;
+                Device candidate = new Device(
+                        value.optString("id", ""),
+                        value.optString("name", "Spotify device"),
+                        value.optBoolean("is_active", false),
+                        value.optBoolean("is_restricted", false));
+                if (candidate.id.isEmpty()) continue;
+                if (candidate.restricted) {
+                    restrictedOnly = true;
+                    continue;
+                }
+                if (candidate.active) {
+                    setDevice(candidate);
+                    return candidate;
+                }
+                if (fallback == null) fallback = candidate;
+            }
+        }
+        if (fallback != null) setDevice(fallback);
+        else {
+            clearDevice();
+            deviceRestricted = restrictedOnly;
+        }
+        return fallback;
+    }
+
+    private void transferPlayback(String targetId) throws Exception {
+        apiRequest("PUT", "/me/player", "{\"device_ids\":[\"" + jsonEscape(targetId) + "\"],\"play\":true}");
+    }
+
+    private void setDevice(Device device) {
+        deviceId = device.id;
+        deviceName = device.name;
+        deviceAvailable = true;
+        deviceRestricted = false;
+    }
+
+    private void clearDevice() {
+        deviceId = "";
+        deviceName = "";
+        deviceAvailable = false;
+        deviceRestricted = false;
     }
 
     private void refreshPlayerState() {
@@ -264,8 +357,16 @@ public class SpotifyPlugin extends Plugin {
                 artist = artists == null ? "" : artists.optString("name", "");
             }
             getActivity().runOnUiThread(this::notifyState);
+        } catch (SpotifyApiException e) {
+            if ("401".equals(e.status)) expireToken();
+            playing = false;
+            track = "";
+            artist = "";
+            getActivity().runOnUiThread(this::notifyState);
         } catch (Exception ignored) {
-            // A 204 response means there is no active Spotify player.
+            playing = false;
+            track = "";
+            artist = "";
         }
     }
 
@@ -285,8 +386,57 @@ public class SpotifyPlugin extends Plugin {
         int responseCode = connection.getResponseCode();
         if (responseCode == 204) return new JSONObject();
         String response = read(connection, responseCode >= 400);
-        if (responseCode >= 400) throw new Exception(String.valueOf(responseCode));
+        if (responseCode >= 400) {
+            String message = response;
+            try {
+                JSONObject error = new JSONObject(response).optJSONObject("error");
+                if (error != null) message = error.optString("message", message);
+            } catch (Exception ignored) {
+                message = "";
+            }
+            throw new SpotifyApiException(String.valueOf(responseCode), apiMessage(responseCode, message));
+        }
         return response.isEmpty() ? new JSONObject() : new JSONObject(response);
+    }
+
+    private String apiMessage(int status, String message) {
+        if (status == 401) {
+            expireToken();
+            return "Spotify authorization expired. Tap LINK to reconnect.";
+        }
+        if (status == 403) return "Spotify denied playback control. Check playback scopes and the selected device.";
+        if (status == 404) return "Spotify could not find the requested playback or playlist.";
+        if (status == 429) return "Spotify is rate limiting requests. Try again shortly.";
+        if (status >= 500) return "Spotify is temporarily unavailable. Try again shortly.";
+        return message == null || message.trim().isEmpty() ? "Spotify rejected the playback request." : message;
+    }
+
+    private void expireToken() {
+        accessToken = "";
+        tokenExpiresAt = 0;
+    }
+
+    private static final class Device {
+        final String id;
+        final String name;
+        final boolean active;
+        final boolean restricted;
+
+        Device(String id, String name, boolean active, boolean restricted) {
+            this.id = id;
+            this.name = name;
+            this.active = active;
+            this.restricted = restricted;
+        }
+    }
+
+    private static final class SpotifyApiException extends Exception {
+        final String status;
+
+        SpotifyApiException(String status, String message) {
+            super(message);
+            this.status = status;
+        }
     }
 
     private JSONObject postForm(String endpoint, String body) throws Exception {

@@ -1131,6 +1131,15 @@ const SPOTIFY_NOTES={
   not_installed:'Install the official Spotify app and sign in.',
   not_logged_in:'Open Spotify, sign in, then return to FORM and tap LINK.',
   auth_failed:'Spotify rejected authorisation. Check the dashboard redirect URI and package fingerprint, then try LINK again.',
+  auth_expired:'Spotify authorisation expired. Tap LINK to reconnect.',
+  no_device:'Open Spotify and start playback on an available device.',
+  restricted_device:'Spotify found only restricted devices. Open Spotify on a controllable device.',
+  '403':'Spotify denied playback control. Check playback scopes and the selected device.',
+  '404':'Spotify could not find the requested playback or playlist.',
+  '429':'Spotify is rate limiting requests. Try again shortly.',
+  '500':'Spotify is temporarily unavailable. Try again shortly.',
+  '502':'Spotify is temporarily unavailable. Try again shortly.',
+  '503':'Spotify is temporarily unavailable. Try again shortly.',
   connected:'Spotify connected.',
   disconnected:'Spotify disconnected. Tap LINK to connect again.',
   connecting:'Spotify authorisation is open. Finish it in the browser, then return to FORM.',
@@ -1142,6 +1151,8 @@ function applySpotify(s){
   const configured=!!s.configured;
   const installed=!!s.installed;
   const connected=!!s.connected;
+  const deviceAvailable=!!s.deviceAvailable;
+  const deviceRestricted=!!s.deviceRestricted;
   const playing=!!s.playing;
   if(s.status)spotifyLastStatus=String(s.status);
   if(connected)spotifyLastStatus='connected';
@@ -1150,7 +1161,7 @@ function applySpotify(s){
   if(available){
     if(!configured)label='SETUP NEEDED';
     else if(status==='connecting')label='LINKING';
-    else if(connected)label='CONNECTED';
+    else if(connected)label='AUTHORIZED';
     else if(status==='auth_failed')label='AUTH FAILED';
     else if(status==='not_logged_in')label='LOG IN';
     else if(status==='error')label='TRY AGAIN';
@@ -1158,11 +1169,11 @@ function applySpotify(s){
   }
   const hasPlaylist=!!spotifyUri(profile.spotifyPlaylist);
   $('spotifyStatus').textContent=label;
-  $('spotifyTrack').textContent=connected&&s.track?s.track:'Not connected';
+  $('spotifyTrack').textContent=connected&&s.track?s.track:'No active playback';
   $('spotifyArtist').textContent=connected&&s.artist?s.artist:available&&configured?'Spotify is ready to link.':'Spotify controls are optional.';
   $('spotifyPrev').disabled=!connected;
   $('spotifyNext').disabled=!connected;
-  $('spotifyPlay').disabled=!connected||playing;
+  $('spotifyPlay').disabled=!connected||!deviceAvailable||deviceRestricted||playing;
   $('spotifyPlay').textContent=hasPlaylist?'PLAY FOCUS':'PLAY';
   $('spotifyPause').disabled=!connected||!playing;
   $('spotifyConnect').disabled=connected||spotifyConnectPending;
@@ -1173,9 +1184,15 @@ function applySpotify(s){
   else if(!configured)note=SPOTIFY_NOTES.unconfigured;
   else if(status&&status!=='connected'&&SPOTIFY_NOTES[status])note=SPOTIFY_NOTES[status];
   else if(!connected)note='Tap LINK. Finish the Spotify authorisation in the browser, then return to FORM.';
+  else if(!deviceAvailable)note=SPOTIFY_NOTES.no_device;
+  else if(deviceRestricted)note='The selected Spotify device is restricted and cannot accept Web API controls.';
   else if(!hasPlaylist)note='Spotify connected. Add a focus playlist in Settings, or PLAY resumes the current track.';
   else note='PLAY starts your saved focus playlist. Audio streams from the official Spotify app.';
   $('spotifyNote').textContent=note;
+  const device=$('spotifyDevice');
+  if(device)device.textContent=deviceAvailable
+    ? 'Playback device: '+(s.deviceName||'Available device')+(deviceRestricted?' (restricted)':'')
+    : 'No usable Spotify playback device. Open Spotify and start playback.';
   const buildInfo=$('spotifyBuildInfo');
   if(buildInfo){
     if(!available)buildInfo.textContent='Build identity unavailable in browser mode.';
@@ -1223,7 +1240,8 @@ async function spotifyCall(method,data){
     else if(status==='not_logged_in')toast(SPOTIFY_NOTES.not_logged_in);
     else if(status==='not_installed')toast(SPOTIFY_NOTES.not_installed);
     else if(status==='unconfigured')toast(SPOTIFY_NOTES.unconfigured);
-    else if(status==='error')toast(SPOTIFY_NOTES.error);
+    else if(SPOTIFY_NOTES[status])toast(SPOTIFY_NOTES[status]);
+    else if(result&&result.errorMessage)toast(String(result.errorMessage));
     if(result)applySpotify(result);
     setTimeout(renderSpotify,300);
   }catch(e){
