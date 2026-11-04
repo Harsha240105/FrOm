@@ -17,8 +17,8 @@ android {
         applicationId "com.harsha.form"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "5.0.1"
+        versionCode 7
+        versionName "5.0.2"
         resValue "string", "spotify_client_id", spotifyClientId
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {

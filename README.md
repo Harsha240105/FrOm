@@ -1,6 +1,6 @@
 # FORM
 
-FORM v5.0.1 is a local-first Android home-training application for guided daily
+FORM v5.0.2 is a local-first Android home-training application for guided daily
 workouts, progress tracking, recovery, nutrition habits, optional music, and
 private photo storage. The web interface and exercise assets are bundled into
 the APK, so normal training use works offline.
@@ -158,6 +158,12 @@ mismatch (`42` actual versus `7` expected); this is tracked separately from the
 v5.0 UI release work and is not silently claimed as passing.
 
 ## Version history
+
+### FORM v5.0.2
+
+- Spotify Authorization Code with PKCE integration and Android callback handling.
+- Exact redirect URI: `formspotify://callback`.
+- Optional Spotify Web API playback controls without a client secret.
 
 ### FORM v5.0
 

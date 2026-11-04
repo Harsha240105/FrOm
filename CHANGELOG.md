@@ -1,5 +1,17 @@
 # Changelog
 
+## FORM v5.0.2
+
+### Added
+
+- Spotify Authorization Code with PKCE integration.
+- Android deep-link handling for `formspotify://callback`.
+- Optional Spotify Web API playback controls without a client secret.
+
+### Changed
+
+- Updated application version to 5.0.2/version code 7.
+
 ## FORM v5.0.1
 
 ### Fixed
