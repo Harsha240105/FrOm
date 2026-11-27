@@ -1,5 +1,12 @@
 # Changelog
 
+## FORM v8.0
+
+### Changed
+
+- Rebuilt the UI/UX with the v8 dark green and pink visual system.
+- Updated Android version to 8.0/version code 10.
+
 ## FORM v7.0
 
 ### Added

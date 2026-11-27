@@ -368,6 +368,7 @@ function show(id){
     $('progressStreak').textContent=streak();
     $('progressCompleted').textContent=completedCount();
     $('progressMonth').textContent=monthCount().done+'/'+monthCount().scheduled;
+    renderWeekBars('progressWeekBars');
   }
   if(el&&typeof el.querySelector==='function'){
     const heading=el.querySelector('h1,h2,h3');
@@ -528,6 +529,29 @@ function renderWeekStrip(){
   const strip=$('weekStrip');
   if(strip&&typeof strip.querySelectorAll==='function')strip.querySelectorAll('[data-home-plan-date]').forEach(card=>card.onclick=()=>openFocusRoutine(weekday(card.dataset.homePlanDate)));
 }
+function renderWeekBars(id){
+  const el=$(id);if(!el)return;
+  const today=dayKey();
+  el.innerHTML=Array.from({length:7},(_,i)=>{
+    const k=addDays(today,i-6),p=calendarPlan(k),r=db[k]||{};
+    const done=p.ids.filter(x=>(r.done||[]).includes(x)).length;
+    const state=!p.ids.length?'rest':done===p.ids.length?'full':done?'partial':'empty';
+    const height=state==='full'||state==='partial'?Math.max(6,Math.round(done/p.ids.length*100)):0;
+    return '<div class="weekBar'+(k===today?' today':'')+'"><span class="weekBarTrack"><i class="weekBarFill '+state+'"'+(height?' style="height:'+height+'%"':'')+'></i></span><small>'+pretty(k,{weekday:'short'}).slice(0,2)+'</small></div>';
+  }).join('');
+}
+function renderTodayRing(){
+  const fill=$('homeRingFill'),value=$('homeRingValue'),label=$('homeRingLabel');
+  if(!fill||!value||!label)return;
+  const p=plan(),r=record(dayKey(),false);
+  const done=p.ids.filter(x=>(r.done||[]).includes(x)).length;
+  const pct=p.ids.length?Math.round(done/p.ids.length*100):100;
+  const circumference=2*Math.PI*42;
+  fill.style.strokeDasharray=String(circumference);
+  fill.style.strokeDashoffset=String(circumference-circumference*pct/100);
+  value.textContent=pct+'%';
+  label.textContent=p.ids.length?'TODAY':'REST';
+}
 function live(){
   const n=new Date(),d=trainingDate(),p=plan(),k=dayKey(),r=record(k,false);
   $('weekday').textContent=d.toLocaleDateString('en-IN',{weekday:'long'}).toUpperCase();
@@ -572,6 +596,8 @@ function renderHome(){
   const m=monthCount();$('monthProgress').textContent=m.done+'/'+m.scheduled;
   const cal=calories();$('calorieEstimate').textContent=cal.text;$('calorieNote').textContent=cal.note;
   renderWeekStrip();
+  renderWeekBars('weekBars');
+  renderTodayRing();
   renderNutrition();
 }
 function renderDailyGuide(complete,p){

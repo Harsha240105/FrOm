@@ -1,6 +1,6 @@
 # FORM
 
-FORM v7.0 is a local-first Android home-training application for guided daily
+FORM v8.0 is a local-first Android home-training application for guided daily
 workouts, progress tracking, recovery, nutrition habits, and private photo
 storage. The web interface and exercise assets are bundled into the APK, so
 normal training use works offline.
@@ -136,6 +136,11 @@ encryption, encrypted backup/restore, notifications, and upgrade-data
 preservation.
 
 ## Version history
+
+### FORM v8.0
+
+- Rebuilt the UI/UX with the v8 dark green and pink visual system.
+- Updated Android version to 8.0/version code 10.
 
 ### FORM v7.0
 
