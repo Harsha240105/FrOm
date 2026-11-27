@@ -2,38 +2,38 @@
 
 ## FORM v7.0
 
-### Fixed
+### Added
 
-- Spotify playback now discovers available devices and prefers an active,
-  non-restricted device.
-- Playback controls target the selected device and report actionable Spotify
-  API errors without exposing credentials.
-- OAuth authorization, device availability, and active playback are shown as
-  separate states.
+- Fixed weekly plan with Monday rest and the same Tuesday–Sunday routine every week.
+- Active-session schema with `sessionId`, `exerciseId`, `day`, `weekStart`, `planKey`, `positionIndex`, timer fields, and restoration state.
+- Home Continue and exercise-card Continue flows that preserve the current unfinished exercise.
+- Playwright end-to-end tests with screenshots, traces, videos, console-error capture, and failed-request capture.
 
 ### Changed
 
+- Calorie history and monthly totals now use the stored calendar plan for stable snapshots.
+- Home and live status no longer create records or use time-of-day gating.
 - Updated Android version to 7.0/version code 9.
+
+### Removed
+
+- Stages, make-up sessions, daily guide switching, swipeable Home plan cards, and time-window gating.
+- Spotify, local music, native music plugins, music settings, music tests, and build validation.
+
+### Fixed
+
+- Interrupted sessions no longer disappear after leaving the workout, refreshing, or crossing into the next day.
+- Repeated Continue clicks keep one session and reopen the same unfinished exercise.
 
 ## FORM v6.0
 
 ### Changed
 
 - Updated Android version to 6.0/version code 8.
-- Spotify Client ID validation now fails builds when configuration is missing,
-  invalid, or inconsistent between Gradle property and environment variable.
 - Added cross-platform `npm run build:android` and `npm run verify` commands.
-- Added repeatable GitHub Actions release workflow with compiled resource and
-  signature verification.
-- Added runtime build identity diagnostics without exposing the Client ID.
+- Added repeatable GitHub Actions release workflow with signature verification.
 
 ## FORM v5.0.2
-
-### Added
-
-- Spotify Authorization Code with PKCE integration.
-- Android deep-link handling for `formspotify://callback`.
-- Optional Spotify Web API playback controls without a client secret.
 
 ### Changed
 
@@ -48,24 +48,21 @@
 
 ### Security and release
 
-- Updated npm dependency overrides for patched glob, minimatch, rimraf, and tar versions.
-- Spotify configuration remains optional; missing credentials no longer block release builds.
+- Updated npm dependency overrides for patched transitive dependencies.
 - Updated Android version to 5.0.1/version code 6.
-- Spotify now uses Authorization Code with PKCE and returns through the
-  registered `formspotify://callback` deep link without a client secret.
 
 ## FORM v5.0
 
 ### Added
 
-- Dedicated Home, Workout, Plan, Progress, Recovery, Nutrition, Music, Photo Vault, Settings, and About screens.
+- Dedicated Home, Workout, Plan, Progress, Recovery, Nutrition, Photo Vault, Settings, and About screens.
 - Persistent rounded bottom navigation with responsive active states.
 - Compact streak and calorie estimate cards and selectable upcoming plan cards.
 
 ### Changed
 
 - Redesigned the dashboard for small Android screens with compact spacing and no unnecessary Home footer.
-- Preserved existing local workout history, nutrition values, stage progression, vault data, backup data, and music behavior.
+- Preserved existing local workout history, nutrition values, vault data, and backup data.
 - Updated application version to 5.0/version code 5.
 
 ## FORM v4.0
@@ -80,8 +77,6 @@
 
 ### Changed
 
-- Spotify Client ID validation now requires exactly 32 hexadecimal characters and rejects invalid or missing values before release builds.
-- Spotify native and JavaScript status handling now preserves authorization failures correctly.
 - Body weight snapshots protect historical calorie estimates.
 - Calorie calculations now use only logged completed exercise work; rest and normal movement are excluded.
 
@@ -105,7 +100,6 @@
 
 ### Validation status
 
-- JavaScript calorie smoke test and release Java compilation pass locally.
-- Physical-device Spotify, vault, backup/restore, lifecycle, and upgrade tests remain pending.
-- Signed release rebuild and final package/signature verification remain pending.
+- JavaScript unit tests and Playwright end-to-end tests pass locally.
+- Physical-device vault, backup/restore, lifecycle, and upgrade tests remain pending.
 - No penetration test was completed; manual source review and local checks do not certify security.

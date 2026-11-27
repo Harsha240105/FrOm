@@ -1,25 +1,26 @@
 # FORM
 
 FORM v7.0 is a local-first Android home-training application for guided daily
-workouts, progress tracking, recovery, nutrition habits, optional music, and
-private photo storage. The web interface and exercise assets are bundled into
-the APK, so normal training use works offline.
+workouts, progress tracking, recovery, nutrition habits, and private photo
+storage. The web interface and exercise assets are bundled into the APK, so
+normal training use works offline.
 
 ## Features
 
-- Compact Home dashboard with today's workout, progress, streak, calorie estimate, and upcoming plans.
+- Compact Home dashboard with today's workout, progress, streak, calorie estimate, and three-day preview.
 - Guided Workout screen with exercise illustrations, instructions, timers, repetitions, rest periods, and completion tracking.
+- Fixed weekly plan: Monday rest; the same Tuesday–Sunday routine repeats every week.
+- Workout sessions resume from Home or the exact exercise card after leaving the screen or refreshing.
 - Five-destination navigation: Home, Workout, Plan, Progress, and More.
-- Weekly Plan calendar with planned, completed, missed, and rest-day states.
-- Progress dashboard with streaks, completed sessions, monthly history, programme stage, and manual progression.
+- Weekly calendar with planned, completed, missed, and rest-day states.
+- Progress dashboard with streaks, completed sessions, and monthly history.
 - MET-based calorie estimates from completed exercise records only; calories are estimates, not medical or dietary advice.
-- Recovery guidance for rest days and the Monday make-up slot. Missed workouts are not doubled up.
+- Recovery guidance for missed workouts: no make-up sessions and no doubling up.
 - Local water and protein tracking with editable targets.
 - Food guidance and a 7–8 hour sleep recommendation.
-- Optional Spotify Authorization Code with PKCE and Web API playback controls; local music playback where supported.
 - AES-256-GCM/PBKDF2 Photo Vault with camera capture, photo selection, preview, unlock, and deletion.
 - Encrypted local backup and restore through Android Storage Access Framework.
-- Settings for profile, programme, body weight snapshots, music, and local preferences.
+- Settings for body weight, body type, and local preferences.
 
 ## Navigation
 
@@ -27,13 +28,13 @@ The persistent bottom navigation opens:
 
 1. **Home** — compact daily dashboard.
 2. **Workout** — today's guided exercise session.
-3. **Plan** — weekly routine and scheduled days.
-4. **Progress** — streak, history, calories, and programme progress.
-5. **More** — Recovery, Nutrition, Music, Photo Vault, Settings, and About FORM.
+3. **Plan** — fixed weekly routine and scheduled days.
+4. **Progress** — streak, history, calories, and monthly progress.
+5. **More** — Recovery, Nutrition, Photo Vault, Settings, and About FORM.
 
 ## Technology
 
-- Capacitor 6.2.3 Android application.
+- Capacitor 7 Android application.
 - HTML, CSS, and vanilla JavaScript frontend in `www/`.
 - Android native Java plugins for encrypted vault and backup features.
 - Android Gradle build with compile/target SDK 34.
@@ -45,7 +46,7 @@ The persistent bottom navigation opens:
 ### Requirements
 
 - Node.js and npm.
-- JDK 17 for the documented Android toolchain.
+- JDK 21 for the documented Android toolchain.
 - Android SDK with API 34 and matching build tools.
 - Android 5.1/API 22 or newer for installation.
 
@@ -55,29 +56,16 @@ The persistent bottom navigation opens:
 git clone https://github.com/Harsha240105/FrOm.git
 Set-Location FrOm
 npm install
-npx cap sync android
-python -m http.server 8080 --directory www
+npm run sync
+npm run test:e2e
 ```
 
-Open `http://localhost:8080`. Browser mode supports the web UI, but Android-only
-features such as Spotify PKCE authorization, camera capture, encrypted native vault
-operations, and Android notifications require the APK.
+Playwright starts a local static server for the end-to-end tests and writes
+screenshots, traces, and videos to `test-results/`.
 
 ### Build Android
 
-Set `FORM_SPOTIFY_CLIENT_ID` in the same shell. The build script validates it
-without printing the value:
-
 ```powershell
-$env:FORM_SPOTIFY_CLIENT_ID = "YOUR_32_CHARACTER_HEX_CLIENT_ID"
-npm run build:android
-npm run build:android -- --release
-```
-
-Linux/macOS:
-
-```bash
-export FORM_SPOTIFY_CLIENT_ID="YOUR_32_CHARACTER_HEX_CLIENT_ID"
 npm run build:android
 npm run build:android -- --release
 ```
@@ -85,15 +73,6 @@ npm run build:android -- --release
 Release output:
 
 `android/app/build/outputs/apk/release/app-release.apk`
-
-An intentionally Spotify-disabled debug build requires the explicit
-`FORM_ALLOW_UNCONFIGURED_SPOTIFY=true` option. This override is rejected for
-release builds:
-
-```powershell
-$env:FORM_ALLOW_UNCONFIGURED_SPOTIFY = "true"
-npm run build:android
-```
 
 Install on a running emulator or connected Android device:
 
@@ -115,20 +94,13 @@ keyPassword=YOUR_KEY_PASSWORD
 
 Release signing enables R8 minification and resource shrinking.
 
-Spotify uses Authorization Code with PKCE and the exact redirect URI
-`formspotify://callback`. Register that URI in the Spotify Developer Dashboard.
-The Android app does not contain or require a Spotify client secret. Spotify
-playback controls use the Web API and require a Spotify Premium account with an
-active playback device; the rest of FORM remains usable when Spotify is not
-configured.
-
 ## Project structure
 
 ```text
 www/                         Web UI, styles, logic, images, and fonts
 android/app/src/main/        Android application and native plugins
 android/app/build.gradle     Android ID, version, signing, and dependencies
-tests/                       Node-based calorie smoke test
+tests/                       Node unit test and Playwright end-to-end tests
 dist/                        Preserved release assets
 capacitor.config.json        Capacitor configuration
 package.json                 npm scripts and dependencies
@@ -136,16 +108,12 @@ package.json                 npm scripts and dependencies
 
 ## Data and privacy
 
-FORM stores workout records, profile settings, stage history, water/protein
-values, body-weight snapshots, and local preferences on the device. Private
-photos are encrypted locally and are not uploaded to cloud storage or copied
-to the public Gallery. Backups are encrypted and exported through Android's
-local Storage Access Framework.
-
-Spotify is optional and uses the Spotify Web API after PKCE authorization.
-Photo-credit links and Spotify are
-the only features that may open external services. FORM does not require an
-account or cloud backend.
+FORM stores workout records, profile settings, water/protein values,
+body-weight snapshots, and local preferences on the device. Private photos are
+encrypted locally and are not uploaded to cloud storage or copied to the public
+Gallery. Backups are encrypted and exported through Android's local Storage
+Access Framework. Photo-credit links are the only feature that may open an
+external service. FORM does not require an account or cloud backend.
 
 Do not clear application data or uninstall the previous app when validating an
 upgrade; the app's local data is intended to remain in place.
@@ -155,55 +123,42 @@ upgrade; the app's local data is intended to remain in place.
 ```powershell
 node --check .\www\app.js
 npm test
-npm run build:android
-npm run verify
+npx playwright test --project=chromium
 ```
 
-Physical-device verification remains important for camera capture, vault
-encryption, Spotify authorization, local music, encrypted backup/restore,
-notifications, and upgrade-data preservation.
+The unit test covers MET calculation, fixed-week structure, active-session
+schema, and weight snapshots. The Playwright tests cover the localhost server,
+fresh profiles, Monday rest, fixed-week repetition, two-exercise completion,
+card Continue, Home Continue, refresh, and repeated-click session safety.
 
-The calorie regression test covers completed, incomplete, invalid, and
-multi-exercise records.
+Physical-device verification remains important for camera capture, vault
+encryption, encrypted backup/restore, notifications, and upgrade-data
+preservation.
 
 ## Version history
 
 ### FORM v7.0
 
-- Android version 7.0/version code 9.
-- Spotify PKCE playback discovers available devices, prefers active
-  non-restricted devices, and targets playback controls explicitly.
-- OAuth, device availability, and playback state are reported separately.
+- Fixed weekly plan with Monday rest and the same Tuesday–Sunday routine every week.
+- Resume interrupted sessions from Home or the exact exercise card.
+- Removed stages, make-up sessions, music, and time-of-day gating.
+- Updated Android version to 7.0/version code 9.
 
 ### FORM v6.0
 
-- Reliable cross-platform Android build commands with strict Spotify configuration validation.
-- Spotify Client ID is required for debug and release builds unless explicit debug-only opt-out is set.
-- Added compiled resource verification, build identity diagnostics, and repeatable GitHub Actions release publishing.
-- Android version 6.0/version code 8.
-
-### FORM v5.0.2
-
-- Spotify Authorization Code with PKCE integration and Android callback handling.
-- Exact redirect URI: `formspotify://callback`.
-- Optional Spotify Web API playback controls without a client secret.
+- Reliable cross-platform Android build commands and repeatable release workflow.
+- Updated Android version to 6.0/version code 8.
 
 ### FORM v5.0
 
 - Complete responsive UI/UX redesign.
 - Compact Home dashboard and persistent rounded bottom navigation.
-- Dedicated Workout, Plan, Progress, Recovery, Nutrition, Music, Photo Vault,
-  Settings, and About screens.
-- Responsive mobile spacing and removal of unnecessary Home footer content.
-- Improved navigation icons, active states, weekly plan selection, and compact
-  streak/calorie cards.
-- Existing local workout, vault, nutrition, backup, and music functionality
-  preserved.
+- Dedicated Workout, Plan, Progress, Recovery, Nutrition, Photo Vault, Settings, and About screens.
 
 ### FORM v4.0
 
-Published release with the fixed weekly routine, calorie estimates, encrypted
-vault and backup workflows.
+- Published release with the fixed weekly routine, calorie estimates, encrypted
+  vault and backup workflows.
 
 ## Contribution and license
 
@@ -217,6 +172,5 @@ otherwise.
 
 - Repository: https://github.com/Harsha240105/FrOm
 - v6.0 release: https://github.com/Harsha240105/FrOm/releases/tag/v6.0
-- v5.0.2 release: https://github.com/Harsha240105/FrOm/releases/tag/v5.0.2
 - v5.0 release: https://github.com/Harsha240105/FrOm/releases/tag/v5.0
 - v4.0 release: https://github.com/Harsha240105/FrOm/releases/tag/v4.0

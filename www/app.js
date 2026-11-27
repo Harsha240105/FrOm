@@ -46,7 +46,27 @@ const E={
   hipflexorstretch:{id:'hipflexorstretch',name:'Half-kneeling hip flexor stretch',focus:'Front of hips',kind:'time',seconds:30,sets:1,restSet:15,restNext:20,group:'Mobility',position:'Kneel on one knee on a padded surface with the other foot in front.',steps:['Place a folded towel under the down knee.','Gently tuck the pelvis and stand tall through the trunk.','Move the hips forward a little until you feel a mild stretch.','Hold for about 15 seconds, then switch sides.'],posture:'Do not arch the lower back. Keep the ribs down.',breathing:'Slow, relaxed breathing. Do not hold your breath.',tip:'Use a smaller range if the knee or hip feels compressed.'},
   hamstringstretch:{id:'hamstringstretch',name:'Standing hamstring stretch',focus:'Back of thighs',kind:'time',seconds:40,sets:1,restSet:15,restNext:20,group:'Mobility',position:'Stand tall with one heel placed slightly forward and a support nearby.',steps:['Keep the front leg nearly straight and the foot flexed.','Hinge gently from the hips with a long back.','Hold for about 20 seconds without bouncing.','Switch sides for the second half of the timer.'],posture:'Long spine. Do not round the back to reach lower.',breathing:'Slow, steady breathing.',tip:'Bend the knee slightly if the stretch feels sharp behind the knee.'},
   balance:{id:'balance',name:'Supported balance',focus:'Balance · stability',kind:'time',seconds:30,sets:2,restSet:25,restNext:20,group:'Balance',position:'Stand beside a stable chair or wall with fingertips lightly touching support.',steps:['Shift your weight onto one foot.','Lift the other foot just off the floor.','Hold gently, using the support only when needed.','Switch feet halfway through the timer.'],posture:'Tall and relaxed. Keep your eyes on one point.',breathing:'Normal breathing.',tip:'Keep both hands on the support if balance is uncertain.'},
-  cool:{id:'cool',name:'Easy cool-down',focus:'Recovery',kind:'time',seconds:120,sets:1,restSet:0,restNext:0,photo:'march',group:'Cool-down',position:'Stand in a safe space with enough room to move slowly.',steps:['March slowly or walk around the room.','Let your breathing settle gradually.','Shake out your arms and shoulders gently.','Finish feeling comfortable, not exhausted.'],posture:'Relaxed and upright.',breathing:'Slow, easy breathing.',tip:'Stop early if you feel dizzy or unusually breathless.'}
+  cool:{id:'cool',name:'Easy cool-down',focus:'Recovery',kind:'time',seconds:120,sets:1,restSet:0,restNext:0,photo:'march',group:'Cool-down',position:'Stand in a safe space with enough room to move slowly.',steps:['March slowly or walk around the room.','Let your breathing settle gradually.','Shake out your arms and shoulders gently.','Finish feeling comfortable, not exhausted.'],posture:'Relaxed and upright.',breathing:'Slow, easy breathing.',tip:'Stop early if you feel dizzy or unusually breathless.'},
+  plank:{id:'plank',name:'Plank',focus:'Core · full body',kind:'time',seconds:30,sets:1,restSet:30,restNext:30,group:'Core',position:'Lie face down with forearms under shoulders and elbows below chest.',steps:['Tighten your stomach gently and keep your body in one line.','Keep elbows under shoulders and do not let the hips sag.','Hold steadily while breathing normally.','Lower to the floor before your form changes.'],posture:'Head, shoulders, hips, and heels in one comfortable line.',breathing:'Breathe slowly and do not hold your breath.',tip:'Drop to your knees for a shorter hold if needed.'},
+  bicyclecrunch:{id:'bicyclecrunch',name:'Bicycle crunch',focus:'Core · obliques',kind:'reps',reps:12,sets:1,restSet:30,restNext:30,group:'Core',eachSide:true,position:'Lie on your back with knees bent and hands near your head without pulling on the neck.',steps:['Bring one knee towards the chest and extend the other leg.','Turn the upper body towards the bent knee.','Switch sides slowly with control.','Keep the movement small if your neck or back complains.'],posture:'Lower back stays comfortable. Do not yank the neck.',breathing:'Breathe out on each turn.',tip:'Move slowly; speed does not improve the exercise.'},
+  reversecrunch:{id:'reversecrunch',name:'Reverse crunch',focus:'Lower core',kind:'reps',reps:10,sets:1,restSet:30,restNext:30,group:'Core',position:'Lie on your back with knees bent and feet flat.',steps:['Place hands by your sides with palms down.','Gently tilt the pelvis and lift the hips a small distance.','Lower slowly without letting the momentum swing you.','Repeat with a small, controlled range.'],posture:'Neck and shoulders stay relaxed.',breathing:'Breathe out as the hips lift.',tip:'Keep the lift small; it is a control movement, not a sit-up.'},
+  sideplank:{id:'sideplank',name:'Side plank',focus:'Side core · balance',kind:'time',seconds:25,sets:1,restSet:30,restNext:30,group:'Core',eachSide:true,position:'Lie on your side with elbow under shoulder and feet stacked.',steps:['Lift your hips so your body forms a straight line.','Keep the elbow under the shoulder and the hips steady.','Hold for about half the timer, then switch sides.','Lower slowly when finished.'],posture:'Stack hips and shoulders. Do not let the hips drop.',breathing:'Slow, steady breathing.',tip:'Bend the knees to shorten the lever if needed.'},
+  mountainclimbers:{id:'mountainclimbers',name:'Mountain climbers',focus:'Core · cardio',kind:'time',seconds:30,sets:1,restSet:30,restNext:30,group:'Cardio',position:'Start on hands and knees or in a plank position.',steps:['Keep shoulders over wrists and brace your middle.','Drive one knee towards the chest, then the other.','Keep the pace steady and hips level.','Slow down if you feel breathless.'],posture:'Do not let the hips bounce high or sag.',breathing:'Steady breathing you can maintain.',tip:'Use hands-and-knees version when needed.'},
+  catcow:{id:'catcow',name:'Cat-cow',focus:'Spine · mobility',kind:'reps',reps:10,sets:1,restSet:15,restNext:20,group:'Mobility',position:'Kneel on all fours with hands under shoulders and knees under hips.',steps:['Inhale and gently let the belly drop while the chest lifts.','Exhale and round the spine like a cat.','Move slowly between the positions.','Keep the neck comfortable.'],posture:'Move through the whole spine without forcing the neck.',breathing:'Match the movement to the breath.',tip:'Keep the range small if the back feels sensitive.'},
+  worldsgreatest:{id:'worldsgreatest',name:"World's greatest stretch",focus:'Hips · upper back',kind:'reps',reps:5,sets:1,restSet:20,restNext:25,group:'Mobility',eachSide:true,position:'Start in a kneeling lunge with one foot forward.',steps:['Place hands inside the front foot.','Press the front knee over the ankle.','Rotate the upper body towards the front leg, then reverse.','Switch sides after the set.'],posture:'Long spine. Do not collapse the chest.',breathing:'Breathe into the stretch.',tip:'Use a shorter lunge if the hips feel tight.'},
+  childspose:{id:'childspose',name:"Child's pose",focus:'Back · hips',kind:'time',seconds:45,sets:1,restSet:15,restNext:20,group:'Mobility',position:'Kneel with knees comfortable and sit hips towards heels.',steps:['Fold the torso forward over the thighs.','Reach arms forward or rest them by your sides.','Breathe into the back and hips.','Hold without forcing the range.'],posture:'Long spine and relaxed shoulders.',breathing:'Slow breathing into the back.',tip:'Place a cushion under hips or wrists if needed.'},
+  doorwaychest:{id:'doorwaychest',name:'Doorway chest stretch',focus:'Chest · posture',kind:'time',seconds:30,sets:1,restSet:15,restNext:20,group:'Mobility',eachSide:true,position:'Stand in a doorway with forearm on the frame at chest height.',steps:['Place one forearm on the door frame.','Step through gently until the chest stretches.','Keep the ribs down and shoulders relaxed.','Switch sides halfway through the timer.'],posture:'Upright trunk. Do not arch the lower back.',breathing:'Slow, relaxed breathing.',tip:'Use a gentle stretch, not a push.'},
+  chintucks:{id:'chintucks',name:'Chin tucks',focus:'Neck · posture',kind:'reps',reps:10,sets:1,restSet:15,restNext:20,group:'Posture',position:'Sit or stand tall with eyes level.',steps:['Glide the chin straight back without tilting the head down.','Hold the gentle position for three seconds.','Release without pushing the head forward.','Repeat slowly.'],posture:'Ears over shoulders. Keep the movement small.',breathing:'Breathe normally.',tip:'Stop if you feel neck pain or dizziness.'},
+  scapularsqueeze:{id:'scapularsqueeze',name:'Scapular squeeze',focus:'Upper back · posture',kind:'reps',reps:12,sets:1,restSet:15,restNext:20,group:'Posture',position:'Sit or stand tall with arms relaxed by your sides.',steps:['Pull the shoulder blades gently together and slightly down.','Hold for a moment without shrugging.','Release slowly.','Repeat without forcing the shoulders back.'],posture:'Ribs down. Neck long.',breathing:'Breathe normally.',tip:'Think of widening the collarbones, not arching the back.'},
+  thoracicextension:{id:'thoracicextension',name:'Thoracic extension over towel',focus:'Upper back · posture',kind:'reps',reps:8,sets:1,restSet:15,restNext:20,group:'Posture',position:'Place a rolled towel across the upper back while lying on your back.',steps:['Support the head with your hands.','Gently extend over the towel without forcing the lower back.','Pause, then return to the floor.','Move the towel slightly only if comfortable.'],posture:'Small movement in the upper back.',breathing:'Breathe out over the towel.',tip:'Stop if the upper back or ribs feel sharp.'},
+  supermanhold:{id:'supermanhold',name:'Superman hold',focus:'Back · glutes',kind:'time',seconds:20,sets:1,restSet:25,restNext:30,group:'Strength',position:'Lie face down with arms extended and a towel under the forehead.',steps:['Lift the chest and legs only a few centimetres.','Keep the neck long and the movement gentle.','Hold without locking the lower back.','Lower slowly.'],posture:'Long body, no sharp arch.',breathing:'Breathe out as you lift.',tip:'Lift one arm and the opposite leg if the full hold feels strong.'},
+  plankpushup:{id:'plankpushup',name:'Plank to push-up',focus:'Core · chest · shoulders',kind:'reps',reps:6,sets:1,restSet:35,restNext:40,group:'Strength',position:'Start on forearms in a plank position.',steps:['Brace your middle and keep hips level.','Press onto one hand, then the other, into a push-up position.','Lower back to forearms with control.','Alternate which arm leads if comfortable.'],posture:'Hips stay steady. Shoulders away from ears.',breathing:'Breathe out as you press up.',tip:'Do the movement from knees if needed.'},
+  chinlift:{id:'chinlift',name:'Chin lift',focus:'Neck · face awareness',kind:'reps',reps:8,sets:1,restSet:15,restNext:20,group:'Face',position:'Sit or stand tall with shoulders relaxed.',steps:['Tilt the head back slightly to a comfortable range.','Pucker the lips towards the ceiling.','Hold for about five seconds.','Return slowly and repeat gently.'],posture:'Keep the movement small and controlled.',breathing:'Breathe normally.',tip:'Skip if you feel neck pain or dizziness.'},
+  neckpress:{id:'neckpress',name:'Isometric neck press',focus:'Neck · posture',kind:'time',seconds:40,sets:1,restSet:15,restNext:20,group:'Face',eachSide:true,position:'Sit tall with a relaxed neck.',steps:['Press your forehead gently into your palm without moving the head.','Repeat with the back of the head and each side of the head.','Use light pressure only.','Stop immediately if you feel pain.'],posture:'Neck stays neutral. No straining.',breathing:'Breathe slowly.',tip:'Evidence for jawline change is limited; keep this gentle.'},
+  cheekhold:{id:'cheekhold',name:'Cheek hold',focus:'Face awareness',kind:'reps',reps:8,sets:1,restSet:10,restNext:15,group:'Face',position:'Sit or stand with the face relaxed.',steps:['Draw the cheeks in gently without straining the jaw.','Hold for about five seconds.','Release fully.','Repeat slowly.'],posture:'Jaw remains comfortable.',breathing:'Breathe normally.',tip:'Skip if the jaw feels tired.'},
+  smilepress:{id:'smilepress',name:'Smile-resistance press',focus:'Face awareness',kind:'reps',reps:8,sets:1,restSet:10,restNext:15,group:'Face',position:'Place fingertips lightly against the cheeks.',steps:['Try to smile gently while fingertips resist.','Hold for a moment without straining the jaw.','Release and repeat.','Keep the movement comfortable.'],posture:'Face and neck stay relaxed.',breathing:'Breathe normally.',tip:'This does not change bone structure; keep expectations modest.'},
+  lowimpactcardio:{id:'lowimpactcardio',name:'Low-impact cardio circuit',focus:'Cardio · stamina',kind:'time',seconds:180,sets:1,restSet:20,restNext:25,group:'Cardio',position:'Stand in a clear space with comfortable shoes.',steps:['March in place at a steady pace.','Add side steps or gentle step-touches.','Keep the pace able to sustain conversation.','Slow down if you feel unusually breathless.'],posture:'Tall and relaxed.',breathing:'Steady breathing.',tip:'This supports overall fat loss when combined with nutrition and consistency.'},
+  cooldownstretch:{id:'cooldownstretch',name:'Cool-down stretch',focus:'Recovery · flexibility',kind:'time',seconds:120,sets:1,restSet:0,restNext:0,group:'Cool-down',position:'Stand or sit in a comfortable space.',steps:['Breathe slowly and let the heart rate settle.','Stretch the calves, hips, chest, and shoulders gently.','Hold each stretch without bouncing.','Finish comfortable, not strained.'],posture:'Relaxed and upright.',breathing:'Slow, easy breathing.',tip:'Stop if you feel dizzy or sharp pain.'}
 };
 
 const WEEK_V1={
@@ -59,11 +79,20 @@ const WEEK_V1={
   6:{title:'Stamina + balance',time:'05:00–05:30 AM',mins:25,ids:['walk','balance','mobility']}
 };
 
-function planBlock(title,mins,ids){return {title,time:'04:00–05:30 AM',mins,ids}}
+function planBlock(title,mins,ids){return {title,time:'Any time',mins,ids}}
+const FIXED_WEEK_PROGRAM={
+  0:planBlock('Core + cardio',28,['plank','deadbug','mountainclimbers','reversecrunch','sideplank','lowimpactcardio','cooldownstretch']),
+  1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
+  2:planBlock('Full-body strength + core',34,['squat','inclinepush','hinge','bridge','lunge','plank','deadbug']),
+  3:planBlock('Flexibility + posture',25,['catcow','worldsgreatest','hipflexorstretch','hamstringstretch','wallangel','chintucks']),
+  4:planBlock('Belly/core + walking',25,['deadbug','plank','bicyclecrunch','reversecrunch','sideplank','mountainclimbers']),
+  5:planBlock('Full-body strength + face',32,['squat','inclinepush','bridge','supermanhold','stepup','plankpushup','chinlift','neckpress','cheekhold','smilepress']),
+  6:planBlock('Flexibility + posture',25,['catcow','childspose','doorwaychest','thoracicextension','scapularsqueeze','wallangel','hipflexorstretch'])
+};
 const PROGRAMS={
   1:{
     0:planBlock('Mobility and confidence',20,['march','wallangel','bridge','clamshell','birddog','openbook','hipflexorstretch','balance','cool']),
-    1:{title:'Rest and make-up',time:'Recovery',mins:0,ids:[]},
+    1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
     2:planBlock('Gentle start',20,['march','wallangel','chair','wallpush','hinge','bridge','calf','cool']),
     3:planBlock('Balance and core',20,['march','sidelift','birddog','deadbug','clamshell','wallsit','stepup','calf','cool']),
     4:planBlock('Posture and push',20,['march','wallangel','chair','inclinepush','hinge','bridge','pelvictilt','openbook','cool']),
@@ -72,7 +101,7 @@ const PROGRAMS={
   },
   2:{
     0:planBlock('Mobility and core',25,['march','wallangel','bridge','pelvictilt','deadbug','openbook','hipflexorstretch','hamstringstretch','balance','cool']),
-    1:{title:'Rest and make-up',time:'Recovery',mins:0,ids:[]},
+    1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
     2:planBlock('Strength A',26,['march','wallangel','inclinepush','kneepush','hinge','bridge','calf','deadbug','cool']),
     3:planBlock('Core and posture',25,['march','sidelift','birddog','deadbug','pelvictilt','clamshell','wallsit','openbook','cool']),
     4:planBlock('Strength B',26,['march','wallangel','wallpush','kneepush','hinge','bridge','stepup','calf','cool']),
@@ -81,7 +110,7 @@ const PROGRAMS={
   },
   3:{
     0:planBlock('Mobility and core',30,['march','wallangel','bridge','pelvictilt','deadbug','openbook','hipflexorstretch','hamstringstretch','balance','cool']),
-    1:{title:'Rest and make-up',time:'Recovery',mins:0,ids:[]},
+    1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
     2:planBlock('Strength A',34,['march','wallangel','wallpush','kneepush','inclinepush','hinge','bridge','calf','deadbug','cool']),
     3:planBlock('Core and posture',32,['march','sidelift','birddog','deadbug','pelvictilt','clamshell','wallsit','openbook','cool']),
     4:planBlock('Strength B',34,['march','wallangel','wallpush','kneepush','hinge','stepup','squat','calf','bridge','cool']),
@@ -89,8 +118,6 @@ const PROGRAMS={
     6:planBlock('Full body',36,['march','wallpush','inclinepush','hinge','stepup','squat','lunge','calf','proney','deadbug','cool']),
   }
 };
-const STAGE_NAMES={1:'Starter',2:'Medium',3:'Hard'};
-const STAGE_NEEDS={1:{sessions:6,days:7},2:{sessions:36,weeks:12},3:{sessions:0,weeks:0}};
 
 let db={};
 try{db=JSON.parse(localStorage.getItem(STORE)||'{}')||{}}catch(e){db={}}
@@ -99,7 +126,6 @@ let activeId=null,repValue=0,exTimer=null,restTick=null,timerDone=false,restNext
 let vaultDates=new Set();
 let currentView='home';
 let calendarMonth=null;
-let homePlanSlide=0;
 let vaultFilePicker=false,vaultPreviewData='',selectedVaultFiles=[];
 let vaultMeta={configured:false,unlocked:false};
 function hasVaultPhoto(k){return vaultDates.has(k)}
@@ -113,11 +139,57 @@ function weekday(k=dayKey()){return parseDay(k).getDay()}
 function mondayOf(k){let d=parseDay(k),off=(d.getDay()+6)%7;d.setDate(d.getDate()-off);return dayISO(d)}
 function pretty(k,opt){return parseDay(k).toLocaleDateString('en-IN',opt)}
 function daysBetween(a,b){return Math.max(0,Math.floor((parseDay(b)-parseDay(a))/DAY))}
+function nextMondayKey(k=dayKey()){const d=parseDay(k),off=(d.getDay()+6)%7;d.setDate(d.getDate()+7-off);return dayISO(d)}
 
 function saveDB(){try{localStorage.setItem(STORE,JSON.stringify(db))}catch(e){toast('Could not save. Storage may be full.')}}
 function saveProfile(){try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile))}catch(e){toast('Could not save profile.')}}
-function saveActive(value){try{if(value)localStorage.setItem(ACTIVE_KEY,JSON.stringify({...value,day:dayKey()}));else localStorage.removeItem(ACTIVE_KEY)}catch(e){}}
-function readActive(){try{return JSON.parse(localStorage.getItem(ACTIVE_KEY)||'null')}catch(e){return null}}
+function normalizeActive(a){
+  if(!a||typeof a!=='object')return null;
+  const id=a.exerciseId||a.id||null;
+  const now=Number(a.updatedAt||a.at)||Date.now();
+  const day=a.day||(a.startedAt?String(a.startedAt).slice(0,10):dayKey());
+  return {
+    sessionId:a.sessionId||'',
+    exerciseId:id,
+    id,
+    day,
+    weekStart:a.weekStart||mondayOf(day),
+    planKey:a.planKey||'fixed-week',
+    positionIndex:Number.isFinite(Number(a.positionIndex))?Number(a.positionIndex):0,
+    mode:a.mode==='rest'?'rest':'exercise',
+    status:a.status||(a.mode==='rest'?'resting':'in-progress'),
+    updatedAt:now,
+    startedAt:a.startedAt||new Date(now).toISOString(),
+    timerEndsAt:a.timerEndsAt||null,
+    restEndsAt:a.restEndsAt||null,
+    nextExerciseId:a.nextExerciseId||a.next||null,
+    next:a.next||null,
+    fromId:a.fromId||id,
+    resumedFrom:a.resumedFrom||null
+  };
+}
+function saveActive(value){
+  try{
+    if(!value){localStorage.removeItem(ACTIVE_KEY);return}
+    const old=normalizeActive(readActive())||{};
+    const p=plan();
+    const merged={...old,...value};
+    merged.id=merged.exerciseId||merged.id||activeId;
+    merged.exerciseId=merged.exerciseId||merged.id;
+    if(!merged.sessionId){
+      const r=db[merged.day]||{};
+      merged.sessionId=r.sessionId||r.sessionStart||new Date().toISOString();
+    }
+    if(!Number.isFinite(Number(merged.positionIndex)))merged.positionIndex=Math.max(0,p.ids.indexOf(merged.exerciseId));
+    merged.day=merged.day||dayKey();
+    merged.weekStart=merged.weekStart||mondayOf(merged.day);
+    merged.updatedAt=Date.now();
+    localStorage.setItem(ACTIVE_KEY,JSON.stringify(normalizeActive(merged)));
+  }catch(e){}
+}
+function readActive(){
+  try{return normalizeActive(JSON.parse(localStorage.getItem(ACTIVE_KEY)||'null'))}catch(e){return null}
+}
 function initProfile(){
   let p={};
   try{p=JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}')||{}}catch(e){p={}}
@@ -131,6 +203,7 @@ function initProfile(){
     p.stageHistory=[{stage:1,startedAt:p.v2Start}];
     p.makeup={};
     p.weightKg=null;
+    p.fixedStartDate=nextMondayKey(today);
   }
   if(!p.dayOne)p.dayOne=today;
   if(!p.v2Start)p.v2Start=today;
@@ -140,20 +213,28 @@ function initProfile(){
   if(!p.makeup||typeof p.makeup!=='object')p.makeup={};
   if(typeof p.weightKg==='undefined')p.weightKg=null;
   if(!p.weightHistory||typeof p.weightHistory!=='object')p.weightHistory={};
+  if(typeof p.heightCm==='undefined')p.heightCm=null;
+  if(typeof p.wristCm==='undefined')p.wristCm=null;
+  if(typeof p.bodyTypeSex==='undefined')p.bodyTypeSex='male';
+  if(typeof p.bodyType==='undefined')p.bodyType=null;
   if(!p.waterGoal)p.waterGoal=2000;
   if(!p.proteinGoal)p.proteinGoal=60;
-  if(typeof p.spotifyPlaylist!=='string')p.spotifyPlaylist='';
-  p.scheduleVersion=2;
+  if(!p.fixedStartDate||!/^\d{4}-\d{2}-\d{2}$/.test(p.fixedStartDate))p.fixedStartDate=nextMondayKey(today);
+  p.scheduleVersion=3;
   try{localStorage.setItem(PROFILE_KEY,JSON.stringify(p))}catch(e){}
   try{if(Object.keys(db).length&&!localStorage.getItem(BACKUP_KEY))localStorage.setItem(BACKUP_KEY,JSON.stringify(db))}catch(e){}
   return p;
 }
 
 function planSnapshot(p){return {title:p.title,time:p.time,mins:p.mins,ids:(p.ids||[]).slice(),stage:p.stage||null}}
-function record(k=dayKey()){
+function record(k=dayKey(),create=true){
   if(!db[k]){
+    if(!create){
+      const p=dayPlan(k);
+      return {sessionStart:null,sessionEnd:null,done:[],events:{},status:'not-started',planSnapshot:planSnapshot(p)};
+    }
     const p=dayPlan(k);
-    db[k]={sessionStart:null,sessionEnd:null,done:[],events:{},status:'not-started',planSnapshot:planSnapshot(p)};
+    db[k]={sessionId:'',sessionStart:null,sessionEnd:null,done:[],events:{},status:'not-started',planSnapshot:planSnapshot(p)};
   }else if(!db[k].planSnapshot&&k<=dayKey()){
     const p=dayPlan(k);
     db[k].planSnapshot=planSnapshot(p);
@@ -182,6 +263,11 @@ function legacyPlan(wd){
 }
 function dayPlan(k){
   if(k<profile.v2Start)return legacyPlan(weekday(k));
+  const fixedStart=profile.fixedStartDate||nextMondayKey(k);
+  if(k>=fixedStart){
+    const p=FIXED_WEEK_PROGRAM[weekday(k)]||FIXED_WEEK_PROGRAM[1];
+    return {...p,stage:1,fixed:true,exercises:(p.ids||[]).map(id=>({id}))};
+  }
   if(weekday(k)===1){
     const mk=(profile.makeup||{})[mondayOf(k)];
     if(mk&&mk!==k)return dayPlan(mk);
@@ -196,7 +282,7 @@ function calendarPlan(k){
   return dayPlan(k);
 }
 function plan(){return dayPlan(dayKey())}
-function planStage(){const p=plan();return p.stage||stageAt(dayKey())}
+function planStage(){return plan().stage||1}
 function isDayComplete(k){
   const p=calendarPlan(k),r=db[k];
   return !!(p.ids&&p.ids.length&&r&&p.ids.every(id=>(r.done||[]).includes(id)));
@@ -230,7 +316,7 @@ function monthCount(){
     const k=dayISO(new Date(y,m,n));
     if(k>dayKey())continue;
     if(k<profile.dayOne)continue;
-    const p=dayPlan(k);
+    const p=calendarPlan(k);
     if(p.ids.length){scheduled++;if(isDayComplete(k))done++}
   }
   return {done,scheduled};
@@ -248,20 +334,7 @@ function activityForDay(k){
 function timeString(x){return x?new Date(x).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'—'}
 function durationString(a,b){if(!a||!b)return '—';let s=Math.max(0,Math.floor((new Date(b)-new Date(a))/1000));return Math.floor(s/60)+'m '+String(s%60).padStart(2,'0')+'s'}
 function fmt(sec){return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
-function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3200)}
-function relocateRedesignPanels(){
-  const move=(id,target)=>{
-    const node=$(id),parent=$(target);
-    if(node&&parent&&typeof parent.appendChild==='function')parent.appendChild(node);
-  };
-  move('stagePanel','progressContent');
-  move('dailyGuide','recoveryContent');
-  move('makeupPanel','recoveryContent');
-  move('nutritionPanel','nutritionContent');
-  move('timetablePanel','nutritionContent');
-  move('foodPanel','nutritionContent');
-  move('spotifyPanel','musicContent');
-}
+function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');const live=$('timerAnnouncer');if(live)live.textContent=msg;clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),3200)}
 function show(id){
   if(currentView==='streak'&&id!=='streak'){
     clearCalendarPhoto();
@@ -288,14 +361,17 @@ function show(id){
   if(id==='streak')renderStreak();
   if(id==='routine')renderRoutine();
   if(id==='settings')renderSettings();
-  if(id==='recovery'){renderDailyGuide(isDayComplete(dayKey()),plan());renderMakeup(makeupCandidates())}
+  if(id==='focus'){closeFocusRoutine();renderFocus()}
+  if(id==='recovery')renderDailyGuide(isDayComplete(dayKey()),plan());
   if(id==='nutrition')renderNutrition();
-  if(id==='music')renderSpotify();
   if(id==='progress'){
     $('progressStreak').textContent=streak();
     $('progressCompleted').textContent=completedCount();
     $('progressMonth').textContent=monthCount().done+'/'+monthCount().scheduled;
-    renderStage();
+  }
+  if(el&&typeof el.querySelector==='function'){
+    const heading=el.querySelector('h1,h2,h3');
+    if(heading){heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true})}
   }
   window.scrollTo(0,0);
 }
@@ -327,6 +403,10 @@ const MET_BY_EXERCISE={
   bridge:3.5,calf:3.5,sidelift:3.0,birddog:3.0,deadbug:2.8,pelvictilt:2.5,clamshell:2.8,
   wallsit:3.5,stepup:4.0,squat:4.0,lunge:4.0,proney:2.8,openbook:2.5,
   hipflexorstretch:2.3,hamstringstretch:2.3,balance:2.5,cool:2.5,
+  plank:3.3,bicyclecrunch:3.8,reversecrunch:3.3,sideplank:3.5,mountainclimbers:5.0,
+  catcow:2.2,worldsgreatest:3.0,childspose:2.0,doorwaychest:2.0,chintucks:2.0,
+  scapularsqueeze:2.2,thoracicextension:2.0,supermanhold:2.8,plankpushup:4.0,
+  chinlift:2.0,neckpress:2.0,cheekhold:2.0,smilepress:2.0,lowimpactcardio:4.3,cooldownstretch:2.2,
   walk:3.0,mobility:2.5,side:3.0
 };
 const REP_SECONDS=3;
@@ -350,7 +430,7 @@ function workSecondsFor(id,ev,stage){
   return sets*perSet;
 }
 function caloriesForDay(k){
-  const p=dayPlan(k),r=db[k],stage=p.stage||stageAt(k),kg=weightForDay(k);
+  const p=calendarPlan(k),r=db[k],stage=p.stage||1,kg=weightForDay(k);
   if(!p.ids.length)return {kcal:0,minutes:0,kg,items:[],note:'Rest day. No workout estimate.'};
   if(!r||!(r.status==='completed'||r.sessionEnd))return {kcal:0,minutes:0,kg,items:[],note:'No completed exercise recorded yet.'};
   let kcal=0,seconds=0;
@@ -386,7 +466,7 @@ function totalCalories(){
 function calorieHistory(){
   const today=dayKey();
   return Array.from({length:14},(_,i)=>addDays(today,-i)).map(k=>{
-    const d=caloriesForDay(k),r=db[k],p=dayPlan(k);
+    const d=caloriesForDay(k),r=db[k],p=calendarPlan(k);
     return {k,d,title:p.ids.length?p.title:'Rest and recovery',recorded:!!(r&&r.events&&Object.keys(r.events).length)};
   });
 }
@@ -419,6 +499,8 @@ function renderNutrition(){
   $('proteinBar').style.width=Math.min(100,Math.round(n.protein/pg*100))+'%';
   if(document.activeElement!==$('waterGoalInput'))$('waterGoalInput').value=wg;
   if(document.activeElement!==$('proteinGoalInput'))$('proteinGoalInput').value=pg;
+  const tip=$('bodyTypeFoodTip');
+  if(tip)tip.textContent=profile.bodyType?BODY_TYPE_INFO[profile.bodyType].food:'Set your body type in Settings for a tailored food note here.';
 }
 function adjustWater(delta){
   const k=dayKey(),r=record(),n=nutritionFor(k);
@@ -437,13 +519,6 @@ function saveNutritionTargets(){
   profile.waterGoal=Math.round(wg);profile.proteinGoal=Math.round(pg);
   saveProfile();renderNutrition();toast('Daily targets saved.');
 }
-let selectedHomePlanKey=null;
-function selectHomePlan(k){
-  selectedHomePlanKey=k;
-  homePlanSlide=0;
-  renderHomePlanCard();
-  $('homePlanCard').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
 function renderWeekStrip(){
   const start=dayKey();
   $('weekStrip').innerHTML=Array.from({length:3},(_,i)=>{
@@ -451,58 +526,38 @@ function renderWeekStrip(){
     return '<button type="button" class="weekDay '+activity.className+(today?' today':'')+'" data-home-plan-date="'+k+'" aria-label="View '+pretty(k,{weekday:'long',day:'numeric',month:'long'})+' plan"><small>'+pretty(k,{weekday:'short'}).toUpperCase()+'</small><b>'+pretty(k,{day:'numeric'})+'</b><span>'+activity.label+'</span><em title="'+p.title+'">'+p.title+'</em></button>';
   }).join('');
   const strip=$('weekStrip');
-  if(strip&&typeof strip.querySelectorAll==='function')strip.querySelectorAll('[data-home-plan-date]').forEach(card=>card.onclick=()=>selectHomePlan(card.dataset.homePlanDate));
-}
-function makeupCandidates(){
-  const k=dayKey();
-  if(weekday(k)!==1||k<profile.v2Start)return [];
-  const out=[];
-  for(let d=addDays(k,-6);d<k;d=addDays(d,1)){
-    if(d<profile.v2Start)continue;
-    const p=dayPlan(d);
-    if(p.ids.length&&!isDayComplete(d))out.push({k:d,p});
-  }
-  return out;
+  if(strip&&typeof strip.querySelectorAll==='function')strip.querySelectorAll('[data-home-plan-date]').forEach(card=>card.onclick=()=>openFocusRoutine(weekday(card.dataset.homePlanDate)));
 }
 function live(){
-  const n=new Date(),d=trainingDate(),p=plan(),k=dayKey();
+  const n=new Date(),d=trainingDate(),p=plan(),k=dayKey(),r=record(k,false);
   $('weekday').textContent=d.toLocaleDateString('en-IN',{weekday:'long'}).toUpperCase();
   $('dateLine').textContent=d.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
   $('liveClock').innerHTML=n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+' <small>'+n.toLocaleTimeString('en-IN',{hour:'2-digit',hour12:true}).slice(-2).toUpperCase()+'</small>';
-  const mins=n.getHours()*60+n.getMinutes();
-  const has=p.ids.length>0;
-  let hint='';
-  if(!has)hint=weekday(k)===1?'REST DAY · MONDAY MAKE-UP SLOT':'REST DAY · RECOVERY';
-  else if(mins>=240&&mins<300)hint='WORKOUT WINDOW OPEN · FINISH BY 05:30';
-  else if(mins>=300&&mins<330)hint='WORKOUT WINDOW · FINISH BY 05:30';
-  else if(mins<240)hint='TRAINING DAY CLOSES AT 04:00 AM';
-  else hint='SESSION WINDOW PASSED · START WHEN READY';
-  $('countdown').textContent=hint;
-  let pct=0;
-  if(has){if(mins<=240)pct=0;else if(mins>=330)pct=100;else pct=Math.round((mins-240)/90*100)}
-  $('liveFill').style.width=pct+'%';
+  $('countdown').textContent=p.ids.length?'FIXED WEEK · TRAIN ANY TIME':weekday(k)===1?'MONDAY · REST DAY':'RECOVERY DAY';
+  const done=p.ids.filter(id=>(r.done||[]).includes(id)).length;
+  $('liveFill').style.width=(p.ids.length?Math.round(done/p.ids.length*100):0)+'%';
 }
 function renderHome(){
   live();
-  const k=dayKey(),p=plan(),r=record(),complete=isDayComplete(k),cands=makeupCandidates();
+  const k=dayKey(),p=plan(),r=record(k,false),complete=isDayComplete(k);
   const activity=activityForDay(k);
   const preview=p.ids.length?p.ids.map(id=>EX(id)?.name||id).join(' · '):'No workout scheduled. Recovery is part of the plan.';
   $('todayStatus').textContent=activity.label;
   $('todayStatus').className='tag '+activity.className;
   $('todayStatus').title=activity.title;
-  $('planName').textContent=p.ids.length?p.title:weekday(k)===1?'Rest and make-up':'Rest and reset';
-  $('planTime').textContent=p.ids.length?'04:00–05:30 AM':'RECOVERY';
+  $('planName').textContent=p.ids.length?p.title:'Rest and recovery';
+  $('planTime').textContent=p.time||'ANY TIME';
   $('durationTag').textContent=p.mins?p.mins+' MIN':'REST';
   $('exercisePreview').textContent=preview;
   const doneCount=p.ids.filter(id=>(r.done||[]).includes(id)).length;
   const progress=p.ids.length?Math.min(doneCount,p.ids.length):0;
   $('workoutProgress').textContent=p.ids.length?(complete?'ALL '+p.ids.length+' EXERCISES COMPLETE':progress+' / '+p.ids.length+' EXERCISES · '+Math.round(progress/p.ids.length*100)+'%'):'RECOVERY DAY';
-  $('startToday').textContent=complete?'VIEW COMPLETED SESSION':r.sessionStart?'CONTINUE WORKOUT':p.ids.length?'START TODAY':cands.length?'CHOOSE MAKE-UP':'VIEW REST DAY';
+  $('startToday').textContent=complete?'VIEW COMPLETED SESSION':r.sessionStart?'CONTINUE WORKOUT':p.ids.length?'START TODAY':'VIEW REST DAY';
   const streakValue=streak();
   $('streakCount').textContent=streakValue+' '+(streakValue===1?'day':'days');
   const streakButton=$('openStreak');
   if(streakButton){
-    streakButton.innerHTML='<span class="streakLabel">STREAK | </span><span class="streakValue">'+String(streakValue).padStart(2,'0')+(streakValue===1?' DAY':' DAYS')+'</span>';
+    streakButton.innerHTML='<span class="streakLabel">COMPLETED DAYS | </span><span class="streakValue">'+String(streakValue).padStart(2,'0')+(streakValue===1?' DAY':' DAYS')+'</span>';
     streakButton.classList.remove('streakPulse');
     void streakButton.offsetWidth;
     streakButton.classList.add('streakPulse');
@@ -516,107 +571,32 @@ function renderHome(){
   }
   const m=monthCount();$('monthProgress').textContent=m.done+'/'+m.scheduled;
   const cal=calories();$('calorieEstimate').textContent=cal.text;$('calorieNote').textContent=cal.note;
-  renderStage();
-  renderMakeup(cands);
-  renderDailyGuide(complete,p);
   renderWeekStrip();
-  renderHomePlanCard();
   renderNutrition();
-  renderSpotify();
-}
-function nextScheduledDay(){
-  const today=dayKey();
-  for(let i=1;i<=7;i++){
-    const k=addDays(today,i);
-    if(dayPlan(k).ids.length)return k;
-  }
-  return addDays(today,1);
-}
-function renderHomePlanCard(){
-  const k=selectedHomePlanKey||(homePlanSlide?nextScheduledDay():dayKey()),p=dayPlan(k),today=k===dayKey();
-  const title=p.ids.length?p.title:(weekday(k)===1?'Rest and make-up':'Rest and reset');
-  const names=p.ids.length?p.ids.map(id=>EX(id)?.name||id).join(' · '):'No workout scheduled. Recovery is part of the plan.';
-  $('homePlanLabel').textContent=today?"TODAY'S PLAN":'SELECTED PLAN';
-  $('homePlanTitle').textContent=title;
-  $('homePlanDate').textContent=today?'TODAY':pretty(k,{weekday:'short',day:'numeric',month:'short'}).toUpperCase();
-  $('homePlanMeta').textContent=p.ids.length?(p.mins+' MIN · '+p.ids.length+' EXERCISES'):'RECOVERY DAY';
-  $('homePlanExercises').textContent=names;
-  $('homePlanDotToday').classList.toggle('active',!homePlanSlide);
-  $('homePlanDotUpcoming').classList.toggle('active',!!homePlanSlide);
-}
-function swipeHomePlan(delta){
-  if(delta>30){selectedHomePlanKey=null;homePlanSlide=1;renderHomePlanCard()}
-  else if(delta<-30){selectedHomePlanKey=null;homePlanSlide=0;renderHomePlanCard()}
 }
 function renderDailyGuide(complete,p){
   const k=dayKey();
-  if(complete){
+  if(weekday(k)===1){
+    $('dailyGuideLabel').textContent='MONDAY · RECOVERY GUIDE';
+    $('dailyGuideTitle').textContent='No workout today.';
+    $('dailyGuideBody').textContent='Monday is the only rest day. Keep it easy with normal meals, water, gentle movement if comfortable, and sleep. The same fixed week starts again tomorrow.';
+  }else if(complete){
     $('dailyGuideLabel').textContent='TODAY COMPLETED · RECOVERY GUIDE';
     $('dailyGuideTitle').textContent='Recover, eat, and protect sleep.';
-    $('dailyGuideBody').textContent='Water and a normal meal with protein. Keep the rest of the day easy. Do not add a second workout. Your next planned session is on the next training day after the 04:00 reset.';
-    return;
-  }
-  if(p.ids.length){
-    $('dailyGuideLabel').textContent='WORKOUT NOT COMPLETED · REST-DAY GUIDE';
-    $('dailyGuideTitle').textContent='If you do not train today, rest without guilt.';
-    $('dailyGuideBody').textContent='No session is recorded yet. Do not double up later. Monday is the only make-up slot for this training week. Use normal meals, water, gentle movement only if comfortable, and sleep.';
-    return;
-  }
-  $('dailyGuideLabel').textContent=weekday(k)===1?'REST DAY · MONDAY':'REST DAY · RECOVERY GUIDE';
-  $('dailyGuideTitle').textContent='No workout today.';
-  $('dailyGuideBody').textContent=weekday(k)===1?'Monday is rest or the one make-up slot for a missed session. If there is nothing to make up, keep the day easy and return to the next planned session.':'Nothing is required today. Normal meals, water, gentle movement if comfortable, and sleep. The plan resumes on the next training day.';
-}
-function renderStage(){
-  const stage=stageAt(dayKey()),start=stageRoot(stage),cnt=completedSince(start),days=daysBetween(start,dayKey())+1;
-  const weeks=Math.floor((days-1)/7);
-  const pend=pendingStage();
-  $('stageName').textContent=STAGE_NAMES[stage];
-  $('stageBadge').textContent='STAGE '+stage+' / 3';
-  const need=STAGE_NEEDS[stage];
-  if(stage===1){
-    $('stageProgress').textContent=cnt+' / '+need.sessions+' sessions · '+Math.min(weeks,1)+' / 1 week';
-    $('stageBar').style.width=Math.min(100,Math.round((cnt/need.sessions)*100))+'%';
-    $('stageHint').textContent='Complete at least 6 controlled sessions across 7 days. Progress is manual, so the app will not move you automatically.';
-  }else if(stage===2){
-    $('stageProgress').textContent=cnt+' / '+need.sessions+' sessions · '+weeks+' / '+need.weeks+' weeks';
-    $('stageBar').style.width=Math.min(100,Math.round((weeks/need.weeks)*100))+'%';
-    $('stageHint').textContent='Stay here for at least 12 weeks. Move on only when you can finish every session with controlled form and no worsening pain.';
+    $('dailyGuideBody').textContent='Water and a normal meal with protein. No second workout is required. Continue with the next day in the same fixed week when you are ready.';
   }else{
-    $('stageProgress').textContent=cnt+' sessions completed in this stage';
-    $('stageBar').style.width='100%';
-    $('stageHint').textContent='Advanced stage. Stay only while recovery, sleep, and form remain good. No automatic progression.';
+    $('dailyGuideLabel').textContent='WORKOUT DAY · RECOVERY GUIDE';
+    $('dailyGuideTitle').textContent='Rest without guilt if today did not happen.';
+    $('dailyGuideBody').textContent='Do not double up. Use normal meals, water, gentle movement only if comfortable, and sleep. The routine repeats unchanged next week.';
   }
-  const can=stage<3&&!pend&&((stage===1&&cnt>=6&&days>=7)||(stage===2&&cnt>=36&&weeks>=12));
-  $('advanceStage').classList.toggle('hidden',stage>=3);
-  $('advanceStage').disabled=!can;
-  $('advanceStage').textContent=pend?'NEXT STAGE STARTS '+pretty(pend.startedAt,{day:'numeric',month:'short'}).toUpperCase():can?'MOVE TO '+STAGE_NAMES[stage+1].toUpperCase():'KEEP TRAINING';
-  $('stageDayOne').textContent='Day 1 · '+pretty(profile.dayOne,{day:'numeric',month:'short',year:'numeric'})+(pend?' · '+STAGE_NAMES[pend.stage]+' begins next day.':'');
-}
-function renderMakeup(cands){
-  const k=dayKey(),panel=$('makeupPanel'),sel=(profile.makeup||{})[mondayOf(k)];
-  panel.classList.toggle('hidden',!(weekday(k)===1&&k>=profile.v2Start));
-  if(weekday(k)!==1||k<profile.v2Start)return;
-  if(sel&&!isDayComplete(k)){
-    const p=dayPlan(sel);
-    $('makeupIntro').textContent='Make-up selected: '+pretty(sel,{weekday:'short',day:'numeric',month:'short'})+' · '+p.title+'. Only one missed session can be made up.';
-    $('makeupSelect').innerHTML='<option value="'+sel+'">'+pretty(sel,{weekday:'long',day:'numeric',month:'long'})+' · '+p.title+'</option>';
-    $('makeupSelect').disabled=true;
-    $('startMakeup').textContent=record().sessionStart?'CONTINUE MAKE-UP':'START MAKE-UP';
-    return;
-  }
-  if(isDayComplete(k)||!cands.length){panel.classList.add('hidden');return}
-  $('makeupIntro').textContent='Choose one missed session from Tuesday to Sunday. It will be recorded on this Monday only.';
-  $('makeupSelect').disabled=false;
-  $('makeupSelect').innerHTML=cands.map(c=>'<option value="'+c.k+'">'+pretty(c.k,{weekday:'long',day:'numeric',month:'short'})+' · '+c.p.title+'</option>').join('');
-  $('startMakeup').textContent='START MAKE-UP';
 }
 function renderWorkout(){
-  const k=dayKey(),p=plan(),r=record(),stage=p.stage||stageAt(k);
+  const k=dayKey(),p=plan(),r=record(),stage=p.stage||1;
   $('workoutDay').textContent=pretty(k,{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
-  $('workoutTitle').textContent=p.ids.length?p.title:weekday(k)===1?'Rest and make-up':'Rest and reset';
-  $('workoutIntro').textContent=p.ids.length?p.ids.length+' exercises · '+p.mins+' minutes planned · Complete the warm-up first and the cool-down last.':'No workout is scheduled. Recovery is part of the plan.';
+  $('workoutTitle').textContent=p.ids.length?p.title:'Rest and recovery';
+  $('workoutIntro').textContent=p.ids.length?p.ids.length+' exercises · '+p.mins+' minutes planned · Move at your own pace and stop if something hurts.':'No workout is scheduled. Monday is the rest day.';
   if(!p.ids.length){
-    $('exerciseCards').innerHTML='<div class="panel solid"><h3>Rest day</h3><p>No workout is scheduled. Monday is the one make-up slot for a missed session in this training week.</p><button class="secondaryBtn" onclick="showHome()">BACK TO TODAY</button></div>';
+    $('exerciseCards').innerHTML='<div class="panel solid"><h3>Rest day</h3><p>No workout is scheduled. Keep the day easy; the same routine repeats next week.</p><button class="secondaryBtn" onclick="showHome()">BACK TO TODAY</button></div>';
     return;
   }
   $('exerciseCards').innerHTML=p.ids.map((id,i)=>{
@@ -624,18 +604,20 @@ function renderWorkout(){
     const rx=rxFor(e,stage),ev=r.events[id],done=r.done.includes(id),im=e.photo?images[e.photo]:null;
     const photo=im?'<img class="cardPhoto" src="'+im.url+'" alt="'+im.alt+'" loading="lazy" onerror="this.remove()">':'';
     const credit=im?'<a class="photoSource" href="'+im.link+'" target="_blank" rel="noopener">Photo: '+im.source+'</a>':'<span class="photoSource">Stored guidance</span>';
-    return '<article class="exerciseCard"><div class="exerciseMain'+(im?'':' noPhoto')+'">'+photo+'<div class="cardBody"><div class="exNum">EXERCISE '+String(i+1).padStart(2,'0')+' / '+p.ids.length+'</div><div class="exName">'+e.name+'</div><div class="exFocus">'+e.focus+'</div><div class="exDescription">'+e.steps[0]+'</div><div class="exMeta"><span>'+formatRx(e,rx)+'</span><span>Rest '+rx.restSet+' sec</span><span>'+rx.sets+' set'+(rx.sets===1?'':'s')+'</span></div></div></div><div class="cardBottom">'+credit+'<button class="startExBtn '+(done?'done':'')+'" data-id="'+id+'" '+(done?'disabled':'')+'>'+(done?'COMPLETED':ev&&ev.startedAt?'CONTINUE':'START EXERCISE')+'</button></div>'+(ev?'<div style="padding:0 12px 10px;color:var(--muted);font-size:9px">Started '+timeString(ev.startedAt)+'</div>':'')+'</article>';
+    return '<article class="exerciseCard" data-id="'+id+'"><div class="exerciseMain'+(im?'':' noPhoto')+'">'+photo+'<div class="cardBody"><div class="exNum">EXERCISE '+String(i+1).padStart(2,'0')+' / '+p.ids.length+'</div><div class="exName">'+e.name+'</div><div class="exFocus">'+e.focus+'</div><div class="exDescription">'+e.steps[0]+'</div><div class="exMeta"><span>'+formatRx(e,rx)+'</span><span>Rest '+rx.restSet+' sec</span><span>'+rx.sets+' set'+(rx.sets===1?'':'s')+'</span></div></div></div><div class="cardBottom">'+credit+'<button class="startExBtn '+(done?'done':'')+'" aria-label="'+e.name+': '+(done?'completed':ev&&ev.startedAt?'continue':'start')+'" '+(done?'disabled':'')+'>'+(done?'COMPLETED':ev&&ev.startedAt?'CONTINUE':'START')+'</button></div>'+(ev?'<div style="padding:0 12px 10px;color:var(--muted);font-size:9px">Started '+timeString(ev.startedAt)+'</div>':'')+'</article>';
   }).join('');
-  $('exerciseCards').querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>openExercise(b.dataset.id));
+  $('exerciseCards').querySelectorAll('.exerciseCard[data-id] button').forEach(b=>b.onclick=()=>openExercise(b.closest('.exerciseCard').dataset.id));
 }
 function startToday(){
-  const k=dayKey(),p=plan(),cands=makeupCandidates(),r=record();
-  if(!p.ids.length){
-    if(cands.length){$('makeupPanel').scrollIntoView({block:'center'});toast('Choose a missed session first.');return}
-    renderWorkout();show('workout');return;
-  }
+  const k=dayKey(),p=plan(),r=record();
+  const a=readActive();
+  if(a&&a.id&&!isDayComplete(k)){restoreActiveSession();return}
+  if(!p.ids.length){renderWorkout();show('workout');return}
   if(isDayComplete(k)){showFinished();return}
-  if(!r.sessionStart){r.sessionStart=new Date().toISOString();r.status='in-progress';saveDB()}
+  const now=new Date().toISOString();
+  if(!r.sessionStart){r.sessionStart=now;r.status='in-progress'}
+  r.sessionId=r.sessionId||r.sessionStart;
+  saveDB();
   const next=p.exercises.find(x=>!r.done.includes(x.id));
   if(next)openExercise(next.id);else showFinished();
 }
@@ -651,27 +633,50 @@ function ensureEv(id){
 }
 function openExercise(id){
   const e=EX(id);if(!e)return;
-  const r=record();
-  if(!r.sessionStart){r.sessionStart=new Date().toISOString();r.status='in-progress'}
+  const r=record(),now=new Date().toISOString();
+  if(!r.sessionStart){r.sessionStart=now;r.status='in-progress'}
+  r.sessionId=r.sessionId||r.sessionStart;
   const ev=ensureEv(id);
   activeId=id;repValue=ev.currentReps||0;timerDone=!!(ev.timerEndsAt&&ev.timerEndsAt<=Date.now());
   clearExerciseTimer();clearRest();
   saveDB();
-  saveActive({id,mode:'exercise',at:Date.now()});
+  saveActive({id,mode:'exercise',status:'in-progress',sessionId:r.sessionId,exerciseId:id,positionIndex:plan().ids.indexOf(id),timerEndsAt:null,restEndsAt:null,at:Date.now()});
   renderExercise();
   if(ev.timerEndsAt&&ev.timerEndsAt>Date.now())resumeSetTimer(ev.timerEndsAt);
   show('exercise');
 }
 function restoreActiveSession(){
   const a=readActive();
-  if(!a||!a.id||a.day!==dayKey()||!EX(a.id)||isDayComplete(dayKey())){saveActive(null);return false}
+  if(!a||!a.id||!EX(a.id)){saveActive(null);return false}
+  const today=dayKey(),oldDay=a.day||today;
+  if(oldDay!==today){
+    const old=db[oldDay],cur=record();
+    if(old&&!cur.sessionStart){
+      cur.sessionStart=old.sessionStart||null;
+      cur.sessionEnd=null;
+      cur.done=Array.isArray(old.done)?old.done.slice():[];
+      cur.events=JSON.parse(JSON.stringify(old.events||{}));
+      cur.water=old.water||0;cur.protein=old.protein||0;
+      cur.status='in-progress';
+      saveDB();
+    }
+    saveActive({...a,day:today,weekStart:mondayOf(today),resumedFrom:oldDay,updatedAt:Date.now()});
+    toast('Session resumed from '+pretty(oldDay,{day:'numeric',month:'short'})+'.');
+  }
+  if(isDayComplete(today)){saveActive(null);return false}
+  const cur=record();
+  if(cur.status!=='completed'){
+    cur.sessionStart=cur.sessionStart||a.startedAt||new Date().toISOString();
+    cur.sessionId=cur.sessionId||a.sessionId||cur.sessionStart;
+    cur.status='in-progress';saveDB();
+  }
   if(a.mode==='rest'&&a.fromId){
     activeId=a.id;
     repValue=ensureEv(a.id).currentReps||0;
     clearExerciseTimer();clearRest();
     renderExercise();
     const remaining=Math.max(0,Math.ceil(((a.restEndsAt||0)-Date.now())/1000));
-    startRest(remaining,a.next,a.fromId);
+    startRest(remaining,a.nextExerciseId||a.next,a.fromId);
     show('exercise');
     return true;
   }
@@ -680,12 +685,12 @@ function restoreActiveSession(){
 }
 function renderExercise(){
   if(!activeId)return;
-  const e=EX(activeId),k=dayKey(),p=plan(),stage=p.stage||stageAt(k),rx=rxFor(e,stage),r=record(),ev=ensureEv(activeId),im=e.photo?images[e.photo]:null;
+  const e=EX(activeId),p=plan(),stage=p.stage||1,rx=rxFor(e,stage),r=record(),ev=ensureEv(activeId),im=e.photo?images[e.photo]:null;
   const idx=p.ids.indexOf(activeId);
   $('exercisePosition').textContent='EXERCISE '+String(idx+1).padStart(2,'0')+' / '+p.ids.length;
   $('focusGroup').textContent=e.focus.toUpperCase();
   $('focusName').textContent=e.name;
-  $('focusMeta').innerHTML='<span class="chip">'+formatRx(e,rx)+'</span><span class="chip">Rest '+rx.restSet+' sec between sets</span><span class="chip">Stage '+stage+'</span>';
+  $('focusMeta').innerHTML='<span class="chip">'+formatRx(e,rx)+'</span><span class="chip">Rest '+rx.restSet+' sec between sets</span><span class="chip">Fixed week</span>';
   $('exercisePositionText').textContent=e.position||'Set up in a clear, safe space.';
   $('exerciseSteps').innerHTML='<ol>'+e.steps.map(x=>'<li>'+x+'</li>').join('')+'</ol>';
   $('exercisePosture').textContent=e.posture||'Move slowly and keep the body controlled.';
@@ -860,6 +865,13 @@ function continueRest(){
   const next=p.exercises.find(x=>!r.done.includes(x.id));
   if(next)openExercise(next.id);else showFinished();
 }
+function skipRest(){
+  clearRest();
+  const btn=$('continueAfterRest');
+  if(btn){btn.disabled=false;btn.textContent=restNextAction==='nextSet'?'START NEXT SET':'NEXT EXERCISE'}
+  $('restHint').textContent='Rest skipped. Continue when ready.';
+  saveActive({id:restFromId,mode:'rest',restEndsAt:0,at:Date.now()});
+}
 function showFinished(){
   const r=record(),p=plan();
   if(!r.sessionEnd)r.sessionEnd=new Date().toISOString();
@@ -982,18 +994,15 @@ async function revealCalendarPhoto(){
 }
 function requestCalendarPhotoPassword(){revealCalendarPhoto()}
 function renderRoutine(){
-  const stage=stageAt(dayKey()),names=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],order=[2,3,4,5,6,0,1];
-  $('routineStage').textContent=STAGE_NAMES[stage]+' · 6 training days';
+  const names=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],order=[1,2,3,4,5,6,0];
+  $('routineStage').textContent='SAME ROUTINE REPEATS EVERY WEEK · MONDAY REST';
   $('routineList').innerHTML=order.map(d=>{
-    const p=PROGRAMS[stage][d];
-    const isToday=d===weekday();
-    const list=p.ids.length?p.ids.map(id=>{const e=EX(id);return e?e.name+' ('+formatRx(e,rxFor(e,stage))+')':id}).join(' · '):'Rest or one make-up session from this week.';
+    const p=FIXED_WEEK_PROGRAM[d],isToday=d===weekday();
+    const list=p.ids.length?p.ids.map(id=>{const e=EX(id);return e?e.name+' ('+formatRx(e,rxFor(e,1))+')':id}).join(' · '):'Rest and recovery.';
     return '<div class="routineRow"><div><b>'+names[d]+' · '+p.title+(isToday?' · TODAY':'')+'</b><small>'+list+'</small></div><span class="durationTag">'+(p.mins?p.mins+' MIN':'REST')+'</span></div>';
   }).join('');
 }
 function renderSettings(){
-  $('spotifyPlaylistInput').value=profile.spotifyPlaylist||'';
-  $('spotifyPlaylistStatus').textContent=profile.spotifyPlaylist?'Saved. PLAY starts this playlist.':'No focus playlist saved. PLAY resumes the current Spotify track.';
   $('weightInput').value=profile.weightKg?String(profile.weightKg):'';
   if(profile.weightKg){
     const c=calories();
@@ -1001,6 +1010,7 @@ function renderSettings(){
   }else{
     $('weightStatus').textContent='No weight saved. The calorie estimate stays hidden until you add it.';
   }
+  renderBodyType();
 }
 function saveWeight(){
   const raw=$('weightInput').value.trim();
@@ -1014,245 +1024,89 @@ function saveWeight(){
   profile.weightHistory[dayKey()]=profile.weightKg;
   saveProfile();renderSettings();renderHome();toast('Body weight saved for the estimate.');
 }
-function advanceStage(){
-  const stage=stageAt(dayKey()),start=stageRoot(stage),cnt=completedSince(start),days=daysBetween(start,dayKey())+1,weeks=Math.floor((days-1)/7);
-  const can=stage<3&&!pendingStage()&&((stage===1&&cnt>=6&&days>=7)||(stage===2&&cnt>=36&&weeks>=12));
-  if(!can){toast('The current stage is not ready to advance yet.');return}
-  if(!confirm('Move to '+STAGE_NAMES[stage+1]+'? It starts on the next day. Day 1 and all history stay unchanged.'))return;
-  const next=stage+1,startDate=addDays(dayKey(),1);
-  profile.stageHistory.push({stage:next,startedAt:startDate});
-  profile.stage=next;
-  profile.stageStartedAt=startDate;
-  saveProfile();
-  renderHome();
-  toast(STAGE_NAMES[next]+' starts '+pretty(startDate,{day:'numeric',month:'short'})+'.');
-}
-function startMakeup(){
-  const k=dayKey(),select=$('makeupSelect'),sel=select.value;
-  if(weekday(k)!==1||!sel){toast('Choose a missed session first.');return}
-  profile.makeup[mondayOf(k)]=sel;
-  saveProfile();
-  renderHome();
-  startToday();
-}
-let spotifyBound=false,spotifyApi=null,spotifyState={},spotifyLastStatus='',spotifyConnectPending=false;
-let localMusicUrl='';
-let localMusicFiles=[],localMusicIndex=0;
-function localMusicApi(){
-  return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalMusic?window.Capacitor.Plugins.LocalMusic:null;
-}
-async function selectLocalMusicFolder(){
-  const api=localMusicApi();
-  if(!api){$('localMusicStatus').textContent='Folder selection is available in the Android app.';return}
-  try{
-    const result=await api.pickFolder();
-    localMusicFiles=result.files||[];
-    localMusicIndex=0;
-    if(!localMusicFiles.length){$('localMusicStatus').textContent='No audio files found in that folder.';return}
-    playLocalMusicUri(localMusicFiles[0].uri,localMusicFiles[0].name);
-    $('localMusicStatus').textContent=localMusicFiles.length+' local songs found.';
-  }catch(e){$('localMusicStatus').textContent='Folder selection cancelled.'}
-}
-function playLocalMusicUri(uri,name){
-  const audio=$('localMusicAudio');
-  if(!audio||!uri)return;
-  audio.src=uri;
-  audio.load();
-  audio.play().catch(()=>{});
-  $('localMusicStatus').textContent='Playing locally: '+name+' ('+(localMusicIndex+1)+'/'+localMusicFiles.length+')';
-}
-function clearLocalMusic(){
-  const audio=$('localMusicAudio');
-  if(audio){
-    audio.pause();
-    audio.removeAttribute('src');
-    audio.load();
-  }
-  if(localMusicUrl){
-    try{URL.revokeObjectURL(localMusicUrl)}catch(e){}
-    localMusicUrl='';
-  }
-  $('localMusicFile').value='';
-  $('localMusicStatus').textContent='Choose an audio file stored on this device. It is played locally and is not uploaded.';
-}
-function selectLocalMusic(){
-  const input=$('localMusicFile'),file=input.files&&input.files[0];
-  if(!file)return;
-  if(!file.type||!file.type.startsWith('audio/')){
-    input.value='';
-    $('localMusicStatus').textContent='Choose a supported audio file.';
-    return;
-  }
-  const audio=$('localMusicAudio');
-  if(!audio||typeof URL==='undefined'||typeof URL.createObjectURL!=='function'){
-    $('localMusicStatus').textContent='Local audio playback is unavailable in this app build.';
-    return;
-  }
-  localMusicFiles=Array.from(input.files||[]);
-  localMusicIndex=0;
-  playLocalMusicFile(file);
-}
-function playLocalMusicFile(file){
-  const audio=$('localMusicAudio');
-  if(!audio||!file)return;
-  if(localMusicUrl)try{URL.revokeObjectURL(localMusicUrl)}catch(e){}
-  localMusicUrl=URL.createObjectURL(file);
-  audio.src=localMusicUrl;
-  audio.load();
-  audio.play().catch(()=>{});
-  $('localMusicStatus').textContent='Playing locally: '+file.name+' ('+(localMusicIndex+1)+'/'+localMusicFiles.length+')';
-}
-function playNextLocalMusic(){
-  if(localMusicFiles.length<2)return;
-  localMusicIndex=(localMusicIndex+1)%localMusicFiles.length;
-  const entry=localMusicFiles[localMusicIndex];
-  if(entry.uri)playLocalMusicUri(entry.uri,entry.name);
-  else playLocalMusicFile(entry);
-}
-function spotifyApiGet(){
-  return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Spotify?window.Capacitor.Plugins.Spotify:null;
-}
-function renderSpotify(){
-  spotifyApi=spotifyApiGet();
-  if(!spotifyApi){
-    console.warn('[FORM Spotify] Native bridge unavailable');
-    applySpotify({available:false,configured:false,installed:false,connected:false});
-    return;
-  }
-  if(!spotifyBound){
-    spotifyBound=true;
-    try{spotifyApi.addListener('stateChanged',s=>applySpotify(s||{}))}catch(e){}
-    try{spotifyApi.addListener('authResult',()=>setTimeout(renderSpotify,250))}catch(e){}
-  }
-  Promise.resolve(spotifyApi.getState()).then(s=>applySpotify(s||{})).catch(()=>applySpotify({available:false,configured:false,installed:false,connected:false,error:true}));
-}
-const SPOTIFY_NOTES={
-  unconfigured:'This build has no valid Spotify Client ID. Add the 32-character ID at build time, then rebuild.',
-  not_installed:'Install the official Spotify app and sign in.',
-  not_logged_in:'Open Spotify, sign in, then return to FORM and tap LINK.',
-  auth_failed:'Spotify rejected authorisation. Check the dashboard redirect URI and package fingerprint, then try LINK again.',
-  auth_expired:'Spotify authorisation expired. Tap LINK to reconnect.',
-  no_device:'Open Spotify and start playback on an available device.',
-  restricted_device:'Spotify found only restricted devices. Open Spotify on a controllable device.',
-  '403':'Spotify denied playback control. Check playback scopes and the selected device.',
-  '404':'Spotify could not find the requested playback or playlist.',
-  '429':'Spotify is rate limiting requests. Try again shortly.',
-  '500':'Spotify is temporarily unavailable. Try again shortly.',
-  '502':'Spotify is temporarily unavailable. Try again shortly.',
-  '503':'Spotify is temporarily unavailable. Try again shortly.',
-  connected:'Spotify connected.',
-  disconnected:'Spotify disconnected. Tap LINK to connect again.',
-  connecting:'Spotify authorisation is open. Finish it in the browser, then return to FORM.',
-  error:'Spotify could not complete that action. Try again.'
+const BODY_TYPE_INFO={
+  ectomorph:{label:'Ectomorph',note:'Naturally slim build, narrow frame, fast metabolism, gains size slowly.',food:'Ectomorph focus: eat more often, do not skip meals, add an extra carbohydrate portion and a protein source at each meal. A slight calorie surplus supports size and strength gains.'},
+  mesomorph:{label:'Mesomorph',note:'Athletic, medium frame, gains and loses weight at a moderate, fairly even rate.',food:'Mesomorph focus: a balanced plate of protein, carbohydrate, and vegetables at each meal works well. Adjust portions up or down based on your goal and activity that week.'},
+  endomorph:{label:'Endomorph',note:'Broader frame, gains weight more easily, often responds well to steady activity.',food:'Endomorph focus: keep protein and vegetables generous, watch portion size on refined carbohydrates, and keep water intake high between meals.'}
 };
-function applySpotify(s){
-  spotifyState=s||{};
-  const available=s.available!==false&&!!spotifyApi;
-  const configured=!!s.configured;
-  const installed=!!s.installed;
-  const connected=!!s.connected;
-  const deviceAvailable=!!s.deviceAvailable;
-  const deviceRestricted=!!s.deviceRestricted;
-  const playing=!!s.playing;
-  if(s.status)spotifyLastStatus=String(s.status);
-  if(connected)spotifyLastStatus='connected';
-  const status=String(s.status||spotifyLastStatus||'');
-  let label='UNAVAILABLE';
-  if(available){
-    if(!configured)label='SETUP NEEDED';
-    else if(status==='connecting')label='LINKING';
-    else if(connected)label='AUTHORIZED';
-    else if(status==='auth_failed')label='AUTH FAILED';
-    else if(status==='not_logged_in')label='LOG IN';
-    else if(status==='error')label='TRY AGAIN';
-    else label='READY';
+function frameRatio(heightCm,wristCm){return heightCm&&wristCm?heightCm/wristCm:null}
+function bodyTypeFromRatio(ratio,sex){
+  if(!ratio)return null;
+  if(sex==='female'){
+    if(ratio>=11)return'ectomorph';
+    if(ratio>=10.1)return'mesomorph';
+    return'endomorph';
   }
-  const hasPlaylist=!!spotifyUri(profile.spotifyPlaylist);
-  $('spotifyStatus').textContent=label;
-  $('spotifyTrack').textContent=connected&&s.track?s.track:'No active playback';
-  $('spotifyArtist').textContent=connected&&s.artist?s.artist:available&&configured?'Spotify is ready to link.':'Spotify controls are optional.';
-  $('spotifyPrev').disabled=!connected;
-  $('spotifyNext').disabled=!connected;
-  $('spotifyPlay').disabled=!connected||!deviceAvailable||deviceRestricted||playing;
-  $('spotifyPlay').textContent=hasPlaylist?'PLAY FOCUS':'PLAY';
-  $('spotifyPause').disabled=!connected||!playing;
-  $('spotifyConnect').disabled=connected||spotifyConnectPending;
-  $('spotifyDisconnect').classList.toggle('hidden',!connected);
-  let note='Spotify is optional. FORM works fully without it.';
-  if(!available&&s.error)note='The native Spotify bridge is unavailable in this build. Rebuild after adding the plugin.';
-  else if(!available)note='Open FORM as the Android app to use Spotify controls.';
-  else if(!configured)note=SPOTIFY_NOTES.unconfigured;
-  else if(status&&status!=='connected'&&SPOTIFY_NOTES[status])note=SPOTIFY_NOTES[status];
-  else if(!connected)note='Tap LINK. Finish the Spotify authorisation in the browser, then return to FORM.';
-  else if(!deviceAvailable)note=SPOTIFY_NOTES.no_device;
-  else if(deviceRestricted)note='The selected Spotify device is restricted and cannot accept Web API controls.';
-  else if(!hasPlaylist)note='Spotify connected. Add a focus playlist in Settings, or PLAY resumes the current track.';
-  else note='PLAY starts your saved focus playlist. Audio streams from the official Spotify app.';
-  $('spotifyNote').textContent=note;
-  const device=$('spotifyDevice');
-  if(device)device.textContent=deviceAvailable
-    ? 'Playback device: '+(s.deviceName||'Available device')+(deviceRestricted?' (restricted)':'')
-    : 'No usable Spotify playback device. Open Spotify and start playback.';
-  const buildInfo=$('spotifyBuildInfo');
-  if(buildInfo){
-    if(!available)buildInfo.textContent='Build identity unavailable in browser mode.';
-    else buildInfo.textContent=(s.versionName||'Unknown')+' · '+(s.buildType||'unknown')+' build · Spotify configuration '+(configured?'present':'missing')+' · native plugin '+(s.nativePluginAvailable?'available':'unavailable');
-  }
+  if(ratio>=10.4)return'ectomorph';
+  if(ratio>=9.6)return'mesomorph';
+  return'endomorph';
 }
-function spotifyUri(value){
-  const v=String(value||'').trim();
-  if(!v)return '';
-  let m=v.match(/spotify:playlist:([A-Za-z0-9]+)/);
-  if(m)return 'spotify:playlist:'+m[1];
-  m=v.match(/spotify:user:[^:]+:playlist:([A-Za-z0-9]+)/);
-  if(m)return 'spotify:playlist:'+m[1];
-  m=v.match(/open\.spotify\.com\/playlist\/([A-Za-z0-9]+)/);
-  if(m)return 'spotify:playlist:'+m[1];
-  return '';
+function renderBodyType(){
+  $('heightInput').value=profile.heightCm?String(profile.heightCm):'';
+  $('wristInput').value=profile.wristCm?String(profile.wristCm):'';
+  $('bodyTypeSex').value=profile.bodyTypeSex||'male';
+  $('bodyTypeSelect').value=profile.bodyType||'';
+  const info=profile.bodyType?BODY_TYPE_INFO[profile.bodyType]:null;
+  $('bodyTypeStatus').textContent=info?'Saved: '+info.label+'. '+info.note:'No body type saved yet.';
 }
-function saveSpotifyPlaylist(){
-  const raw=$('spotifyPlaylistInput').value;
-  const uri=spotifyUri(raw);
-  if(raw.trim()&&!uri){toast('Paste a Spotify playlist link or URI.');return}
-  profile.spotifyPlaylist=uri;
+function checkBodyType(){
+  const h=Number($('heightInput').value),w=Number($('wristInput').value),sex=$('bodyTypeSex').value;
+  if(!isFinite(h)||h<100||h>230){toast('Enter height in cm, between 100 and 230.');return}
+  if(!isFinite(w)||w<10||w>25){toast('Enter wrist circumference in cm, between 10 and 25.');return}
+  const guess=bodyTypeFromRatio(frameRatio(h,w),sex);
+  if(!guess){toast('Could not estimate. Check the values.');return}
+  $('bodyTypeSelect').value=guess;
+  profile.heightCm=Math.round(h*10)/10;
+  profile.wristCm=Math.round(w*10)/10;
+  profile.bodyTypeSex=sex;
   saveProfile();
-  renderSettings();
-  renderSpotify();
-  toast(uri?'Focus playlist saved.':'Focus playlist cleared.');
+  toast('Estimate: '+BODY_TYPE_INFO[guess].label+'. Adjust below if it does not match, then save.');
 }
-async function spotifyCall(method,data){
-  console.info('[FORM Spotify] action requested:',method);
-  if(!spotifyApi){
-    console.warn('[FORM Spotify] Cannot launch action: native bridge unavailable');
-    toast('Spotify is unavailable in this build. Reinstall the Android build with Spotify support.');
-    return;
-  }
-  if(method==='connect'&&spotifyConnectPending){
-    console.info('[FORM Spotify] Duplicate connect ignored');
-    return;
-  }
-  if(method==='connect')spotifyConnectPending=true;
-  if(method==='connect')applySpotify({...spotifyState,status:'connecting'});
-  try{
-    const result=await spotifyApi[method](data||{});
-    const status=result&&result.status?String(result.status):'';
-    if(status==='auth_failed')toast(SPOTIFY_NOTES.auth_failed);
-    else if(status==='not_logged_in')toast(SPOTIFY_NOTES.not_logged_in);
-    else if(status==='not_installed')toast(SPOTIFY_NOTES.not_installed);
-    else if(status==='unconfigured')toast(SPOTIFY_NOTES.unconfigured);
-    else if(SPOTIFY_NOTES[status])toast(SPOTIFY_NOTES[status]);
-    else if(result&&result.errorMessage)toast(String(result.errorMessage));
-    if(result)applySpotify(result);
-    setTimeout(renderSpotify,300);
-  }catch(e){
-    console.warn('[FORM Spotify] action failed:',method);
-    toast('Spotify is not available right now.');
-  }finally{
-    if(method==='connect'){
-      spotifyConnectPending=false;
-      setTimeout(renderSpotify,300);
-    }
-  }
+function saveBodyType(){
+  const sel=$('bodyTypeSelect').value;
+  if(!sel){toast('Choose a body type first.');return}
+  profile.bodyType=sel;
+  profile.bodyTypeSex=$('bodyTypeSex').value;
+  saveProfile();
+  renderBodyType();
+  renderNutrition();
+  toast('Body type saved: '+BODY_TYPE_INFO[sel].label+'.');
+}
+const FOCUS_DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+let focusOpen=null;
+function renderFocusGrid(){
+  const grid=$('focusGrid');if(!grid)return;
+  const order=[1,2,3,4,5,6,0];
+  grid.innerHTML=order.map(d=>{
+    const p=FIXED_WEEK_PROGRAM[d];
+    return '<button class="moreItem" type="button" data-day="'+d+'"><span>'+FOCUS_DAY_NAMES[d]+'<small>'+(p.ids.length?p.title+' · '+p.mins+' min':'Rest and recovery')+'</small></span><b>\u203a</b></button>';
+  }).join('');
+  grid.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>openFocusRoutine(Number(b.dataset.day)));
+}
+function openFocusRoutine(day){
+  const p=FIXED_WEEK_PROGRAM[day];if(!p)return;
+  focusOpen=day;
+  $('focusGrid').classList.add('hidden');
+  $('focusDetailPanel').classList.remove('hidden');
+  $('focusDetailOverline').textContent=day===1?'RECOVERY':'FIXED WEEK';
+  $('focusDetailTitle').textContent=FOCUS_DAY_NAMES[day]+' · '+(p.ids.length?p.title:'Rest and recovery');
+  $('focusDetailBlurb').textContent=p.ids.length?'This day repeats unchanged every week. Complete any order shown below, with simple form and steady pacing.':'Monday is the only rest day. Keep the day easy; the same workout week starts again next Monday.';
+  $('focusDetailNote').textContent='Form matters more than speed. No extra routines are added on top of the fixed week.';
+  const list=$('focusDetailList');
+  list.innerHTML=p.ids.length?p.ids.map(id=>{
+    const e=EX(id);if(!e)return '';
+    return '<li><b>'+e.name+'</b><span>'+formatRx(e,rxFor(e,1))+' — '+e.focus+'</span></li>';
+  }).join(''):'<li><b>Rest</b><span>Gentle movement is fine. No workout is required.</span></li>';
+  const open=$('focusDetailOpen');
+  if(open){open.classList.remove('hidden');open.textContent=day===weekday()?'OPEN TODAY\u2019S WORKOUT':'VIEW THIS WEEK\u2019S PLAN'}
+}
+function closeFocusRoutine(){
+  focusOpen=null;
+  $('focusDetailPanel').classList.add('hidden');
+  $('focusGrid').classList.remove('hidden');
+}
+function renderFocus(){
+  if(!focusOpen)renderFocusGrid();
 }
 function vaultApi(){return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Vault?window.Capacitor.Plugins.Vault:null}
 function backupApi(){return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Backup?window.Capacitor.Plugins.Backup:null}
@@ -1596,49 +1450,35 @@ $('backHome').onclick=showHome;
 $('finishHome').onclick=showHome;
 $('routineFromWorkout').onclick=openRoutine;
 $('showHistoryFromWorkout').onclick=openStreak;
-$('backToWorkout').onclick=()=>{clearExerciseTimer();clearRest();renderWorkout();show('workout')};
+$('backToWorkout').onclick=()=>{
+  if(exTimer||restTick)toast('Timer still running in this session.');
+  clearExerciseTimer();clearRest();renderWorkout();show('workout');
+};
 $('exerciseSkip').onclick=()=>{clearExerciseTimer();clearRest();renderWorkout();show('workout')};
 $('exerciseAction').onclick=actionSet;
 $('repPlus').onclick=()=>adjustRep(1);
 $('repMinus').onclick=()=>adjustRep(-1);
 $('continueAfterRest').onclick=continueRest;
-$('advanceStage').onclick=advanceStage;
-$('startMakeup').onclick=startMakeup;
+$('skipRest').onclick=skipRest;
 $('saveWeight').onclick=saveWeight;
-$('spotifyConnect').onclick=()=>spotifyCall('connect');
-$('spotifyDisconnect').onclick=()=>spotifyCall('disconnect');
-$('spotifyPlay').onclick=()=>spotifyCall('play',profile.spotifyPlaylist?{uri:profile.spotifyPlaylist}:{});
-$('spotifyPause').onclick=()=>spotifyCall('pause');
-$('spotifyNext').onclick=()=>spotifyCall('next');
-$('spotifyPrev').onclick=()=>spotifyCall('previous');
-$('localMusicFile').onchange=selectLocalMusic;
-$('localMusicFolder').onclick=selectLocalMusicFolder;
-$('localMusicClear').onclick=clearLocalMusic;
-$('localMusicAudio').onended=playNextLocalMusic;
-let homePlanTouchStart=0;
-const homePlanCard=$('homePlanCard');
-if(homePlanCard&&typeof homePlanCard.addEventListener==='function'){
-  homePlanCard.addEventListener('touchstart',event=>{
-    homePlanTouchStart=event.touches[0]?.clientX||0;
-  },{passive:true});
-  homePlanCard.addEventListener('touchend',event=>{
-    const end=event.changedTouches[0]?.clientX||homePlanTouchStart;
-    swipeHomePlan(end-homePlanTouchStart);
-  },{passive:true});
-}
-$('saveSpotifyPlaylist').onclick=saveSpotifyPlaylist;
+$('checkBodyType').onclick=checkBodyType;
+$('saveBodyType').onclick=saveBodyType;
 $('exportHistory').onclick=()=>{
   const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');
   a.href=URL.createObjectURL(blob);a.download='FORM-workout-history.json';a.click();
   URL.revokeObjectURL(a.href);
 };
-relocateRedesignPanels();
 document.querySelectorAll('[data-nav-view]').forEach(button=>button.onclick=()=>show(button.dataset.navView));
 $('menuMore').onclick=()=>show('more');
 $('progressHistory').onclick=openStreak;
+$('moreFocus').onclick=()=>show('focus');
+$('focusBack').onclick=()=>show('more');
+$('focusDetailBack').onclick=closeFocusRoutine;
+$('focusDetailOpen').onclick=()=>show(focusOpen===weekday()?'workout':'routine');
 $('moreRecovery').onclick=()=>show('recovery');
 $('moreNutrition').onclick=()=>show('nutrition');
-$('moreMusic').onclick=()=>show('music');
+$('recoveryBack').onclick=()=>show('more');
+$('nutritionBack').onclick=()=>show('more');
 $('moreVault').onclick=openVault;
 $('moreSettings').onclick=openSettings;
 $('moreAbout').onclick=()=>{
@@ -1651,12 +1491,11 @@ cancelLegacyAlarms();
 registerNotificationTapHandler();
 renderRoutine();
 renderHome();
-renderSpotify();
 restoreActiveSession();
 setInterval(()=>{
   live();
   if(dayKey()!==window.activeDay){window.activeDay=dayKey();renderHome();show('home')}
-},1000);
+},30000);
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&!vaultFilePicker){
     lockVault(true);
@@ -1670,7 +1509,6 @@ window.addEventListener('focus',()=>{
   closeNavigationMenu();
   setTimeout(()=>{vaultFilePicker=false},1500);
   if($('home').classList.contains('active'))renderHome();
-  renderSpotify();
   if(currentView==='vault'&&$('vaultContent').classList.contains('hidden'))renderVault();
 });
 refreshVaultDates();

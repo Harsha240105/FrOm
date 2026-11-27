@@ -6,20 +6,6 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-def spotifyProperty = project.hasProperty('FORM_SPOTIFY_CLIENT_ID') ? project.property('FORM_SPOTIFY_CLIENT_ID').toString().trim() : ''
-def spotifyEnvironment = (System.getenv('FORM_SPOTIFY_CLIENT_ID') ?: '').toString().trim()
-if (spotifyProperty && spotifyEnvironment && spotifyProperty != spotifyEnvironment) {
-    throw new GradleException('FORM_SPOTIFY_CLIENT_ID project property and environment variable do not match.')
-}
-def rawSpotifyClientId = spotifyProperty ?: spotifyEnvironment
-def spotifyClientIdPattern = /^[0-9a-fA-F]{32}$/
-def allowUnconfiguredSpotify = ((project.findProperty('FORM_ALLOW_UNCONFIGURED_SPOTIFY') ?: System.getenv('FORM_ALLOW_UNCONFIGURED_SPOTIFY') ?: '').toString().trim().equalsIgnoreCase('true'))
-def releaseRequested = gradle.startParameter.taskNames.any { it.toLowerCase().contains('release') }
-if (!(rawSpotifyClientId ==~ spotifyClientIdPattern) && (!allowUnconfiguredSpotify || releaseRequested)) {
-    throw new GradleException('A valid 32-character FORM_SPOTIFY_CLIENT_ID is required. Only an explicit debug build with FORM_ALLOW_UNCONFIGURED_SPOTIFY=true may omit it.')
-}
-def spotifyClientId = (rawSpotifyClientId ==~ spotifyClientIdPattern) ? rawSpotifyClientId : ''
-
 android {
     namespace "com.harsha.form"
     compileSdk rootProject.ext.compileSdkVersion
@@ -29,7 +15,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 9
         versionName "7.0"
-        resValue "string", "spotify_client_id", spotifyClientId
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -58,29 +43,6 @@ android {
     }
 }
 
-task verifySpotifyConfiguration {
-    doLast {
-        println "SPOTIFY_CLIENT_ID_CONFIGURED=${spotifyClientId ? 'true' : 'false'}"
-        println "SPOTIFY_UNCONFIGURED_DEBUG_ALLOWED=${spotifyClientId ? 'false' : allowUnconfiguredSpotify.toString()}"
-    }
-}
-
-task verifySpotifyAppRemoteSdk {
-    doLast {
-        def sdkFile = file('libs/spotify-app-remote-release-0.8.0.aar')
-        if (!sdkFile.exists()) {
-            throw new GradleException('Spotify App Remote SDK is missing. Run npm run prepare:spotify-sdk before building.')
-        }
-    }
-}
-
-tasks.configureEach { task ->
-    if (task.name == 'preBuild' || task.name == 'preReleaseBuild') {
-        task.dependsOn verifySpotifyConfiguration
-        task.dependsOn verifySpotifyAppRemoteSdk
-    }
-}
-
 repositories {
     flatDir{
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
@@ -93,8 +55,6 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
-    implementation(name: 'spotify-app-remote-release-0.8.0', ext: 'aar')
-    implementation 'com.google.code.gson:gson:2.10.1'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

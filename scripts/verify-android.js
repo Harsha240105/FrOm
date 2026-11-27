@@ -7,8 +7,6 @@ const path = require('path');
 const root = path.resolve(__dirname, '..');
 const variant = process.env.FORM_APK_VARIANT || 'release';
 const apk = process.env.FORM_APK_PATH || path.join(root, 'android', 'app', 'build', 'outputs', 'apk', variant, 'app-release.apk');
-const expectedId = String(process.env.FORM_SPOTIFY_CLIENT_ID || '').trim();
-if (!/^[0-9a-fA-F]{32}$/.test(expectedId)) throw new Error('FORM_SPOTIFY_CLIENT_ID must be set to verify the APK.');
 if (!fs.existsSync(apk)) throw new Error(`APK not found: ${apk}`);
 
 function sdkTool(name) {
@@ -43,10 +41,6 @@ function runCombined(tool, args) {
 }
 
 const aapt = sdkTool('aapt');
-const resources = run(aapt, ['dump', '--values', 'resources', apk]);
-const resourceMatches = [...resources.matchAll(/resource 0x[0-9a-f]+ com\.harsha\.form:string\/spotify_client_id:[\s\S]*?\(string8\) "([^"]*)"/g)];
-const resourceMatch = resourceMatches[resourceMatches.length - 1];
-if (!resourceMatch || resourceMatch[1] !== expectedId) throw new Error('Compiled spotify_client_id does not match the supplied Client ID.');
 const badging = run(aapt, ['dump', 'badging', apk]);
 if (!/package: name='com\.harsha\.form' versionCode='9' versionName='7\.0'/.test(badging)) {
   throw new Error('APK package identity or version is incorrect.');
@@ -67,7 +61,6 @@ if (actualCertSha256 !== expectedCertSha256) {
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256').update(fs.readFileSync(apk)).digest('hex').toUpperCase();
 console.log(`APK verified: ${path.relative(root, apk)}`);
-console.log('Compiled Spotify resource: valid');
 console.log('Package/version: com.harsha.form 7.0 (9)');
 console.log('Signature: verified');
 console.log('Signing certificate: production SHA-256 verified');

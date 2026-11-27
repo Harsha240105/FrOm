@@ -5,10 +5,10 @@
   "description": "FORM daily training app wrapped in Capacitor",
   "scripts": {
     "sync": "cap sync android",
-    "prepare:spotify-sdk": "node scripts/prepare-spotify-sdk.js",
     "build": "node scripts/build-android.js",
     "build:android": "node scripts/build-android.js",
-    "test": "node tests/form-calorie.test.js && node tests/spotify-playback.test.js",
+    "test": "node tests/form-calorie.test.js",
+    "test:e2e": "playwright test",
     "verify": "node scripts/verify-android.js"
   },
   "dependencies": {
@@ -17,7 +17,8 @@
     "@capacitor/local-notifications": "6.1.3"
   },
   "devDependencies": {
-    "@capacitor/cli": "7.6.10"
+    "@capacitor/cli": "7.6.10",
+    "@playwright/test": "1.65.1"
   },
   "overrides": {
     "glob": "14.0.3",
