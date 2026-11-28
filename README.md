@@ -1,6 +1,6 @@
 # FORM
 
-FORM v8.0 is a local-first Android home-training application for guided daily
+FORM v9.0 is a local-first Android home-training application for guided daily
 workouts, progress tracking, recovery, nutrition habits, and private photo
 storage. The web interface and exercise assets are bundled into the APK, so
 normal training use works offline.
@@ -11,7 +11,7 @@ normal training use works offline.
 - Guided Workout screen with exercise illustrations, instructions, timers, repetitions, rest periods, and completion tracking.
 - Fixed weekly plan: Monday rest; the same Tuesday–Sunday routine repeats every week.
 - Workout sessions resume from Home or the exact exercise card after leaving the screen or refreshing.
-- Five-destination navigation: Home, Workout, Plan, Progress, and More.
+- Five-destination navigation: Plan, Streak, Home, Progress, and Settings; Workout opens from Home.
 - Weekly calendar with planned, completed, missed, and rest-day states.
 - Progress dashboard with streaks, completed sessions, and monthly history.
 - MET-based calorie estimates from completed exercise records only; calories are estimates, not medical or dietary advice.
@@ -136,6 +136,13 @@ encryption, encrypted backup/restore, notifications, and upgrade-data
 preservation.
 
 ## Version history
+
+### FORM v9.0
+
+- Rebuilt the interface with a monochrome light/dark theme and a five-tab layout.
+- Consolidated Recovery, Nutrition, Vault, Backup, About, body type, and the full weekly reference into Settings.
+- Removed stage, make-up, fixed-start, focus, More, and Workout tab branching; the canonical week repeats unchanged.
+- Updated Android version to 9.0/version code 11.
 
 ### FORM v8.0
 

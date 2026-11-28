@@ -10,24 +10,38 @@ test('localhost server is reachable', async ({ request, baseURL }) => {
   expect(await response.text()).toContain('<title>FORM</title>');
 });
 
-test('fresh profile starts on the next Monday and Home creates no record', async ({ page }) => {
+test('fresh profile opens Home with monochrome defaults and creates no record', async ({ page }) => {
   const log = await openApp(page, '2026-11-29T09:00:00', false);
   const profile = await readStorage(page, PROFILE);
   const db = await readStorage(page, STORE);
-  expect(profile.fixedStartDate).toBe('2026-11-30');
+  expect(profile.scheduleVersion).toBe(4);
+  expect(profile.theme).toBe('dark');
+  expect(profile.soundOn).toBe(true);
   expect(db).toBe(null);
   await expect(page.locator('#startToday')).toHaveText('START TODAY');
   await capture(page, 'fresh-profile');
   await expectNoErrors(log);
 });
 
-test('Monday is rest only, fixed week repeats, and music UI is gone', async ({ page }) => {
+test('Monday is rest only, fixed week repeats, and navigation is five monochrome tabs', async ({ page }) => {
   const log = await openApp(page, `${MONDAY}T09:00:00`);
   await expect(page.locator('#planName')).toHaveText('Rest and recovery');
   await expect(page.locator('#countdown')).toHaveText('MONDAY · REST DAY');
   await expect(page.locator('#startToday')).toHaveText('VIEW REST DAY');
+
+  const clock = await page.locator('#liveClock').innerText();
+  expect(clock).toMatch(/^\d{1,2}:\d{2}\s?(AM|PM)$/i);
+  expect(clock.match(/(AM|PM)/gi)).toHaveLength(1);
+  const pill = await page.locator('#openStreak').evaluate(el => ({ whiteSpace: getComputedStyle(el).whiteSpace, lineHeight: getComputedStyle(el).lineHeight }));
+  expect(pill.whiteSpace).toBe('nowrap');
+
+  const nav = await page.locator('#bottomNav [data-nav-view]').evaluateAll(buttons => buttons.map(button => button.dataset.navView));
+  expect(nav).toEqual(['routine', 'streak', 'home', 'progress', 'settings']);
+  expect(await page.locator('[data-nav-view="workout"]').count()).toBe(0);
+  expect(await page.locator('[data-nav-view="more"]').count()).toBe(0);
+
   await page.locator('[data-nav-view="routine"]').click();
-  await expect(page.locator('#routineStage')).toHaveText('SAME ROUTINE REPEATS EVERY WEEK · MONDAY REST');
+  await expect(page.locator('#routineStage')).toHaveText('FIXED WEEK · MONDAY REST');
   await expect(page.locator('#routineList')).toContainText('Standing hip hinge');
   await expect(page.locator('#routineList')).toContainText('Incline push-up');
   const body = (await page.locator('body').innerText()).toLowerCase();
@@ -92,9 +106,7 @@ test('card Continue, Home Continue, refresh, and repeated clicks keep one sessio
   };
   const log = await openApp(page, `${TUESDAY}T09:00:00`, true, { db, active });
   await expect(page.locator('#startToday')).toHaveText('CONTINUE WORKOUT');
-  await page.locator('[data-nav-view="workout"]').click();
-  await expect(page.locator('[data-id="inclinepush"] button')).toHaveText('CONTINUE');
-  await page.locator('[data-id="inclinepush"] button').click();
+  await page.locator('#startToday').click();
   await expect(page.locator('#focusName')).toHaveText('Incline push-up');
   let savedActive = await readStorage(page, ACTIVE);
   expect(savedActive.sessionId).toBe('session-1');
@@ -127,5 +139,28 @@ test('card Continue, Home Continue, refresh, and repeated clicks keep one sessio
   expect(finalActive.exerciseId).toBe('hinge');
   expect(finalActive.sessionId).toBe('session-1');
   await capture(page, 'continue-session');
+  await expectNoErrors(log);
+});
+
+test('Settings holds moved sections, canonical reference, theme, and sound controls', async ({ page }) => {
+  const log = await openApp(page, `${TUESDAY}T09:00:00`);
+  await page.locator('[data-nav-view="settings"]').click();
+  await expect(page.locator('#settingsRecovery')).toBeVisible();
+  await expect(page.locator('#settingsNutrition')).toBeVisible();
+  await expect(page.locator('#settingsVault')).toBeVisible();
+  await expect(page.locator('#settingsBackup')).toBeVisible();
+  await expect(page.locator('#settingsAbout')).toBeVisible();
+  await expect(page.locator('#settingsExerciseReference')).toContainText('Full-body strength + core');
+  await expect(page.locator('#settingsExerciseReference')).toContainText('Chair-assisted squat');
+
+  await page.locator('#themeToggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  let profile = await readStorage(page, PROFILE);
+  expect(profile.theme).toBe('light');
+
+  await page.locator('#soundToggle').click();
+  profile = await readStorage(page, PROFILE);
+  expect(profile.soundOn).toBe(false);
+  await capture(page, 'settings-light-mode');
   await expectNoErrors(log);
 });

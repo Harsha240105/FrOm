@@ -42,7 +42,7 @@ function runCombined(tool, args) {
 
 const aapt = sdkTool('aapt');
 const badging = run(aapt, ['dump', 'badging', apk]);
-if (!/package: name='com\.harsha\.form' versionCode='10' versionName='8\.0'/.test(badging)) {
+if (!/package: name='com\.harsha\.form' versionCode='11' versionName='9\.0'/.test(badging)) {
   throw new Error('APK package identity or version is incorrect.');
 }
 const apksigner = sdkTool('apksigner');
@@ -61,7 +61,7 @@ if (actualCertSha256 !== expectedCertSha256) {
 const crypto = require('crypto');
 const hash = crypto.createHash('sha256').update(fs.readFileSync(apk)).digest('hex').toUpperCase();
 console.log(`APK verified: ${path.relative(root, apk)}`);
-console.log('Package/version: com.harsha.form 8.0 (10)');
+console.log('Package/version: com.harsha.form 9.0 (11)');
 console.log('Signature: verified');
 console.log('Signing certificate: production SHA-256 verified');
 console.log(`SHA-256: ${hash}`);

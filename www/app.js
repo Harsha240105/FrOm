@@ -69,18 +69,8 @@ const E={
   cooldownstretch:{id:'cooldownstretch',name:'Cool-down stretch',focus:'Recovery · flexibility',kind:'time',seconds:120,sets:1,restSet:0,restNext:0,group:'Cool-down',position:'Stand or sit in a comfortable space.',steps:['Breathe slowly and let the heart rate settle.','Stretch the calves, hips, chest, and shoulders gently.','Hold each stretch without bouncing.','Finish comfortable, not strained.'],posture:'Relaxed and upright.',breathing:'Slow, easy breathing.',tip:'Stop if you feel dizzy or sharp pain.'}
 };
 
-const WEEK_V1={
-  0:{title:'Rest day',time:'Recovery',mins:0,ids:[]},
-  1:{title:'Strength A',time:'05:00–05:30 AM',mins:30,ids:['march','chair','wall','hinge','bridge','calf','cool']},
-  2:{title:'Walk + mobility',time:'05:00–05:30 AM',mins:25,ids:['walk','mobility']},
-  3:{title:'Strength B',time:'05:00–05:30 AM',mins:30,ids:['march','chair','side','bridge','calf','cool']},
-  4:{title:'Walk + mobility',time:'05:00–05:30 AM',mins:25,ids:['walk','mobility']},
-  5:{title:'Strength A',time:'05:00–05:30 AM',mins:30,ids:['march','chair','wall','hinge','bridge','calf','cool']},
-  6:{title:'Stamina + balance',time:'05:00–05:30 AM',mins:25,ids:['walk','balance','mobility']}
-};
-
 function planBlock(title,mins,ids){return {title,time:'Any time',mins,ids}}
-const FIXED_WEEK_PROGRAM={
+const CANONICAL_WEEK={
   0:planBlock('Core + cardio',28,['plank','deadbug','mountainclimbers','reversecrunch','sideplank','lowimpactcardio','cooldownstretch']),
   1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
   2:planBlock('Full-body strength + core',34,['squat','inclinepush','hinge','bridge','lunge','plank','deadbug']),
@@ -89,45 +79,18 @@ const FIXED_WEEK_PROGRAM={
   5:planBlock('Full-body strength + face',32,['squat','inclinepush','bridge','supermanhold','stepup','plankpushup','chinlift','neckpress','cheekhold','smilepress']),
   6:planBlock('Flexibility + posture',25,['catcow','childspose','doorwaychest','thoracicextension','scapularsqueeze','wallangel','hipflexorstretch'])
 };
-const PROGRAMS={
-  1:{
-    0:planBlock('Mobility and confidence',20,['march','wallangel','bridge','clamshell','birddog','openbook','hipflexorstretch','balance','cool']),
-    1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
-    2:planBlock('Gentle start',20,['march','wallangel','chair','wallpush','hinge','bridge','calf','cool']),
-    3:planBlock('Balance and core',20,['march','sidelift','birddog','deadbug','clamshell','wallsit','stepup','calf','cool']),
-    4:planBlock('Posture and push',20,['march','wallangel','chair','inclinepush','hinge','bridge','pelvictilt','openbook','cool']),
-    5:planBlock('Steady strength',22,['march','wallpush','kneepush','sidelift','deadbug','stepup','birddog','calf','cool']),
-    6:planBlock('Confidence circuit',22,['march','chair','wallpush','hinge','wallsit','stepup','squat','hamstringstretch','cool']),
-  },
-  2:{
-    0:planBlock('Mobility and core',25,['march','wallangel','bridge','pelvictilt','deadbug','openbook','hipflexorstretch','hamstringstretch','balance','cool']),
-    1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
-    2:planBlock('Strength A',26,['march','wallangel','inclinepush','kneepush','hinge','bridge','calf','deadbug','cool']),
-    3:planBlock('Core and posture',25,['march','sidelift','birddog','deadbug','pelvictilt','clamshell','wallsit','openbook','cool']),
-    4:planBlock('Strength B',26,['march','wallangel','wallpush','kneepush','hinge','bridge','stepup','calf','cool']),
-    5:planBlock('Balance and control',26,['march','chair','sidelift','birddog','clamshell','wallsit','squat','balance','cool']),
-    6:planBlock('Full body',28,['march','wallpush','inclinepush','hinge','stepup','squat','calf','proney','deadbug','cool']),
-  },
-  3:{
-    0:planBlock('Mobility and core',30,['march','wallangel','bridge','pelvictilt','deadbug','openbook','hipflexorstretch','hamstringstretch','balance','cool']),
-    1:{title:'Rest and recovery',time:'Recovery',mins:0,ids:[]},
-    2:planBlock('Strength A',34,['march','wallangel','wallpush','kneepush','inclinepush','hinge','bridge','calf','deadbug','cool']),
-    3:planBlock('Core and posture',32,['march','sidelift','birddog','deadbug','pelvictilt','clamshell','wallsit','openbook','cool']),
-    4:planBlock('Strength B',34,['march','wallangel','wallpush','kneepush','hinge','stepup','squat','calf','bridge','cool']),
-    5:planBlock('Balance and control',33,['march','chair','sidelift','birddog','clamshell','wallsit','squat','lunge','balance','cool']),
-    6:planBlock('Full body',36,['march','wallpush','inclinepush','hinge','stepup','squat','lunge','calf','proney','deadbug','cool']),
-  }
-};
 
 let db={};
 try{db=JSON.parse(localStorage.getItem(STORE)||'{}')||{}}catch(e){db={}}
 let profile=initProfile();
+applyTheme();
 let activeId=null,repValue=0,exTimer=null,restTick=null,timerDone=false,restNextAction='',restFromId='';
 let vaultDates=new Set();
 let currentView='home';
 let calendarMonth=null;
 let vaultFilePicker=false,vaultPreviewData='',selectedVaultFiles=[];
 let vaultMeta={configured:false,unlocked:false};
+let planFocusDay=null;
 function hasVaultPhoto(k){return vaultDates.has(k)}
 
 function dayISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -143,6 +106,13 @@ function nextMondayKey(k=dayKey()){const d=parseDay(k),off=(d.getDay()+6)%7;d.se
 
 function saveDB(){try{localStorage.setItem(STORE,JSON.stringify(db))}catch(e){toast('Could not save. Storage may be full.')}}
 function saveProfile(){try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile))}catch(e){toast('Could not save profile.')}}
+function applyTheme(){
+  const theme=profile.theme==='light'?'light':'dark';
+  const root=document.documentElement;
+  if(root&&root.dataset)root.dataset.theme=theme;
+  const meta=document.querySelector?document.querySelector('meta[name="theme-color"]'):null;
+  if(meta)meta.setAttribute('content',theme==='light'?'#f2f2f0':'#000000');
+}
 function normalizeActive(a){
   if(!a||typeof a!=='object')return null;
   const id=a.exerciseId||a.id||null;
@@ -194,23 +164,7 @@ function initProfile(){
   let p={};
   try{p=JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}')||{}}catch(e){p={}}
   const today=dayKey();
-  if(!p.v2Start){
-    const keys=Object.keys(db).sort();
-    p.dayOne=keys[0]||today;
-    p.v2Start=db[today]?addDays(today,1):today;
-    p.stage=1;
-    p.stageStartedAt=p.v2Start;
-    p.stageHistory=[{stage:1,startedAt:p.v2Start}];
-    p.makeup={};
-    p.weightKg=null;
-    p.fixedStartDate=nextMondayKey(today);
-  }
   if(!p.dayOne)p.dayOne=today;
-  if(!p.v2Start)p.v2Start=today;
-  if(!p.stage)p.stage=1;
-  if(!p.stageStartedAt)p.stageStartedAt=p.v2Start;
-  if(!Array.isArray(p.stageHistory)||!p.stageHistory.length)p.stageHistory=[{stage:p.stage,startedAt:p.stageStartedAt}];
-  if(!p.makeup||typeof p.makeup!=='object')p.makeup={};
   if(typeof p.weightKg==='undefined')p.weightKg=null;
   if(!p.weightHistory||typeof p.weightHistory!=='object')p.weightHistory={};
   if(typeof p.heightCm==='undefined')p.heightCm=null;
@@ -219,8 +173,9 @@ function initProfile(){
   if(typeof p.bodyType==='undefined')p.bodyType=null;
   if(!p.waterGoal)p.waterGoal=2000;
   if(!p.proteinGoal)p.proteinGoal=60;
-  if(!p.fixedStartDate||!/^\d{4}-\d{2}-\d{2}$/.test(p.fixedStartDate))p.fixedStartDate=nextMondayKey(today);
-  p.scheduleVersion=3;
+  if(typeof p.theme==='undefined')p.theme='dark';
+  if(typeof p.soundOn==='undefined')p.soundOn=true;
+  p.scheduleVersion=4;
   try{localStorage.setItem(PROFILE_KEY,JSON.stringify(p))}catch(e){}
   try{if(Object.keys(db).length&&!localStorage.getItem(BACKUP_KEY))localStorage.setItem(BACKUP_KEY,JSON.stringify(db))}catch(e){}
   return p;
@@ -242,39 +197,9 @@ function record(k=dayKey(),create=true){
   return db[k];
 }
 function EX(id){return E[id]||LEGACY_E[id]||null}
-function stageAt(k=dayKey()){
-  const hist=(profile.stageHistory||[]).slice().sort((a,b)=>a.startedAt.localeCompare(b.startedAt));
-  let s=1;
-  for(const h of hist)if(h.startedAt<=k)s=h.stage;
-  return s;
-}
-function stageRoot(s,k=dayKey()){
-  let at=profile.v2Start;
-  (profile.stageHistory||[]).slice().sort((a,b)=>a.startedAt.localeCompare(b.startedAt)).forEach(h=>{if(h.stage===s&&h.startedAt<=k)at=h.startedAt});
-  return at;
-}
-function pendingStage(){
-  const today=dayKey();
-  return (profile.stageHistory||[]).filter(h=>h.startedAt>today).sort((a,b)=>a.startedAt.localeCompare(b.startedAt))[0]||null;
-}
-function legacyPlan(wd){
-  const p=WEEK_V1[wd];
-  return {...p,stage:1,legacy:true,exercises:p.ids.map(id=>({id}))};
-}
 function dayPlan(k){
-  if(k<profile.v2Start)return legacyPlan(weekday(k));
-  const fixedStart=profile.fixedStartDate||nextMondayKey(k);
-  if(k>=fixedStart){
-    const p=FIXED_WEEK_PROGRAM[weekday(k)]||FIXED_WEEK_PROGRAM[1];
-    return {...p,stage:1,fixed:true,exercises:(p.ids||[]).map(id=>({id}))};
-  }
-  if(weekday(k)===1){
-    const mk=(profile.makeup||{})[mondayOf(k)];
-    if(mk&&mk!==k)return dayPlan(mk);
-  }
-  const stage=stageAt(k);
-  const p=(PROGRAMS[stage]&&PROGRAMS[stage][weekday(k)])||PROGRAMS[1][weekday(k)]||PROGRAMS[1][0];
-  return {...p,stage,exercises:(p.ids||[]).map(id=>({id}))};
+  const p=CANONICAL_WEEK[weekday(k)]||CANONICAL_WEEK[1];
+  return {...p,stage:1,fixed:true,exercises:(p.ids||[]).map(id=>({id}))};
 }
 function calendarPlan(k){
   const saved=db[k]&&db[k].planSnapshot;
@@ -343,7 +268,6 @@ function show(id){
     vaultMeta={configured:!!vaultMeta.configured,unlocked:false};
   }
   if(currentView==='vault'&&id!=='vault')lockVault();
-  closeNavigationMenu();
   currentView=id;
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const el=$(id);if(!el)return;
@@ -361,7 +285,6 @@ function show(id){
   if(id==='streak')renderStreak();
   if(id==='routine')renderRoutine();
   if(id==='settings')renderSettings();
-  if(id==='focus'){closeFocusRoutine();renderFocus()}
   if(id==='recovery')renderDailyGuide(isDayComplete(dayKey()),plan());
   if(id==='nutrition')renderNutrition();
   if(id==='progress'){
@@ -378,24 +301,9 @@ function show(id){
 }
 function showHome(){show('home')}
 function openSettings(){show('settings')}
-function closeNavigationMenu(){
-  const panel=$('navigationMenu'),toggle=$('menuToggle');
-  if(panel)panel.hidden=true;
-  if(toggle){
-    toggle.setAttribute('aria-expanded','false');
-    toggle.setAttribute('aria-label','Open navigation menu');
-  }
-}
-function toggleNavigationMenu(){
-  const panel=$('navigationMenu'),toggle=$('menuToggle');
-  if(!panel||!toggle)return;
-  panel.hidden=!panel.hidden;
-  const expanded=!panel.hidden;
-  toggle.setAttribute('aria-expanded',String(expanded));
-  toggle.setAttribute('aria-label',expanded?'Close navigation menu':'Open navigation menu');
-}
 function openStreak(){show('streak')}
-function openRoutine(){show('routine')}
+function openRoutine(){planFocusDay=null;show('routine')}
+function openPlanDay(day){planFocusDay=day;show('routine')}
 function openVault(){show('vault')}
 function openBackup(){show('backup')}
 
@@ -527,7 +435,7 @@ function renderWeekStrip(){
     return '<button type="button" class="weekDay '+activity.className+(today?' today':'')+'" data-home-plan-date="'+k+'" aria-label="View '+pretty(k,{weekday:'long',day:'numeric',month:'long'})+' plan"><small>'+pretty(k,{weekday:'short'}).toUpperCase()+'</small><b>'+pretty(k,{day:'numeric'})+'</b><span>'+activity.label+'</span><em title="'+p.title+'">'+p.title+'</em></button>';
   }).join('');
   const strip=$('weekStrip');
-  if(strip&&typeof strip.querySelectorAll==='function')strip.querySelectorAll('[data-home-plan-date]').forEach(card=>card.onclick=()=>openFocusRoutine(weekday(card.dataset.homePlanDate)));
+  if(strip&&typeof strip.querySelectorAll==='function')strip.querySelectorAll('[data-home-plan-date]').forEach(card=>card.onclick=()=>openPlanDay(weekday(card.dataset.homePlanDate)));
 }
 function renderWeekBars(id){
   const el=$(id);if(!el)return;
@@ -556,7 +464,7 @@ function live(){
   const n=new Date(),d=trainingDate(),p=plan(),k=dayKey(),r=record(k,false);
   $('weekday').textContent=d.toLocaleDateString('en-IN',{weekday:'long'}).toUpperCase();
   $('dateLine').textContent=d.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
-  $('liveClock').innerHTML=n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+' <small>'+n.toLocaleTimeString('en-IN',{hour:'2-digit',hour12:true}).slice(-2).toUpperCase()+'</small>';
+  $('liveClock').textContent=n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}).toUpperCase();
   $('countdown').textContent=p.ids.length?'FIXED WEEK · TRAIN ANY TIME':weekday(k)===1?'MONDAY · REST DAY':'RECOVERY DAY';
   const done=p.ids.filter(id=>(r.done||[]).includes(id)).length;
   $('liveFill').style.width=(p.ids.length?Math.round(done/p.ids.length*100):0)+'%';
@@ -1021,11 +929,22 @@ async function revealCalendarPhoto(){
 function requestCalendarPhotoPassword(){revealCalendarPhoto()}
 function renderRoutine(){
   const names=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],order=[1,2,3,4,5,6,0];
-  $('routineStage').textContent='SAME ROUTINE REPEATS EVERY WEEK · MONDAY REST';
+  $('routineStage').textContent='FIXED WEEK · MONDAY REST';
   $('routineList').innerHTML=order.map(d=>{
-    const p=FIXED_WEEK_PROGRAM[d],isToday=d===weekday();
+    const p=CANONICAL_WEEK[d],isToday=d===weekday();
     const list=p.ids.length?p.ids.map(id=>{const e=EX(id);return e?e.name+' ('+formatRx(e,rxFor(e,1))+')':id}).join(' · '):'Rest and recovery.';
-    return '<div class="routineRow"><div><b>'+names[d]+' · '+p.title+(isToday?' · TODAY':'')+'</b><small>'+list+'</small></div><span class="durationTag">'+(p.mins?p.mins+' MIN':'REST')+'</span></div>';
+    return '<div class="routineRow'+(d===planFocusDay?' selected':'')+'" data-plan-day="'+d+'"><div><b>'+names[d]+' · '+p.title+(isToday?' · TODAY':'')+'</b><small>'+list+'</small></div><span class="durationTag">'+(p.mins?p.mins+' MIN':'REST')+'</span></div>';
+  }).join('');
+  const list=$('routineList');
+  if(list&&typeof list.querySelectorAll==='function')list.querySelectorAll('[data-plan-day]').forEach(row=>row.onclick=()=>{planFocusDay=Number(row.dataset.planDay);renderRoutine()});
+}
+function renderExerciseReference(){
+  const el=$('settingsExerciseReference');if(!el)return;
+  const names=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],order=[1,2,3,4,5,6,0];
+  el.innerHTML=order.map(d=>{
+    const p=CANONICAL_WEEK[d];
+    const list=p.ids.length?p.ids.map(id=>{const e=EX(id);return e?e.name+' — '+formatRx(e,rxFor(e,1))+' · '+e.focus:id}).join(' · '):'Rest and recovery. No workout is scheduled.';
+    return '<div class="referenceDay"><b>'+names[d]+' · '+p.title+(p.mins?' · '+p.mins+' MIN':'')+'</b><small>'+list+'</small></div>';
   }).join('');
 }
 function renderSettings(){
@@ -1036,7 +955,21 @@ function renderSettings(){
   }else{
     $('weightStatus').textContent='No weight saved. The calorie estimate stays hidden until you add it.';
   }
+  const themeBtn=$('themeToggle');
+  if(themeBtn)themeBtn.textContent=profile.theme==='light'?'USE DARK THEME':'USE LIGHT THEME';
+  const soundBtn=$('soundToggle');
+  if(soundBtn)soundBtn.textContent=profile.soundOn===false?'SOUND OFF · TAP TO ON':'SOUND ON · TAP TO OFF';
   renderBodyType();
+  renderExerciseReference();
+}
+function toggleTheme(){
+  profile.theme=profile.theme==='light'?'dark':'light';
+  saveProfile();applyTheme();renderSettings();
+}
+function toggleSound(){
+  profile.soundOn=profile.soundOn===false;
+  saveProfile();renderSettings();
+  toast(profile.soundOn?'Timer sound on.':'Timer sound muted.');
 }
 function saveWeight(){
   const raw=$('weightInput').value.trim();
@@ -1097,42 +1030,6 @@ function saveBodyType(){
   renderBodyType();
   renderNutrition();
   toast('Body type saved: '+BODY_TYPE_INFO[sel].label+'.');
-}
-const FOCUS_DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-let focusOpen=null;
-function renderFocusGrid(){
-  const grid=$('focusGrid');if(!grid)return;
-  const order=[1,2,3,4,5,6,0];
-  grid.innerHTML=order.map(d=>{
-    const p=FIXED_WEEK_PROGRAM[d];
-    return '<button class="moreItem" type="button" data-day="'+d+'"><span>'+FOCUS_DAY_NAMES[d]+'<small>'+(p.ids.length?p.title+' · '+p.mins+' min':'Rest and recovery')+'</small></span><b>\u203a</b></button>';
-  }).join('');
-  grid.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>openFocusRoutine(Number(b.dataset.day)));
-}
-function openFocusRoutine(day){
-  const p=FIXED_WEEK_PROGRAM[day];if(!p)return;
-  focusOpen=day;
-  $('focusGrid').classList.add('hidden');
-  $('focusDetailPanel').classList.remove('hidden');
-  $('focusDetailOverline').textContent=day===1?'RECOVERY':'FIXED WEEK';
-  $('focusDetailTitle').textContent=FOCUS_DAY_NAMES[day]+' · '+(p.ids.length?p.title:'Rest and recovery');
-  $('focusDetailBlurb').textContent=p.ids.length?'This day repeats unchanged every week. Complete any order shown below, with simple form and steady pacing.':'Monday is the only rest day. Keep the day easy; the same workout week starts again next Monday.';
-  $('focusDetailNote').textContent='Form matters more than speed. No extra routines are added on top of the fixed week.';
-  const list=$('focusDetailList');
-  list.innerHTML=p.ids.length?p.ids.map(id=>{
-    const e=EX(id);if(!e)return '';
-    return '<li><b>'+e.name+'</b><span>'+formatRx(e,rxFor(e,1))+' — '+e.focus+'</span></li>';
-  }).join(''):'<li><b>Rest</b><span>Gentle movement is fine. No workout is required.</span></li>';
-  const open=$('focusDetailOpen');
-  if(open){open.classList.remove('hidden');open.textContent=day===weekday()?'OPEN TODAY\u2019S WORKOUT':'VIEW THIS WEEK\u2019S PLAN'}
-}
-function closeFocusRoutine(){
-  focusOpen=null;
-  $('focusDetailPanel').classList.add('hidden');
-  $('focusGrid').classList.remove('hidden');
-}
-function renderFocus(){
-  if(!focusOpen)renderFocusGrid();
 }
 function vaultApi(){return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Vault?window.Capacitor.Plugins.Vault:null}
 function backupApi(){return window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Backup?window.Capacitor.Plugins.Backup:null}
@@ -1400,6 +1297,7 @@ async function importBackup(){
   }
 }
 function beep(){
+  if(profile.soundOn===false)return;
   try{
     const A=window.AudioContext||window.webkitAudioContext;
     if(!A)return;
@@ -1429,8 +1327,6 @@ async function cancelLegacyAlarms(){
 $('startToday').onclick=startToday;
 $('openCalories').onclick=openCalories;
 $('caloriesBack').onclick=showHome;
-$('openVault').onclick=openVault;
-$('vaultBack').onclick=showHome;
 $('vaultLock').onclick=()=>lockVault();
 $('vaultAuthBtn').onclick=vaultAuth;
 $('vaultTakeTab').onclick=()=>showVaultPanel('take');
@@ -1459,11 +1355,19 @@ $('proteinMinus').onclick=()=>adjustProtein(-10);
 $('proteinPlus').onclick=()=>adjustProtein(10);
 $('saveNutritionTargets').onclick=saveNutritionTargets;
 $('openStreak').onclick=openStreak;
-$('menuToggle').onclick=toggleNavigationMenu;
-$('menuHome').onclick=showHome;
-$('menuSettings').onclick=openSettings;
 $('openRoutine').onclick=openRoutine;
 $('openSettings').onclick=openSettings;
+$('themeToggle').onclick=toggleTheme;
+$('soundToggle').onclick=toggleSound;
+$('settingsRecovery').onclick=()=>show('recovery');
+$('settingsNutrition').onclick=()=>show('nutrition');
+$('settingsVault').onclick=openVault;
+$('settingsBackup').onclick=openBackup;
+$('settingsAbout').onclick=()=>{
+  const panel=$('aboutForm');
+  panel.classList.toggle('hidden');
+  if(!panel.classList.contains('hidden'))panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+};
 $('streakBack').onclick=showHome;
 $('calendarPrevious').onclick=()=>shiftCalendarMonth(-1);
 $('calendarNext').onclick=()=>shiftCalendarMonth(1);
@@ -1472,6 +1376,10 @@ $('calendarPhotoUnlock').onclick=revealCalendarPhoto;
 $('calendarPhotoBlurred').onclick=requestCalendarPhotoPassword;
 $('routineBack').onclick=showHome;
 $('settingsBack').onclick=showHome;
+$('recoveryBack').onclick=()=>show('settings');
+$('nutritionBack').onclick=()=>show('settings');
+$('vaultBack').onclick=()=>show('settings');
+$('backupBack').onclick=()=>show('settings');
 $('backHome').onclick=showHome;
 $('finishHome').onclick=showHome;
 $('routineFromWorkout').onclick=openRoutine;
@@ -1495,23 +1403,7 @@ $('exportHistory').onclick=()=>{
   URL.revokeObjectURL(a.href);
 };
 document.querySelectorAll('[data-nav-view]').forEach(button=>button.onclick=()=>show(button.dataset.navView));
-$('menuMore').onclick=()=>show('more');
 $('progressHistory').onclick=openStreak;
-$('moreFocus').onclick=()=>show('focus');
-$('focusBack').onclick=()=>show('more');
-$('focusDetailBack').onclick=closeFocusRoutine;
-$('focusDetailOpen').onclick=()=>show(focusOpen===weekday()?'workout':'routine');
-$('moreRecovery').onclick=()=>show('recovery');
-$('moreNutrition').onclick=()=>show('nutrition');
-$('recoveryBack').onclick=()=>show('more');
-$('nutritionBack').onclick=()=>show('more');
-$('moreVault').onclick=openVault;
-$('moreSettings').onclick=openSettings;
-$('moreAbout').onclick=()=>{
-  const panel=$('aboutForm');
-  panel.classList.toggle('hidden');
-  if(!panel.classList.contains('hidden'))panel.scrollIntoView({behavior:'smooth',block:'nearest'});
-};
 window.activeDay=dayKey();
 cancelLegacyAlarms();
 registerNotificationTapHandler();
@@ -1532,7 +1424,6 @@ document.addEventListener('visibilitychange',()=>{
   }
 });
 window.addEventListener('focus',()=>{
-  closeNavigationMenu();
   setTimeout(()=>{vaultFilePicker=false},1500);
   if($('home').classList.contains('active'))renderHome();
   if(currentView==='vault'&&$('vaultContent').classList.contains('hidden'))renderVault();

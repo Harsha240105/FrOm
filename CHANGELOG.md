@@ -1,5 +1,26 @@
 # Changelog
 
+## FORM v9.0
+
+### Added
+
+- Manual light/dark theme and timer sound controls in Settings.
+- Full weekly exercise reference in Settings.
+
+### Changed
+
+- Rebuilt the interface with a monochrome light/dark theme and five-tab navigation.
+- Consolidated Recovery, Nutrition, Vault, Backup, About, body type, and the full weekly reference into Settings.
+- Updated Android version to 9.0/version code 11.
+
+### Removed
+
+- Stage, make-up, fixed-start, focus, More, and Workout tab branching; one canonical week now repeats unchanged.
+
+### Fixed
+
+- Home clock renders one meridiem and the streak pill no longer wraps.
+
 ## FORM v8.0
 
 ### Changed

@@ -8,9 +8,10 @@
 <title>FORM</title>
 <style>
 @font-face{font-family:'Inter';src:url('fonts/InterVariable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
-:root{--paper:#0b0b0b;--paper2:#121212;--ink:#f4f2ec;--muted:#a4a49c;--faint:#787870;--line:#2b2b2b;--soft:#1b1b1b;--white:#ffffff;--black:#000000;--green:#3ddc84;--accent:#3ddc84;--accent2:#ff4fa0;--accentInk:#07140d;--radius:18px;--radius-sm:12px}
+:root{color-scheme:dark;--paper:#000000;--paper2:#121212;--ink:#f4f2ec;--muted:#a4a49c;--faint:#787870;--line:#2b2b2b;--soft:#1b1b1b;--white:#ffffff;--black:#000000;--accent:#f4f2ec;--accentInk:#000000;--panelBg:#0f0f0f;--radius:12px;--radius-sm:10px}
+:root[data-theme="light"]{color-scheme:light;--paper:#f2f2f0;--paper2:#ffffff;--ink:#111111;--muted:#666666;--faint:#8a8a8a;--line:#d6d6d2;--soft:#e9e9e6;--white:#ffffff;--black:#000000;--accent:#111111;--accentInk:#ffffff;--panelBg:#ffffff}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:var(--black)}
+html,body{margin:0;min-height:100%;background:var(--paper)}
 html,body{overflow-x:hidden}
 body{font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
 button,input,select,textarea{font:inherit;color:var(--ink);background:var(--paper2);border:1px solid var(--line);border-radius:var(--radius)}
@@ -24,33 +25,27 @@ a{color:inherit}
 .brand h1{font-size:19px;letter-spacing:-.4px;margin:0;font-weight:800;text-transform:lowercase}
 .brand span{font-size:9px;letter-spacing:1.4px;color:var(--muted)}
 .topActions{display:flex;align-items:center;gap:6px}
-.headerBtn{background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:8px 12px;font-size:11px;letter-spacing:.8px;font-weight:700;min-height:44px}
+.headerBtn{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:8px 12px;font-size:11px;letter-spacing:.8px;font-weight:700;min-height:44px}
 .headerBtn.solid{background:var(--accent);color:var(--accentInk);border-color:var(--accent)}
-#openStreak{background:var(--black);border-color:var(--accent2);color:var(--accent2)}
-#openStreak .streakLabel{color:var(--accent2)}
+#openStreak{background:var(--paper2);border-color:var(--muted);color:var(--muted);max-width:46vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(8px,2.5vw,11px);letter-spacing:.4px;padding:8px 10px}
+#openStreak .streakLabel{color:var(--muted)}
 #openStreak .streakValue{color:var(--ink)}
-.menuWrap{position:relative}
-.menuBtn{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;width:44px;height:44px;padding:0;background:transparent;border:1px solid var(--line);border-radius:var(--radius)}
-.menuBtn span{display:block;width:17px;height:2px;background:var(--ink)}
-.menuPanel{position:absolute;right:0;top:48px;width:180px;padding:6px;background:var(--paper2);border:1px solid var(--accent);box-shadow:0 12px 28px rgba(0,0,0,.5);z-index:30}
-.menuPanel[hidden]{display:none}
-.menuItem{display:block;width:100%;min-height:44px;padding:12px 10px;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--ink);text-align:left;font-size:11px;letter-spacing:1px;font-weight:700}
-.menuItem:last-child{border-bottom:0}
-.menuItem:hover{background:var(--soft);color:var(--accent)}
 .streakPulse{animation:streakFade 650ms ease-out}
 @keyframes streakFade{from{opacity:.55}to{opacity:1}}
 #dateLine{animation:dateFade 700ms ease-out}
 @keyframes dateFade{from{opacity:.55;transform:translateY(6px)}to{opacity:1;transform:none}}
 .view{display:none;padding:12px 0 0}
 .view.active{display:block}
-.bottomNav{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(448px,calc(100% - 24px));height:64px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:6px;border:1px solid #1d2b48;border-radius:34px;background:#080d16;box-shadow:0 10px 28px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.03) inset;z-index:25}
-.bottomNav button{position:relative;display:flex;align-items:center;justify-content:center;border:0;border-radius:28px;background:transparent;color:#f0f3f8;padding:0;z-index:0}
-.bottomNav button::before{content:"";position:absolute;inset:0;border-radius:28px;background:rgba(61,220,132,.18);opacity:0;transform:scale(.72);transition:opacity .28s ease,transform .28s cubic-bezier(.2,.8,.2,1);z-index:-1}
+.bottomNav{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(448px,calc(100% - 24px));height:64px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--paper2);box-shadow:0 10px 28px rgba(0,0,0,.24);z-index:25}
+.bottomNav button{position:relative;display:flex;align-items:center;justify-content:center;border:0;border-radius:10px;background:transparent;color:var(--muted);padding:0;z-index:0}
+.bottomNav button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bottomNav button::before{content:"";position:absolute;inset:0;border-radius:10px;background:var(--soft);opacity:0;transform:scale(.72);transition:opacity .28s ease,transform .28s cubic-bezier(.2,.8,.2,1);z-index:-1}
 .bottomNav button span{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.bottomNav button svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:transform .28s cubic-bezier(.2,.8,.2,1),stroke-width .28s ease}
-.bottomNav button.active{color:var(--accent)}
+.bottomNav button svg{width:27px;height:27px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .28s cubic-bezier(.2,.8,.2,1),stroke-width .28s ease}
+.bottomNav button:nth-child(3) svg{width:31px;height:31px}
+.bottomNav button.active{color:var(--ink)}
 .bottomNav button.active::before{opacity:1;transform:scale(1)}
-.bottomNav button.active svg{transform:scale(1.08);stroke-width:2.15;animation:navIconPop .32s cubic-bezier(.2,.8,.2,1)}
+.bottomNav button.active svg{transform:scale(1.08);stroke-width:2;fill:currentColor;fill-opacity:.18;animation:navIconPop .32s cubic-bezier(.2,.8,.2,1)}
 .bottomNav button:active svg{transform:scale(.86)}
 @keyframes navIconPop{0%{opacity:.55;transform:translateY(2px) scale(.82)}70%{opacity:1;transform:translateY(-2px) scale(1.17)}100%{opacity:1;transform:translateY(-1px) scale(1.12)}}
 .moreGrid{display:grid;gap:8px}
@@ -66,9 +61,9 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .smallNote{font-size:12px;line-height:1.5;color:var(--muted)}
 .tinyNote{font-size:11px;line-height:1.45;color:var(--faint)}
 .muted{color:var(--muted)}
-.panel{border:1px solid var(--line);background:rgba(255,255,255,.03);padding:12px;margin:8px 0;border-radius:var(--radius)}
+.panel{border:1px solid var(--line);background:var(--panelBg);padding:12px;margin:8px 0;border-radius:var(--radius)}
 .panel.solid{background:var(--paper2)}
-.panel.dark{background:linear-gradient(135deg,rgba(61,220,132,.08),rgba(255,79,160,.08));border-color:var(--accent)}
+.panel.dark{background:var(--soft);border-color:var(--line)}
 .pageHead{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:12px}
 .backBtn{background:transparent;border:1px solid var(--line);border-radius:999px;padding:10px 12px;font-size:12px;font-weight:700;letter-spacing:.7px;white-space:nowrap;min-height:44px}
 .primaryBtn{width:100%;min-height:48px;background:var(--accent);color:var(--accentInk);border:1px solid var(--accent);border-radius:var(--radius);padding:12px;font-size:13px;letter-spacing:1.1px;font-weight:750;margin-top:6px}
@@ -78,16 +73,16 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .tag{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 8px;font-size:8px;letter-spacing:1.1px;font-weight:700;white-space:nowrap}
 .tag.dark{background:var(--accent);color:var(--accentInk);border-color:var(--accent)}
 .tag.light{background:var(--paper2);border-color:var(--line)}
-.activity-workout{background:var(--green);color:var(--accentInk);border-color:var(--green)}
-.activity-rest,.activity-photo{background:var(--black);color:var(--accent2);border-color:var(--accent2)}
+.activity-workout{background:var(--accent);color:var(--accentInk);border-color:var(--accent)}
+.activity-rest,.activity-photo{background:var(--black);color:var(--muted);border-color:var(--muted)}
 .activity-none{background:var(--black);color:var(--ink);border-color:var(--ink)}
 .activity-planned{background:var(--black);color:var(--ink);border-color:var(--ink);border-style:dashed}
 .activity-missed{background:var(--soft);color:var(--muted);border-color:var(--faint)}
-.hero{border:1px solid rgba(255,255,255,.08);border-top:1px solid var(--accent);border-bottom:1px solid var(--accent);background:linear-gradient(135deg,#0c2420 0%,#121018 55%,#2a0f24 100%);padding:16px 14px 18px;margin-top:12px;border-radius:24px;box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.hero{border:1px solid var(--line);background:var(--paper2);padding:16px 14px 18px;margin-top:12px;border-radius:var(--radius);box-shadow:0 14px 32px rgba(0,0,0,.18)}
 .heroTop{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
 .heroRing{position:relative;width:54px;height:54px;flex-shrink:0}
 .heroRing svg{width:100%;height:100%;transform:rotate(-90deg)}
-.heroRing .ringTrack{fill:none;stroke:rgba(255,255,255,.1);stroke-width:8}
+.heroRing .ringTrack{fill:none;stroke:var(--line);stroke-width:8}
 .heroRing .ringFill{fill:none;stroke:var(--accent);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .5s ease}
 .heroRing .ringCenter{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .heroRing .ringCenter b{font-size:13px;font-weight:800;letter-spacing:-.3px;line-height:1}
@@ -96,13 +91,13 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .weekBar{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;height:100%;justify-content:flex-end}
 .weekBar small{font-size:8px;color:var(--muted);letter-spacing:.4px}
 .weekBar.today small{color:var(--accent);font-weight:700}
-.weekBarTrack{width:100%;max-width:18px;height:44px;background:rgba(255,255,255,.06);border-radius:999px;display:flex;align-items:flex-end;overflow:hidden}
+.weekBarTrack{width:100%;max-width:18px;height:44px;background:var(--line);border-radius:999px;display:flex;align-items:flex-end;overflow:hidden}
 .weekBarFill{display:block;width:100%;border-radius:999px;min-height:6px}
-.weekBarFill.full{background:linear-gradient(180deg,var(--green),#1f9e5c)}
-.weekBarFill.partial{background:linear-gradient(180deg,var(--accent2),#9a2e63)}
-.weekBarFill.empty{background:rgba(255,255,255,.14)}
-.weekBarFill.rest{background:rgba(255,255,255,.08)}
-.weekBar.today .weekBarTrack{box-shadow:0 0 0 1px var(--accent)}
+.weekBarFill.full{background:var(--ink)}
+.weekBarFill.partial{background:var(--muted)}
+.weekBarFill.empty{background:var(--line)}
+.weekBarFill.rest{background:var(--soft)}
+.weekBar.today .weekBarTrack{box-shadow:0 0 0 1px var(--muted)}
 .focusWidget .planName{font-size:15px}
 .heroBody{display:flex;justify-content:space-between;gap:14px;align-items:flex-end}
 .planName{font-size:22px;line-height:1.05;letter-spacing:-.7px;font-weight:760}
@@ -118,7 +113,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .streakCalories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}
 .metricCard{min-width:0;min-height:96px;padding:11px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper2);display:flex;flex-direction:column;justify-content:space-between;text-align:left}
 .metricHead{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:8px;letter-spacing:1px;font-weight:700}
-.metricIcon{width:16px;height:16px;fill:none;stroke:var(--accent2);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.metricIcon{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .metricValue{font-size:25px;line-height:1;letter-spacing:-.8px;font-weight:780;color:var(--ink);margin-top:8px}
 .metricSub{font-size:9px;line-height:1.35;color:var(--muted);margin-top:5px}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:0 0 14px}
@@ -131,9 +126,9 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .calorieRow b{display:block;font-size:15px;letter-spacing:-.3px}
 .calorieRow span{font-size:9px;line-height:1.4;color:var(--muted);text-align:right;max-width:60%}
 .weekStrip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:6px 0 2px}
-.weekDay{min-width:0;border:1px solid var(--line);padding:8px 7px;background:rgba(255,255,255,.03);color:inherit;text-align:left;font:inherit;cursor:pointer}
+.weekDay{min-width:0;border:1px solid var(--line);padding:8px 7px;background:var(--panelBg);color:inherit;text-align:left;font:inherit;cursor:pointer}
 .weekDay.today{border-color:var(--accent)}
-.weekDay.done{background:var(--green);color:var(--accentInk);border-color:var(--green)}
+.weekDay.done{background:var(--accent);color:var(--accentInk);border-color:var(--accent)}
 .weekDay small,.weekDay span{display:block;font-size:8px;letter-spacing:.8px;color:var(--muted)}
 .weekDay.done small,.weekDay.done span{color:var(--accentInk)}
 .weekDay b{display:block;font-size:18px;line-height:1.1;margin:2px 0}
@@ -144,10 +139,10 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .nutritionRow b{display:block;font-size:13px}
 .nutritionRow small{display:block;font-size:9px;color:var(--muted);margin-top:2px}
 .stepper{display:flex;gap:5px}
-.stepper button{width:34px;height:32px;border:1px solid var(--green);background:transparent;color:var(--green);font-size:15px}
-.stepper button:last-child{background:var(--green);color:var(--accentInk)}
+.stepper button{width:34px;height:32px;border:1px solid var(--accent);background:transparent;color:var(--accent);font-size:15px}
+.stepper button:last-child{background:var(--accent);color:var(--accentInk)}
 .bar{height:4px;background:var(--soft);margin:2px 0 8px}
-.bar i{display:block;height:100%;background:var(--green);width:0}
+.bar i{display:block;height:100%;background:var(--accent);width:0}
 .targetRow{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
 .targetRow label{font-size:9px;letter-spacing:.4px;color:var(--muted)}
 .targetRow input{width:100%;margin-top:4px;background:var(--paper2);border:1px solid var(--line);border-radius:var(--radius);padding:9px;font-size:11px}
@@ -158,7 +153,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .calorieStat b{font-size:20px;letter-spacing:-.6px}
 .stageHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .guideGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
-.guideItem{border:1px solid var(--line);padding:10px;background:rgba(255,255,255,.03)}
+.guideItem{border:1px solid var(--line);padding:10px;background:var(--panelBg)}
 .guideItem small{display:block;font-size:8px;letter-spacing:.9px;color:var(--muted);margin-bottom:4px;font-weight:650}
 .guideItem strong{display:block;font-size:15px;letter-spacing:-.3px;margin-bottom:4px}
 .timeline{border-top:1px solid var(--line)}
@@ -172,7 +167,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .foodList li{display:grid;grid-template-columns:58px minmax(0,1fr);gap:9px;padding:7px 0;border-bottom:1px solid var(--soft);font-size:10px;line-height:1.4;color:var(--muted)}
 .foodList li:last-child{border-bottom:0}
 .foodList b{color:var(--ink);font-size:9px;letter-spacing:.5px}
-.exerciseCard{border:1px solid var(--line);background:rgba(255,255,255,.03);margin:7px 0;overflow:hidden}
+.exerciseCard{border:1px solid var(--line);background:var(--panelBg);margin:7px 0;overflow:hidden}
 .exerciseMain{display:grid;grid-template-columns:110px 1fr;gap:0}
 .exerciseMain.noPhoto{grid-template-columns:1fr}
 .cardPhoto{width:100%;height:100%;min-height:138px;object-fit:cover;display:block;border-right:1px solid var(--line);background:var(--soft)}
@@ -195,20 +190,20 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .instructionBlock ol{margin:0;padding-left:18px}
 .instructionBlock li{font-size:13px;line-height:1.55;color:var(--muted);margin-bottom:6px;padding-left:2px}
 .formDetails{margin-top:10px;border-top:1px solid var(--line)}
-.formDetails summary{list-style:none;min-height:44px;display:flex;align-items:center;justify-content:space-between;font-size:12px;letter-spacing:.8px;color:var(--accent2);font-weight:700;cursor:pointer}
+.formDetails summary{list-style:none;min-height:44px;display:flex;align-items:center;justify-content:space-between;font-size:12px;letter-spacing:.8px;color:var(--muted);font-weight:700;cursor:pointer}
 .formDetails summary::-webkit-details-marker{display:none}
 .formDetails summary::after{content:'+';font-size:16px}
 .formDetails[open] summary::after{content:'−'}
 .stickyActions{position:sticky;bottom:calc(82px + env(safe-area-inset-bottom));z-index:14;background:var(--paper);padding:10px 0 4px;border-top:1px solid var(--line)}
 .srOnly{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .setStatus{font-size:9px;letter-spacing:1.3px;font-weight:750;margin:12px 0 8px}
-.repPanel,.exerciseTimerPanel{border:1px solid var(--line);padding:15px;margin:10px 0;text-align:center;background:rgba(255,255,255,.03)}
+.repPanel,.exerciseTimerPanel{border:1px solid var(--line);padding:15px;margin:10px 0;text-align:center;background:var(--panelBg)}
 .repValue,.exerciseTimer{font-size:42px;line-height:1;letter-spacing:-2px;font-weight:780;font-variant-numeric:tabular-nums}
 .repLabel,.timerHint{font-size:9px;letter-spacing:1px;color:var(--muted);margin-top:6px}
 .repControls{display:flex;justify-content:center;gap:10px;margin-top:12px}
-.repControls button{width:54px;height:44px;border:1px solid var(--green);background:transparent;color:var(--green);border-radius:var(--radius);font-size:20px;font-weight:600}
-.repControls button:last-child{background:var(--green);color:var(--accentInk)}
-.restPanel{border:1px solid var(--accent2);padding:18px;margin:12px 0;text-align:center;background:var(--paper2)}
+.repControls button{width:54px;height:44px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:var(--radius);font-size:20px;font-weight:600}
+.repControls button:last-child{background:var(--accent);color:var(--accentInk)}
+.restPanel{border:1px solid var(--muted);padding:18px;margin:12px 0;text-align:center;background:var(--paper2)}
 .restTimer{font-size:46px;line-height:1;letter-spacing:-2px;font-weight:780;font-variant-numeric:tabular-nums}
 .restHint{font-size:10px;color:var(--muted);margin:8px 0 12px;min-height:15px}
 .summaryGrid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);border-left:1px solid var(--line);margin:10px 0}
@@ -219,17 +214,17 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .calendarCell{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:50%;font-size:11px;font-weight:700;background:var(--ink);color:var(--paper)}
 .calendarCell{padding:0;font-family:inherit;cursor:pointer}
 .calendarCell.dow{border-color:transparent;background:transparent;color:var(--muted);font-size:8px;letter-spacing:.6px}
-.calendarCell.done{background:var(--green);color:var(--accentInk);border-color:var(--green)}
-.calendarCell.photo{background:var(--black);color:var(--accent2);border-color:var(--accent2)}
+.calendarCell.done{background:var(--accent);color:var(--accentInk);border-color:var(--accent)}
+.calendarCell.photo{background:var(--black);color:var(--muted);border-color:var(--muted)}
 .calendarCell.missed{background:var(--soft);color:var(--muted);border-color:var(--faint)}
 .calendarCell.planned{background:var(--black);color:var(--ink);border-color:var(--ink);border-style:dashed}
 .calendarCell.pre{background:transparent;border-color:transparent;color:var(--faint)}
-.calendarCell.today{outline:2px solid var(--accent2);outline-offset:2px}
+.calendarCell.today{outline:2px solid var(--muted);outline-offset:2px}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:8px;color:var(--muted)}
 .legend span{display:flex;align-items:center;gap:4px}
 .legend i{width:9px;height:9px;border:1px solid var(--line);border-radius:50%;display:inline-block}
-.legend i.done{background:var(--green);border-color:var(--green)}
-.legend i.photo{background:var(--black);border-color:var(--accent2)}
+.legend i.done{background:var(--accent);border-color:var(--accent)}
+.legend i.photo{background:var(--black);border-color:var(--muted)}
 .legend i.none{background:var(--black);border-color:var(--ink)}
 .calendarDetail{border:1px solid var(--line);padding:12px;margin-top:12px}
 .calendarDetailHead{display:flex;justify-content:space-between;gap:12px;align-items:start}
@@ -238,7 +233,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .calendarPlan b,.calendarPlan small{display:block}
 .calendarPlan small{color:var(--muted);font-size:10px;line-height:1.45;margin-top:4px}
 .calendarPhoto{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
-.calendarPhotoPlaceholder{min-height:120px;background:var(--soft);border:1px solid var(--accent2);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--accent2);font-size:10px;letter-spacing:1px;filter:blur(2px)}
+.calendarPhotoPlaceholder{min-height:120px;background:var(--soft);border:1px solid var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:10px;letter-spacing:1px;filter:blur(2px)}
 .calendarPhotoPlaceholder{width:100%;font-family:inherit;cursor:pointer}
 .calendarPhotoReveal{margin-top:8px}
 .calendarPhotoImage{width:100%;max-height:240px;object-fit:contain;display:block;filter:blur(0)}
@@ -251,11 +246,19 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .historyItem>div>b{font-size:11px;letter-spacing:.2px;display:block;margin-bottom:2px}
 .routineRow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid var(--soft);padding:11px 0}
 .routineRow:last-child{border-bottom:0}
+.routineRow.selected{background:var(--soft);border-radius:var(--radius-sm);padding:11px 10px}
 .routineRow b{display:block;font-size:11px;line-height:1.35;margin-bottom:3px}
 .routineRow small{display:block;font-size:9px;line-height:1.45;color:var(--muted)}
+.referenceDay{border-bottom:1px solid var(--soft);padding:10px 0}
+.referenceDay:last-child{border-bottom:0}
+.referenceDay b{display:block;font-size:11px;margin-bottom:4px}
+.referenceDay small{display:block;font-size:9px;line-height:1.5;color:var(--muted)}
 .settingsRow{display:flex;justify-content:space-between;align-items:center;gap:14px;border-bottom:1px solid var(--soft);padding:11px 0}
+button.settingsRow{width:100%;background:transparent;color:inherit;text-align:left;font:inherit;font-weight:inherit;cursor:pointer}
 .settingsRow:last-child{border-bottom:0}
 .settingsRow b{display:block;font-size:12px;margin-bottom:2px}
+.settingsRow small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.settingsRow>span:last-child{font-size:18px;color:var(--muted)}
 .settingsRow .smallNote{max-width:230px}
 .weightRow{display:flex;gap:7px;margin:9px 0}
 .weightRow input{flex:1;background:var(--paper2);border:1px solid var(--line);border-radius:var(--radius);padding:11px;font-size:12px;min-width:0}
@@ -278,7 +281,7 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 .modalActions{display:flex;gap:8px;margin-top:14px}
 .modalActions button{flex:1;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:var(--radius);padding:12px;font-size:9px;letter-spacing:1px;font-weight:700}
 .modalActions button.white{background:var(--accent);color:var(--accentInk)}
-.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--paper2);color:var(--ink);border:1px solid var(--accent2);padding:10px 14px;font-size:10px;letter-spacing:.5px;z-index:120;max-width:90vw;text-align:center;opacity:0;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--paper2);color:var(--ink);border:1px solid var(--muted);padding:10px 14px;font-size:10px;letter-spacing:.5px;z-index:120;max-width:90vw;text-align:center;opacity:0;pointer-events:none}
 .toast.show{opacity:1}
 .hidden{display:none!important}
 @media (min-width:640px){.phone{margin:16px auto;min-height:calc(100vh - 32px);border:1px solid var(--line)}}
@@ -291,19 +294,9 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 <body>
 <main class="phone">
 <header class="top">
-  <div class="brand"><h1>form</h1><span>8.0</span></div>
+  <div class="brand"><h1>form</h1><span>DAILY</span></div>
   <div class="topActions">
     <button class="headerBtn" id="openStreak"><span class="streakLabel">COMPLETED DAYS | </span><span class="streakValue">00 DAYS</span></button>
-    <div class="menuWrap">
-      <button class="menuBtn" id="menuToggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navigationMenu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="menuPanel" id="navigationMenu" aria-label="Main navigation" hidden>
-        <button class="menuItem" id="menuHome" type="button">HOME</button>
-        <button class="menuItem" id="menuMore" type="button">MORE</button>
-        <button class="menuItem" id="menuSettings" type="button">SETTINGS</button>
-      </nav>
-    </div>
   </div>
 </header>
 
@@ -374,7 +367,6 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 
   <div class="linkRow">
     <button class="ghostBtn" id="openRoutine">VIEW WEEKLY PLAN</button>
-    <button class="ghostBtn" id="openVault">PHOTO VAULT</button>
     <button class="ghostBtn" id="openSettings">SETTINGS</button>
   </div>
   <p class="tinyNote">Day 1 and every recorded session are kept when you install this update over the existing app.</p>
@@ -479,37 +471,6 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
       <p class="smallNote" id="bodyTypeFoodTip">Set your body type in Settings for a tailored food note here.</p>
       <p class="tinyNote">General guidance only. Follow your doctor or dietitian for medical conditions, pregnancy, or prescribed diets. No fat-loss spot reduction is promised.</p>
     </section>
-  </div>
-</section>
-
-<section id="more" class="view">
-  <div class="pageHead"><div><div class="overline">FORM</div><h2>More</h2></div></div>
-  <div class="moreGrid">
-    <button class="moreItem" id="moreFocus" type="button"><span>Focus Routines<small>The fixed week, day by day</small></span><b>›</b></button>
-    <button class="moreItem" id="moreRecovery" type="button"><span>Recovery Guide<small>Rest, sleep and easy days</small></span><b>›</b></button>
-    <button class="moreItem" id="moreNutrition" type="button"><span>Nutrition<small>Water, protein and meal guidance</small></span><b>›</b></button>
-    <button class="moreItem" id="moreVault" type="button"><span>Photo Vault<small>Private encrypted photos</small></span><b>›</b></button>
-    <button class="moreItem" id="moreSettings" type="button"><span>Settings<small>Preferences and privacy</small></span><b>›</b></button>
-    <button class="moreItem" id="moreAbout" type="button"><span>About FORM<small>Offline personal training companion</small></span><b>›</b></button>
-  </div>
-  <div class="panel hidden" id="aboutForm"><h3>About FORM</h3><p>FORM is a local-first home-training companion. Your workout history, nutrition data and private photos remain on this device.</p></div>
-</section>
-
-<section id="focus" class="view">
-  <div class="pageHead">
-    <div><div class="overline">FIXED WEEK</div><h2>Focus Routines</h2></div>
-    <button class="backBtn" id="focusBack" type="button">BACK</button>
-  </div>
-  <p class="smallNote">Your weekly routine, day by day. Monday is rest; the same week repeats. This is the plan, not extra work on top of it.</p>
-  <div class="moreGrid" id="focusGrid"></div>
-  <div class="panel hidden" id="focusDetailPanel">
-    <button class="backBtn" id="focusDetailBack" style="margin-bottom:10px">ALL ROUTINES</button>
-    <div class="overline" id="focusDetailOverline">FOCUS</div>
-    <h3 id="focusDetailTitle">—</h3>
-    <p class="smallNote" id="focusDetailBlurb">—</p>
-    <ul class="foodList" id="focusDetailList"></ul>
-    <p class="tinyNote" id="focusDetailNote"></p>
-    <button class="primaryBtn hidden" id="focusDetailOpen" type="button">OPEN TODAY'S WORKOUT</button>
   </div>
 </section>
 
@@ -755,8 +716,22 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
 
 <section id="settings" class="view">
   <div class="pageHead">
-    <div><div class="overline">FORM 8.0</div><h2>Settings</h2></div>
+    <div><div class="overline">FORM</div><h2>Settings</h2></div>
     <button class="backBtn" id="settingsBack">BACK HOME</button>
+  </div>
+  <div class="panel">
+    <div class="overline">PREFERENCES</div>
+    <div class="settingsRow"><div><b>Appearance</b><small>Light grey or dark black.</small></div><button class="backBtn" id="themeToggle" type="button">USE LIGHT THEME</button></div>
+    <div class="settingsRow"><div><b>Timer sound</b><small>Beep when a set or rest timer ends.</small></div><button class="backBtn" id="soundToggle" type="button">SOUND ON · TAP TO OFF</button></div>
+  </div>
+  <div class="panel">
+    <div class="overline">SECTIONS</div>
+    <button class="settingsRow" id="settingsRecovery" type="button"><span><b>Recovery guide</b><small>Rest, sleep, and easy days</small></span><span>›</span></button>
+    <button class="settingsRow" id="settingsNutrition" type="button"><span><b>Nutrition</b><small>Water, protein, and meal guidance</small></span><span>›</span></button>
+    <button class="settingsRow" id="settingsVault" type="button"><span><b>Photo vault</b><small>Private encrypted photos</small></span><span>›</span></button>
+    <button class="settingsRow" id="settingsBackup" type="button"><span><b>Encrypted backup</b><small>Export or restore your data</small></span><span>›</span></button>
+    <button class="settingsRow" id="settingsAbout" type="button"><span><b>About FORM</b><small>Offline personal training companion</small></span><span>›</span></button>
+    <div class="panel hidden" id="aboutForm"><h3>About FORM</h3><p>FORM is a local-first home-training companion. Your workout history, nutrition data, and private photos remain on this device.</p></div>
   </div>
   <div class="panel">
     <div class="overline">BODY WEIGHT</div>
@@ -804,31 +779,35 @@ p{font-size:12px;line-height:1.55;color:var(--muted);margin:0 0 10px}
     <p class="smallNote">Create an encrypted file containing your history and encrypted photos.</p>
     <button class="secondaryBtn" id="openBackup">OPEN BACKUP</button>
   </div>
+  <div class="panel">
+    <div class="overline">FULL WEEK REFERENCE</div>
+    <div id="settingsExerciseReference"></div>
+  </div>
 </section>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="srOnly" id="timerAnnouncer" aria-live="polite"></div>
 <nav class="bottomNav" id="bottomNav" aria-label="Primary navigation">
-  <button type="button" data-nav-view="home" aria-label="Home">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
-    <span>HOME</span>
-  </button>
-  <button type="button" data-nav-view="workout" aria-label="Workout">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8v8M17 8v8M4 10v4M20 10v4M7 12h10"/></svg>
-    <span>WORKOUT</span>
-  </button>
   <button type="button" data-nav-view="routine" aria-label="Plan">
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01M16 17h.01"/></svg>
     <span>PLAN</span>
+  </button>
+  <button type="button" data-nav-view="streak" aria-label="Streak">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M9 15l2 2 4-4"/></svg>
+    <span>STREAK</span>
+  </button>
+  <button type="button" data-nav-view="home" aria-label="Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></svg>
+    <span>HOME</span>
   </button>
   <button type="button" data-nav-view="progress" aria-label="Progress">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V9M12 19V5M19 19v-8"/></svg>
     <span>PROGRESS</span>
   </button>
-  <button type="button" data-nav-view="more" aria-label="More">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 12h14M5 16h14"/></svg>
-    <span>MORE</span>
+  <button type="button" data-nav-view="settings" aria-label="Settings">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 12h14M5 16h14"/><circle cx="9" cy="8" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="11" cy="16" r="2"/></svg>
+    <span>SETTINGS</span>
   </button>
 </nav>
 </main>
